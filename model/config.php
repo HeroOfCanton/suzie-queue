@@ -1,8 +1,8 @@
 <?php
   define("LDAP_SERVER", "smith.eng.utah.edu");
   define("LDAP_DOMAIN", "users.coe.utah.edu");
-  define("BIND_USER",   "FIXME");
-  define("BIND_PASSWD", "FIXME");
+  define("BIND_USER",   "ta-queue");
+  define("BIND_PASSWD", "Grad4ation18");
   define("COURSE_OU",   "OU=FIXME");
 
   define("SQL_SERVER",  "localhost");

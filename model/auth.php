@@ -7,8 +7,7 @@ require 'config.php';
  */
 function auth($username, $pass){
   $username = "$username@".LDAP_DOMAIN;
-  $ldap_conn = ldap_connect(LDAP_SERVER);
-  
+  $ldap_conn = ldap_connect(LDAP_SERVER); 
   if($ldap_conn){
     $ldap_bind = ldap_bind($ldap_conn, $username, $pass);
     if($ldap_bind){
@@ -35,9 +34,8 @@ function is_ta($username, $class){
 //
 function _ldap_connect(){
   $ldap_conn = ldap_connect(LDAP_SERVER);
-
   if($ldap_conn){
-    $ldap_bind = ldap_bind($ldap_conn, BIND_USER, BIND_PASSWD);
+    $ldap_bind = ldap_bind($ldap_conn, BIND_USER."@".LDAP_DOMAIN, BIND_PASSWD);
     if($ldap_bind){
       return $ldap_bind;
     } 
@@ -46,7 +44,7 @@ function _ldap_connect(){
 }
 
 function _ldap_disconnct($ldap_bind){
-  ldap_disconnect($ldap_bind);
+  ldap_unbind($ldap_bind);
 }
 
 ?>
