@@ -6,6 +6,9 @@ require 'config.php';
  *Each course has a group in LDAP
  */
 function get_avail_courses(){
+  #Eventually we'll check this list against LDAP and only return
+  #the courses who's LDAP groups exist.
+  return array_keys($courses_avail);
 }
 
 /*

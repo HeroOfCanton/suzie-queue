@@ -10,7 +10,7 @@ require 'config.php';
 
 
 /*
- *
+ *Returns true if user binds to LDAP
  *
  */
 function auth($username, $pass){
@@ -27,16 +27,24 @@ function auth($username, $pass){
   return $auth; 
 }
 
-
+/*
+ *Returns an array of information on $username from LDAP 
+ *
+ */
 function get_info($username){
   $filter = "(sAMAccountName=$username)";
   $ldap_conn = _ldap_connect();
   
+  if($ldap_conn == NULL){
+    return NULL;
+  }
+  
   $results = ldap_search($ldap_conn, BASE_OU, $filter);
   $entries = ldap_get_entries($ldap_conn, $results);
-  //Do some error checking here!  
-  //Consider writing a schema mapping in the config file
-  //instead of hard coding the mapping
+  
+  if(!$entries["count"]){
+    return NULL;
+  }
 
   $first_name = $entries[0]["givenname"][0];
   $last_name  = $entries[0]["sn"][0];
@@ -52,9 +60,12 @@ function get_info($username){
 
 
 
-//
-//Helper Functions for LDAP
-//
+//Helper Functions for LDAP: No reason to call these from outside the model.
+
+/*
+ *Connect to LDAP server under the bind account in the config file
+ *Returns an ldap_connection on success, NULL on failure.
+ */
 function _ldap_connect(){
   $ldap_conn = ldap_connect(LDAP_SERVER);
   if($ldap_conn){
@@ -66,8 +77,33 @@ function _ldap_connect(){
   return NULL;
 }
 
+/*
+ *Disconnects the bind account from LDAP
+ */
 function _ldap_disconnect($ldap_conn){
   ldap_unbind($ldap_conn);
 }
+
+/*
+ *Converts a fully qualified DN to a sAMAccountName
+ */
+function dn_to_sam($dn){
+  $filter = "(distinguishedName=$dn)";
+  $ldap_conn = _ldap_connect();
+
+  if($ldap_conn == NULL){
+    return NULL;
+  }
+
+  $results = ldap_search($ldap_conn, BASE_OU, $filter);
+  $entries = ldap_get_entries($ldap_conn, $results);
+
+  if(!$entries["count"]){
+    return NULL;
+  }
+
+  return  $entries[0]["samaccountname"][0];
+}
+
 
 ?>
