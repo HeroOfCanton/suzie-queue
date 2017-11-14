@@ -12,4 +12,6 @@ if(!_ldap_connect()){
   echo "Test02 failed";
 }
 
+get_info("zakraise");
+
 ?>
