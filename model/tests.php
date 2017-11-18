@@ -1,6 +1,7 @@
 <?php
 
 require 'auth.php';
+require 'courses.php';
 
 #test01
 if(!auth('ta-queue', 'Grad4ation18')){
@@ -24,5 +25,12 @@ if(get_info("doesntExist") != NULL){
 
 dn_to_sam("CN=zakraise,OU=Domain Admin OU,DC=users,DC=coe,DC=utah,DC=edu");
 
+$TAs = get_tas("CS 9999");
+if($TAs == NULL){
+ echo "Test 06 failed";
+}
+if($TAs[1] != "zakraise"){
+  echo "Test 06 failed";
+}
 
 ?>

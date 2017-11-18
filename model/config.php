@@ -25,5 +25,4 @@ $courses_avail = array(
   "CS 9999" => "cs9999",
   "CS 9998" => "cs9998"
 );
-  
 ?>

@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require_once 'config.php';
 
 /*
  *Functions for Authentication and Authorization.
@@ -102,6 +102,7 @@ function dn_to_sam($dn){
     return NULL;
   }
 
+  _ldap_disconnect($ldap_conn);
   return  $entries[0]["samaccountname"][0];
 }
 
