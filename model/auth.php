@@ -103,7 +103,7 @@ function dn_to_sam($dn){
   }
 
   _ldap_disconnect($ldap_conn);
-  return  $entries[0]["samaccountname"][0];
+  return $entries[0]["samaccountname"][0];
 }
 
 

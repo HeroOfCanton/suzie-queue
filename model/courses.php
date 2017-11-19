@@ -8,6 +8,7 @@ require_once 'config.php';
 function get_avail_courses(){
   #Eventually we'll check this list against LDAP and only return
   #the courses who's LDAP groups exist.
+  global $courses_avail;
   return array_keys($courses_avail);
 }
 
@@ -26,7 +27,7 @@ function del_course($course){
 
 
 /*
- *Returns a list of TAs for the course
+ *Returns a list of TAs for the course.
  *Information is pulled from LDAP
  */
 function get_tas($course){
@@ -64,9 +65,35 @@ function get_tas($course){
  *NOTE: These are taken from LDAP, and not stored in SQL
  */
 function get_ta_courses($username){
+  global $courses_avail;
+  $ldap_conn = _ldap_connect();
+
+  if($ldap_conn == NULL){
+    return NULL;
+  }
+
+  $filter = "(sAMAccountName=$username)";
+  $results = ldap_search($ldap_conn, BASE_OU, $filter);
+  $entries = ldap_get_entries($ldap_conn, $results);
+  
+  if(!$entries["count"]){
+    return NULL;
+  }
+  
+  $groups = $entries[0]["memberof"];
+  $courses = array();
+  foreach($groups as $group) {
+    $group_sam = dn_to_sam($group);
+    $course = array_search($group_sam, $courses_avail);
+    if($course){
+      $courses[] = $course;
+    }
+  }
+
+  _ldap_disconnect($ldap_conn);
+
+  return $courses;
 }
-
-
 
 /*
  *Get courses that the student has joined.
@@ -88,6 +115,8 @@ function add_stud_course($username, $course){
  */
 function rem_stud_course($username, $course){
 }
+
+
 
 
 
