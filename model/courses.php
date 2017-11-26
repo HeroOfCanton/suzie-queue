@@ -36,26 +36,15 @@ function get_tas($course){
     return NULL;
   }
 
-  $ldap_conn = _ldap_connect();
-
-  if($ldap_conn == NULL){
+  $result = srch_by_sam($course_group);
+  if($result == NULL){
     return NULL;
   }
 
-  $filter = "(sAMAccountName=$course_group)";
-  $results = ldap_search($ldap_conn, BASE_OU, $filter);
-  $entries = ldap_get_entries($ldap_conn, $results);
-
-  if(!$entries["count"]){
-    return NULL;
-  }
-
-  $members = $entries[0]["member"];
+  $members = $result["member"];
   foreach($members as &$member) {
     $member = dn_to_sam($member);
   }
-
-  _ldap_disconnect($ldap_conn);
 
   return $members;
 }
@@ -66,21 +55,13 @@ function get_tas($course){
  */
 function get_ta_courses($username){
   global $courses_avail;
-  $ldap_conn = _ldap_connect();
-
-  if($ldap_conn == NULL){
-    return NULL;
-  }
-
-  $filter = "(sAMAccountName=$username)";
-  $results = ldap_search($ldap_conn, BASE_OU, $filter);
-  $entries = ldap_get_entries($ldap_conn, $results);
   
-  if(!$entries["count"]){
+  $result = srch_by_sam($username);
+  if($result == NULL){
     return NULL;
-  }
-  
-  $groups = $entries[0]["memberof"];
+  } 
+ 
+  $groups = $result["memberof"];
   $courses = array();
   foreach($groups as $group) {
     $group_sam = dn_to_sam($group);
@@ -89,8 +70,6 @@ function get_ta_courses($username){
       $courses[] = $course;
     }
   }
-
-  _ldap_disconnect($ldap_conn);
 
   return $courses;
 }
@@ -129,7 +108,10 @@ function course_lookup($course){
   return $courses_avail[$course];
 }
 
-
-
+/*
+ *Adds a user to to the "users" table in the database
+ */
+function create_user(){
+}
 
 ?>

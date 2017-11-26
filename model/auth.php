@@ -32,25 +32,14 @@ function auth($username, $pass){
  *
  */
 function get_info($username){
-  $filter = "(sAMAccountName=$username)";
-  $ldap_conn = _ldap_connect();
-  
-  if($ldap_conn == NULL){
-    return NULL;
-  }
-  
-  $results = ldap_search($ldap_conn, BASE_OU, $filter);
-  $entries = ldap_get_entries($ldap_conn, $results);
-  
-  if(!$entries["count"]){
+  $result = srch_by_sam($username); 
+  if($result == NULL){
     return NULL;
   }
 
-  $first_name = $entries[0]["givenname"][0];
-  $last_name  = $entries[0]["sn"][0];
+  $first_name = $result["givenname"][0];
+  $last_name  = $result["sn"][0];
   
-  _ldap_disconnect($ldap_conn);
-
   return array(
     "first_name" => $first_name,
     "last_name"  => $last_name,
@@ -104,6 +93,32 @@ function dn_to_sam($dn){
 
   _ldap_disconnect($ldap_conn);
   return $entries[0]["samaccountname"][0];
+}
+
+/*
+ *Performs an LDAP query on the sam
+ *Returns only the first result since sams are unique
+ */
+function srch_by_sam($sam){
+  if(empty($sam)){
+    return NULL;
+  }
+
+  $ldap_conn = _ldap_connect();
+  if($ldap_conn == NULL){
+    return NULL;
+  }
+
+  $filter = "(sAMAccountName=$sam)";
+  $results = ldap_search($ldap_conn, BASE_OU, $filter);
+  $entries = ldap_get_entries($ldap_conn, $results);
+
+  _ldap_disconnect($ldap_conn);
+  if(!$entries["count"]){
+    return NULL;
+  }
+
+  return $entries[0];
 }
 
 
