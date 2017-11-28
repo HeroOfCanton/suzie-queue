@@ -4,7 +4,9 @@ require_once '../model/auth.php';
 session_start();
 
 if(!$_POST['username'] || !$_POST['password']){
-  echo "{}";
+  $return = array("error" => "No username and/or password");
+  $return = json_encode($return);
+  echo $return; 
   die();
 }
 
@@ -12,13 +14,17 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 if(!auth($username, $password)){
-  echo "{}";
+  $return = array("authenticated" => False);
+  $return = json_encode($return);
+  echo $return;
   die();
 }
 
 $info = get_info($username);
 if($info == NULL){
-  echo "{}";
+  $return = array("error" => "Unable to Retrieve Info");
+  $return = json_encode($return);
+  echo $return;
   die();
 }
 
