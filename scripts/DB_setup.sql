@@ -15,6 +15,8 @@ create table users(
 
 create table courses(
   id int NOT NULL AUTO_INCREMENT,
+  depart_pref  VARCHAR(16),
+  course_num  VARCHAR(16),
   course_name VARCHAR(128),
   description TEXT,
   ldap_group  VARCHAR(256),
