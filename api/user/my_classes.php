@@ -1,5 +1,8 @@
 <?php
+//File: my_classes.php 
+
 require_once '../../model/courses.php';
+
 // get the session variables
 session_start(); 
 
@@ -13,21 +16,24 @@ if (!$_SESSION["username"])
 }
 
 $username = $_SESSION['username'];
-
 $stud_courses = get_stud_courses($username);
 $ta_courses   = get_ta_courses($username);
 
 if (stud_courses == NULL || ta_courses == NULL)
 {
-  $return = array("error" => "Unable to Fetch Classes");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to Fetch Classes"
+  );
   $return = json_encode($return);
   echo $return;
   die();
 }
 
 $return = array(
+  "authenticated" => True,
   "student_courses" => $stud_courses,
-  "ta_courses"      => $ta_coursesa,
+  "ta_courses"      => $ta_courses
 );
 
 $return = json_encode($return);
