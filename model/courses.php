@@ -31,7 +31,7 @@ function del_course($course){
  *Information is pulled from LDAP
  */
 function get_tas($course){
-  $course_group = course_lookup($course);
+  $course_group = get_course_group($course);
   if($course_group == NULL){
     return NULL;
   }
@@ -83,6 +83,8 @@ function get_stud_courses($username){
 
 /*
  *Add student to course in database
+ *Assumes the user already exists in the users table
+ *if not, touch_user()
  *NOTE: Not meant for TAs
  */
 function add_stud_course($username, $course){
@@ -100,18 +102,8 @@ function rem_stud_course($username, $course){
 
 
 ######### HELPER METHODS #########
-/*
- *Return the Active Directory group name for a course
- */
-function course_lookup($course){
+function get_course_group($course_name){
   global $courses_avail;
-  return $courses_avail[$course];
+  return $courses_avail[$course_name];
 }
-
-/*
- *Adds a user to to the "users" table in the database
- */
-function create_user(){
-}
-
 ?>

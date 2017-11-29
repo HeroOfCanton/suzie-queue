@@ -50,6 +50,12 @@ if(get_ta_courses('fake-user') != NULL){
 
 }
 
+if (touch_user("zakraise", "zane", "zak", "zane zak")){
+  echo "Test 09 failed";
+  die();
+}
+
+
 
 
 ?>

@@ -7,8 +7,8 @@ define("BASE_OU",     "DC=users,DC=coe,DC=utah,DC=edu");
 define("COURSE_OU",   "OU=ENG Class Groups OU,OU=ENG OU,DC=users,DC=coe,DC=utah,DC=edu");
 
 define("SQL_SERVER",  "localhost");
-define("SQL_USER",    "FIXME");
-define("SQL_PASSWD",  "FIXME");
+define("SQL_USER",    "root");
+define("SQL_PASSWD",  "root_sql");
 define("DATABASE",    "ta_queue");
 
 

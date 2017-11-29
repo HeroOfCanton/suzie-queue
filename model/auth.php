@@ -39,7 +39,11 @@ function get_info($username){
 
   $first_name = $result["givenname"][0];
   $last_name  = $result["sn"][0];
-  
+  $full_name  = $result["displayname"][0]; #We may need to fix this!
+
+  #Touches the user entry in the sql table
+  touch_user($username, $first_name, $last_name, $full_name);
+ 
   return array(
     "first_name" => $first_name,
     "last_name"  => $last_name,
@@ -121,5 +125,21 @@ function srch_by_sam($sam){
   return $entries[0];
 }
 
+/*
+ *Adds a user to to the "users" table in the database
+ */
+function touch_user($username, $first, $last, $full){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
 
+  $query = "INSERT IGNORE INTO users (username, first_name, last_name, full_name) VALUES ('".$username."','".$first."','".$last."','".$full."')";
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_close($sql_conn);
+  return 0;
+}
 ?>

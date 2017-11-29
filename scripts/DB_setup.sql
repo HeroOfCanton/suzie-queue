@@ -14,11 +14,19 @@ create table users(
 );
 
 create table courses(
-  id int NOT NULL AUTO_INCREMENT,
+  course_id int NOT NULL AUTO_INCREMENT,
   depart_pref  VARCHAR(16),
   course_num  VARCHAR(16),
   course_name VARCHAR(128),
   description TEXT,
   ldap_group  VARCHAR(256),
-  primary key (id)
-); 
+  primary key (course_id)
+);
+
+create table enrolled(
+  username    VARCHAR(256),
+  course_id   int,
+  foreign key (username) references users(username),
+  foreign key (course_id) references courses(course_id)
+);
+
