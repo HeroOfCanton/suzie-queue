@@ -33,22 +33,6 @@ if($sam == NULL || $sam =! 'zakraise'){
   die();
 }
 
-$TAs = get_tas("CS 9999");
-if($TAs == NULL){
- echo "Test 06 failed";
- die();
-}
-if($TAs[1] != "zakraise"){
-  echo "Test 06 failed";
-  die();
-}
-
-get_ta_courses('zakraise');
-if(get_ta_courses('fake-user') != NULL){
-  echo "Test 08 failed";
-  die();
-
-}
 
 if (touch_user("zakraise", "zane", "zak", "zane zak")){
   echo "Test 09 failed";
@@ -57,7 +41,7 @@ if (touch_user("zakraise", "zane", "zak", "zane zak")){
 
 if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake")){
   echo "Test 10 failed";
-  #die();
+  die();
 }
 
 if (!new_course("Computer Systems", "CS", "4401", "The hard stuff 1!", "fake 1")){
@@ -93,13 +77,49 @@ for ($i = 0; $i<10; $i++){
 
 if (new_course("Algorithms", "CS", "4150", "Algorithms", "fake")){
   echo "Test 15 failed";
-  //die();
+  die();
 }
 if (add_stud_course("zakraise", "Algorithms")){
   echo "Test 15 failed";
   die();
 }
 
-echo get_stud_courses("zakraise")[1];
+if (sizeof(get_stud_courses("zakraise")) != 2){
+  echo "Test 16 failed";
+  die();
+}
 
+
+
+if (new_course("CS 9999", "CS", "9999", "course desc", "cs9999")){
+  echo "Test 17 failed";
+  die();
+}
+
+$TAs = get_tas("CS 9999");
+if($TAs == NULL){
+ echo "Test 18 failed";
+ die();
+}
+if($TAs[1] != "zakraise"){
+  echo "Test 19 failed";
+  die();
+}
+
+if(!in_array("CS 9999", get_ta_courses('zakraise'))){
+  echo "Test 20 failed";
+  die();
+}
+
+if(get_ta_courses('fake-user') != NULL){
+  echo "Test 21 failed";
+  die();
+}
+
+
+$courses_avail = get_avail_courses();
+if (sizeof($courses_avail) != 3){
+  echo "Test 22 failed";
+  die();
+}
 ?>

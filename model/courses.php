@@ -6,10 +6,21 @@ require_once 'config.php';
  *Each course has a group in LDAP
  */
 function get_avail_courses(){
-  #Eventually we'll check this list against LDAP and only return
-  #the courses who's LDAP groups exist.
-  global $courses_avail;
-  return array_keys($courses_avail);
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL; //error
+  }
+
+  $query  = "SELECT course_name FROM courses";
+  $result = mysqli_query($sql_conn, $query);
+
+  $courses = array();
+  while($entry = mysqli_fetch_assoc($result)){
+    $courses[] = $entry["course_name"];
+  }
+
+  mysqli_close($sql_conn);
+  return $courses;
 }
 
 /*
@@ -75,23 +86,35 @@ function get_tas($course){
  *NOTE: These are taken from LDAP, and not stored in SQL
  */
 function get_ta_courses($username){
-  global $courses_avail;
-  
   $result = srch_by_sam($username);
   if($result == NULL){
     return NULL;
   } 
+
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL; //error
+  }
  
   $groups = $result["memberof"];
   $courses = array();
   foreach($groups as $group) {
     $group_sam = dn_to_sam($group);
-    $course = array_search($group_sam, $courses_avail);
-    if($course){
-      $courses[] = $course;
+
+    $query  = "SELECT course_name FROM courses WHERE ldap_group ='".$group_sam."'";
+    $result = mysqli_query($sql_conn, $query);
+    if(!mysqli_num_rows($result)){
+      continue; //No class in the database with this ldap group
     }
+    
+    //possible multiple courses use the same ldap_group
+    while($entry = mysqli_fetch_assoc($result)){
+      $courses[] = $entry["course_name"]; 
+    }
+    
   }
 
+  mysqli_close($sql_conn);
   return $courses;
 }
 
@@ -206,7 +229,23 @@ function rem_stud_course($username, $course_name){
 
 ######### HELPER METHODS #########
 function get_course_group($course_name){
-  global $courses_avail;
-  return $courses_avail[$course_name];
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  #Check if course_name already exists!
+
+  $query = "SELECT ldap_group FROM courses WHERE course_name ='".$course_name."'";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  $entry = mysqli_fetch_assoc($result);
+  $ldap_group = $entry["ldap_group"];
+
+  mysqli_close($sql_conn);
+  return $ldap_group;
 }
 ?>

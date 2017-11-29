@@ -11,18 +11,4 @@ define("SQL_USER",    "root");
 define("SQL_PASSWD",  "root_sql");
 define("DATABASE",    "ta_queue");
 
-
-
-/*
- *This maps a course name to its sAMAccountName in LDAP
- *
- *To add a new course to the queue, simply create a group
- *in LDAP for it in $COURSE_OU, and add it to the mapping
- *
- *Course_Name => group_sAMAccountName
- */ 
-$courses_avail = array(
-  "CS 9999" => "cs9999",
-  "CS 9998" => "cs9998"
-);
 ?>
