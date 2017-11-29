@@ -55,7 +55,10 @@ if (touch_user("zakraise", "zane", "zak", "zane zak")){
   die();
 }
 
-
+if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake")){
+  echo "Test 10 failed";
+  die();
+}
 
 
 ?>

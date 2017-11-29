@@ -14,14 +14,35 @@ function get_avail_courses(){
 
 /*
  *Adds the course to the database
+ *Only authorized teachers can call this.
+ *Course LDAP group should exist first
+ *  When a new course is to be created, they need to send 
+ *  the IT people a request for a new group. The group sam goes here.
  */
-function new_course($course){
+function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group){
+  #Check input validity
+
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+  
+  #Check if course_name already exists!
+  
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group) VALUES ('".$depart_prefix."','".$course_num."','".$course_name."','".$description."','".$ldap_group."')";
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_close($sql_conn);
+  return 0;
 }
 
 /*
  *Removes the course from the database
+ *IMPLEMENT IN SPRING
  */
-function del_course($course){
+function del_course($course_name){
 }
 
 
