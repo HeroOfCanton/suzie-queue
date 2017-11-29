@@ -60,5 +60,10 @@ if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake")){
   die();
 }
 
+if (add_stud_course("zakraise", "Computer Systems")){
+  echo "Test 11 failed";
+  die();
+}
+
 
 ?>

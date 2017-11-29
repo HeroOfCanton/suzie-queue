@@ -104,11 +104,34 @@ function get_stud_courses($username){
 
 /*
  *Add student to course in database
- *Assumes the user already exists in the users table
- *if not, touch_user()
+ *Assumes the course already exists in the courses table 
  *NOTE: Not meant for TAs
  */
-function add_stud_course($username, $course){
+function add_stud_course($username, $course_name){ 
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  #Verify user exists
+
+  #Verify course exists
+  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return 1;  
+  }
+  $entry = mysqli_fetch_assoc($result);
+  $course_id = $entry["course_id"];
+
+  $query = "INSERT IGNORE INTO enrolled (username, course_id) VALUES ( '".$username."','".$course_id."')";
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_close($sql_conn);
+  return 0;
 }
 
 /*
