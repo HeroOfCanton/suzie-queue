@@ -100,6 +100,41 @@ function get_ta_courses($username){
  *NOTE: Does not return courses an individual is a TA for.
  */
 function get_stud_courses($username){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL; //error
+  }
+
+  #Verify course exists
+  $query  = "SELECT course_id FROM enrolled WHERE username ='".$username."'";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return array(); //Not in any courses
+  }
+  
+  $courses = array();
+  while($entry = mysqli_fetch_assoc($result)){
+    $course_id = $entry["course_id"];
+    $courses[] = $course_id;
+  }
+  $courses = '('.implode(",",$courses).')';
+
+  $query = "SELECT course_name FROM courses WHERE course_id IN ".$courses."";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return NULL; //error
+  }
+
+  $courses = array();
+  while($entry = mysqli_fetch_assoc($result)){
+    $course_name = $entry["course_name"];
+    $courses[]   = $course_name;
+  }
+
+  mysqli_close($sql_conn);
+  return $courses;
 }
 
 /*
@@ -138,7 +173,31 @@ function add_stud_course($username, $course_name){
  *Remove student from course in databse
  *NOTE: Not meant for TAs
  */
-function rem_stud_course($username, $course){
+function rem_stud_course($username, $course_name){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  #Verify user exists
+
+  #Verify course exists
+  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  $entry = mysqli_fetch_assoc($result);
+  $course_id = $entry["course_id"];
+
+  $query = "DELETE IGNORE FROM enrolled WHERE username='".$username."' AND course_id='".$course_id."'";
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_close($sql_conn);
+  return 0;
 }
 
 
