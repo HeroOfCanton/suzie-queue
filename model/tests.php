@@ -2,6 +2,7 @@
 
 require_once 'auth.php';
 require_once 'courses.php';
+require_once 'queue.php';
 
 #test01
 if(!auth(BIND_USER, BIND_PASSWD)){
@@ -122,4 +123,53 @@ if (sizeof($courses_avail) != 3){
   echo "Test 22 failed";
   die();
 }
+
+if (get_queue_state("CS 9999") != "closed"){
+  echo "Test 23 failed";
+  die();
+}
+
+if (close_queue("CS 9999") != "closed"){
+  echo "Test 24 failed";
+  die();
+}
+
+if (close_queue("CS 9999") != "closed"){
+  echo "Test 25 failed";
+  die();
+}
+
+if (open_queue("CS 9999") != "open"){
+  echo "Test 26 failed";
+  die();
+}
+
+if (pause_queue("CS 9999") != "paused"){
+  echo "Test 27 failed";
+  die();
+}
+
+if (open_queue("CS 9999") != "open"){
+  echo "Test 28 failed";
+  die();
+}
+
+if (close_queue("CS 9999") != "closed"){
+  echo "Test 29 failed";
+  die();
+}
+
+if (close_queue("CS 9999") != "closed"){
+  echo "Test 30 failed";
+  die();
+}
+
+if (get_queue_state("CS 9999") != "closed"){
+  echo "Test 31 failed";
+  die();
+}
+
+
+
+echo "All Tests Completed Successfully";
 ?>

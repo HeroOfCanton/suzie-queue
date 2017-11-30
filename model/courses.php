@@ -45,6 +45,23 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
     mysqli_close($sql_conn);
     return 1;
   }
+
+  #Verify course exists
+  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  $entry = mysqli_fetch_assoc($result);
+  $course_id = $entry["course_id"];
+
+  $query = "INSERT INTO queue_state (course_id, state, time_lim) VALUES ('".$course_id."','closed',0)";
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
   mysqli_close($sql_conn);
   return 0;
 }
