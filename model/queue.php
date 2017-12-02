@@ -5,6 +5,8 @@ require_once 'config.php';
 /*
  *Returns the state of the queue
  *This function will be called numerous times per minute
+ *This function returns all information in the queue
+ *  It's up to the controller to implement access control.
  */
 function get_queue($course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -23,11 +25,7 @@ function get_queue($course){
   $course_id = $entry["course_id"];
 
   #Build return array
-  $return = array(
-    "state"    => NULL,
-    "time_lim" => NULL,
-    "queue"     => array(),
-  );
+  $return = array();
 
   #Get the state of the queue
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
@@ -37,22 +35,18 @@ function get_queue($course){
     return NULL;
   }
   $entry    = mysqli_fetch_assoc($result);
-  $result["state"]    = $entry["state"];
-  $result["time_lim"] = $entry["time_lim"];
+  $return["state"]    = $entry["state"];
+  $return["time_lim"] = $entry["time_lim"];
 
   #Get the actual queue
   $query  = "SELECT * FROM queue WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
-    return NULL;
-  }
   while($entry = mysqli_fetch_assoc($result)){
-    //$return["queue"][] = entry[]
+    $return["queue"][] = $entry;
   }
 
   mysqli_close($sql_conn);
-  return $result;
+  return $return;
 }
 
 
@@ -72,10 +66,14 @@ function enq_stu($username, $course, $question, $location){
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
-    return NULL;
+    return 1;
   }
   $entry = mysqli_fetch_assoc($result);
   $course_id = $entry["course_id"];
+
+  if(get_queue_state($course) != "open"){
+    return 1;
+  }  
 
   $query = "INSERT INTO queue (username, course_id, question, location) VALUES ('".$username."','".$course_id."','".$question."','".$location."')";
   if(!mysqli_query($sql_conn, $query)){
@@ -84,7 +82,6 @@ function enq_stu($username, $course, $question, $location){
   }
   mysqli_close($sql_conn);
   return 0;
-
 }
 
 /*

@@ -39,6 +39,15 @@ if (touch_user("zakraise", "zane", "zak", "zane zak")){
   echo "Test 09 failed";
   die();
 }
+if (touch_user("zakraise2", "zane2", "zak2", "zane2 zak2")){
+  echo "Test 09 failed";
+  die();
+}
+if (touch_user("zakraise3", "zane3", "zak3", "zane3 zak3")){
+  echo "Test 09 failed";
+  die();
+}
+
 
 if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake")){
   echo "Test 10 failed";
@@ -168,6 +177,33 @@ if (get_queue_state("CS 9999") != "closed"){
   echo "Test 31 failed";
   die();
 }
+
+
+#This should fail since the queue is closed
+if(!enq_stu("zakraise", "CS 9999", "What is love?", "baby dont hurt me")){
+  echo "Test 32 failed";
+  die();
+}
+
+
+if (open_queue("CS 9999") != "open"){
+  echo "Test 33 failed";
+  die();
+}
+
+if(enq_stu("zakraise", "CS 9999", "What is love?", "baby dont hurt me")){
+  echo "Test 34 failed";
+  die();
+}
+if(enq_stu("zakraise2", "CS 9999", "What is love?", "baby dont hurt me")){
+  echo "Test 35 failed";
+  die();
+}
+if(enq_stu("zakraise3", "CS 9999", "What is love?", "baby dont hurt me")){
+  echo "Test 36 failed";
+  die(); 
+}
+$queue = get_queue("CS 9999");
 
 
 
