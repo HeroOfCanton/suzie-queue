@@ -55,3 +55,14 @@ create table queue(
   foreign key (username) references users(username),
   foreign key (course_id) references courses(course_id)
 );
+
+create table ta_status(
+  username   VARCHAR(256),
+  course_id  int,
+  helping    BIGINT,
+  primary key (username, course_id),
+  foreign key (username) references users(username),
+  foreign key (course_id) references courses(course_id),
+  foreign key (helping) references queue(position)
+);
+
