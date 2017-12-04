@@ -34,7 +34,7 @@
 			<div class="row">
 				<div class="col-sm-12 text-center">
 					<div id = class_table>
-						<table align="center" style="margin-left:auto; margin-right:auto;">
+						<table class="table table-bordered table-hover" align="center" style="margin-left:auto; margin-right:auto;">
 							<tr>
 								<th>Class Name</th>
 								<th>Course Number</th>
