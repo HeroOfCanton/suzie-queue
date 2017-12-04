@@ -51,79 +51,12 @@
 
       <body style="padding-top: 70px;">       
 
-				<div class="jumbotron" style="background-image: url('resources/img/campus.jpg') !important; background-position: center center !important">
-					<div align="center">	
-						<h1 style="color: #e8002b; text-shadow: 2px 2px #ffffff;">Login Portal</h1>
-					</div>
+			<div class="jumbotron" style="background-image: url('resources/img/campus.jpg') !important; background-position: center center !important">
+				<div align="center">	
+					<h1 style="color: #e8002b; text-shadow: 2px 2px #ffffff;">Login Portal</h1>
 				</div>
-			
-			<!-- Navigation -->
-		    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		        <div class="container">
-		            <!-- Brand and toggle get grouped for better mobile display -->
-		            <div class="navbar-header">
-		                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-		                    <span class="sr-only">Toggle navigation</span>
-		                    <span class="icon-bar"></span>
-		                    <span class="icon-bar"></span>
-		                    <span class="icon-bar"></span>
-		                </button>
-		                <a class="navbar-brand" href="#">Graduate Tracker</a>
-		            </div>
-		            <!-- Collect the nav links, forms, and other content for toggling -->
-		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	                <ul class="nav navbar-nav navbar-right">
-	                  <li class="dropdown">
-	                  	<a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" title="Main">Main / Email</a>
-       								<ul class="dropdown-menu">
-       									<li><a href="href=../../index.html" title="Main Page">Main Page</a></li>
-       									<li><a href="mailto:ryan@ryanwelling.com" title="Email Me">Email Me</a></li>
-    									</ul> 
-										</li>
-
-										<!-- Next Main Menu Item -->
-										<li><a href="index.html" title="Grad Progess Main Page">Grad Progress Main</a></li>
-
-										<!-- Next Main Menu Item -->
-										<li class="active"><a href="entrance.php" title="Entrance Portal">Entrance Portal</a></li>
-						<?php 
-                        if($_SESSION['Role'] == Student)
-                        {
-                            $navelem = '<li><a href="Student/student_forms.php?id=' .$_SESSION['ID'] .'" title="Student Form">Your Forms</a></li>';
-                        }
-                        else if($_SESSION['Role'] == Faculty)
-                        {
-                            $navelem = '<li><a href="Advisor/students.php?lastName=' .$_SESSION['Last_Name'] .'" title="Advisor Portal">List of Students</a></li>';
-                        }
-                        else {
-                        	$navelem = '<li><a href="DGS/overview.php" title="DGS Home">DGS Home</a></li>';
-                        }
-	                    ?>
-	                    <!-- Next Main Menu Item -->
-	                  <?= $navelem; ?>
-	                </ul>
-		            </div>
-		            <!-- /.navbar-collapse -->
-		        </div>
-		        <!-- /.container -->
-		    </nav>
-		    
-		    <div class="container">
-					<div class="row">
-						<div class="col-sm-12">
-							<h2 style="padding-bottom: 25px;">Welcome to the <span style="color: #e8002b;">University of Utah</span> School of Computing Graduate Progress Tracker</h2>
-						</div><!--col-sm-12-->
-					</div><!--row-->
-					<div class="row">
-						<div class="col-sm-6">
-							<p style="font-size:150%;">The School of Computing tracks Graduate student progress each semester to make sure the students are making satisfactory progress toward their degree. </p>
-						</div><!--col-sm-6-->
-						<div class="col-sm-6">
-							<p style="font-size:150%;"> If you're an existing user, please login, and you'll be taken to the correct portal to access your information. If you're a new user, please register using the 'New User' button below.</p>
-						</div><!--col-sm-6-->
-					</div><!--row-->
-				</div><!--container-->
-			
+			</div>
+		
 			<div align = "center" style="margin-top:50px;">
 				<button class="btn" id="login_button"><span>Login</span></button>
 			
