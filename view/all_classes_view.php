@@ -47,7 +47,7 @@
 								<td>C. Hansen</td>
 								<td>
 									<a href="">
-										<button class="btn">
+										<button class="btn btn-success">
 											<span>Enroll</span>
 										</button>
 									</a>
@@ -59,7 +59,7 @@
 								<td>J. Zachary</td>
 								<td>
 									<a href="">
-										<button class="btn">
+										<button class="btn btn-success">
 											<span>Enroll</span>
 										</button>
 									</a>
@@ -71,7 +71,7 @@
 								<td>D. Parker</td>
 								<td>
 									<a href="">
-										<button class="btn">
+										<button class="btn btn-success">
 											<span>Enroll</span>
 										</button>
 									</a>
@@ -83,7 +83,7 @@
 								<td>P. Jensen</td>
 								<td>
 									<a href="">
-										<button class="btn">
+										<button class="btn btn-success">
 											<span>Enroll</span>
 										</button>
 									</a>
