@@ -42,7 +42,7 @@ create table enrolled(
 create table queue_state(
   course_id  int,
   state      ENUM('open','paused'),
-  time_lim   int,
+  time_lim   int DEFAULT 0,
   foreign key (course_id) references courses(course_id)
 );
 
@@ -55,7 +55,8 @@ create table queue(
   location   VARCHAR(256),
   primary key (position),
   foreign key (username) references users(username),
-  foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE
+  foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
+  unique (username, course_id)
 );
 
 --State of each TA on duty--
