@@ -2,6 +2,9 @@
 require_once '../model/auth.php';
 
 session_start();
+redirectToHTTPS();
+
+require_once '../view/login_view.php'
 
 if(!$_POST['username'] || !$_POST['password']){
   $return = array("error" => "No username and/or password");
