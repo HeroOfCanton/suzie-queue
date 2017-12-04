@@ -56,6 +56,7 @@ create table queue(
   foreign key (course_id) references courses(course_id)
 );
 
+--State of each TA on duty--
 create table ta_status(
   username   VARCHAR(256),
   course_id  int,
@@ -63,6 +64,6 @@ create table ta_status(
   primary key (username, course_id),
   foreign key (username) references users(username),
   foreign key (course_id) references courses(course_id),
-  foreign key (helping) references queue(position)
+  foreign key (helping) references queue(position) ON DELETE SET NULL
 );
 
