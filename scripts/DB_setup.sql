@@ -38,10 +38,12 @@ create table enrolled(
 
 
 --State of each queue;
+--Closed queues don't appear here
 create table queue_state(
   course_id  int,
-  state      ENUM('open','closed','paused'),
-  time_lim   int
+  state      ENUM('open','paused'),
+  time_lim   int DEFAULT 0,
+  foreign key (course_id) references courses(course_id)
 );
 
 --Master queue for all courses;
@@ -53,5 +55,18 @@ create table queue(
   location   VARCHAR(256),
   primary key (position),
   foreign key (username) references users(username),
-  foreign key (course_id) references courses(course_id)
+  foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
+  unique (username, course_id)
 );
+
+--State of each TA on duty--
+create table ta_status(
+  username   VARCHAR(256),
+  course_id  int,
+  helping    BIGINT,
+  primary key (username, course_id),
+  foreign key (username) references users(username),
+  foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
+  foreign key (helping) references queue(position) ON DELETE SET NULL
+);
+
