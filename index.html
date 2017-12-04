@@ -10,31 +10,43 @@
 
 		<!-- ALL CSS FILES -->
 		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- jQuery CDN -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 		<!-- Latest compiled and minified JavaScript -->
-		<script src="//code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	</head>
 	<body>
 
 		<div class="jumbotron">
 			<div align="center">	
-				<h1 style="color: #e8002b; text-shadow: 2px 2px #000000;">Welcome to UTrack</h1>
+				<h1 style="color: #e8002b; text-shadow: 2px 2px #000000;">Welcome to the TA Help Queue</h1>
 			</div>
 		</div>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<h2 style="padding-bottom: 25px;">Welcome to the <span style="color: #e8002b;">University of Utah</span> School of Computing TA Help Queue</h2>
+				</div><!--col-sm-12-->
+			</div><!--row-->
+			<div class="row">
+				<div class="col-sm-6">
+					<p style="font-size:150%;"> If you're not sure if your class offers a help queue, you can see a list of classes by clicking below</p>
+				</div><!--col-sm-6-->
+				<div class="col-sm-6">
+					<p style="font-size:150%;"> Authentication with the help queue is done with your CADE login. Please login to be taken to your class page and join a queue. </p>
+				</div><!--col-sm-6-->
+			</div><!--row-->
+		</div><!--container-->
 
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 text-center">
-					<a href="login.php"><button class="btn"><span>Login</span></button></a>
-					<a href="classes/all_classes.php"><button class="btn"><span>See Classes</span></button></a>
+					<a href="view/login_view.php"><button class="btn"><span>Login</span></button></a>
+					<a href="view/all_classes_view.php"><button class="btn"><span>See Classes</span></button></a>
 				</div><!--col-sm-12-->
 			</div><!--row-->
 		</div><!--container-->
