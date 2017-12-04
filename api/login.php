@@ -7,7 +7,7 @@ redirectToHTTPS();
 require_once '../view/login_view.php'
 
 if(!$_POST['username'] || !$_POST['password']){
-  $return = array("error" => "No username and/or password");
+  $return = array("error" => "No username or password");
   $return = json_encode($return);
   echo $return; 
   die();

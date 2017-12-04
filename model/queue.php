@@ -306,7 +306,7 @@ function open_queue($course){
 }
 
 function close_queue($course){
- return change_queue_state($course, "closed");
+  return change_queue_state($course, "closed");
 }
 
 function pause_queue($course){
