@@ -38,11 +38,13 @@
 		
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-12 text-center">
+				<div class="col-sm-12">
 					<div id = class_table>
-						<div class="panel panel-default">
+						<div class="panel panel-primary">
 						<!-- Default panel contents -->
-							<div class="panel-heading">All Available Classes</div>
+							<div class="panel-heading">
+								<h3 class="panel-title">All Available Classes</h3>
+							</div>
 							<div class="panel-body">
 								<p>The following table contains the list of classes for this semester.</p>
 							</div>
@@ -59,7 +61,7 @@
 									<td>C. Hansen</td>
 									<td>
 										<a href="">
-											<button class="btn">
+											<button class="btn btn-primary">
 												<span>Enroll</span>
 											</button>
 										</a>
@@ -71,7 +73,7 @@
 									<td>J. Zachary</td>
 									<td>
 										<a href="">
-											<button class="btn">
+											<button class="btn btn-primary">
 												<span>Enroll</span>
 											</button>
 										</a>
@@ -83,7 +85,7 @@
 									<td>D. Parker</td>
 									<td>
 										<a href="">
-											<button class="btn">
+											<button class="btn btn-primary">
 												<span>Enroll</span>
 											</button>
 										</a>
@@ -95,7 +97,7 @@
 									<td>P. Jensen</td>
 									<td>
 										<a href="">
-											<button class="btn">
+											<button class="btn btn-primary">
 												<span>Enroll</span>
 											</button>
 										</a>
