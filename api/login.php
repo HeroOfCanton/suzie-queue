@@ -4,7 +4,7 @@ require_once '../model/auth.php';
 session_start();
 
 if(!$_POST['username'] || !$_POST['password']){
-  $return = array("error" => "No username and/or password");
+  $return = array("error" => "No username or password");
   $return = json_encode($return);
   echo $return; 
   die();
