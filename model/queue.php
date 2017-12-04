@@ -23,12 +23,13 @@ function get_queue($course){
   #Build return array
   $return = array();
 
-  #Get the state of the queue
+  #Get the state of the queue, if its not here, it must be closed
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
-    return NULL;
+    $return["state"] = "closed";
+    return $return;
   }
   $entry    = mysqli_fetch_assoc($result);
   $return["state"]    = $entry["state"];
@@ -329,25 +330,24 @@ function change_queue_state($course, $state){
     return NULL;
   }
 
-  if($state != NULL){
-    $query = "UPDATE queue_state SET state='".$state."' WHERE course_id ='".$course_id."'";
+  if($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
+    $query = "DELETE IGNORE FROM queue_state WHERE course_id='".$course_id."'";
     if(!mysqli_query($sql_conn, $query)){
       mysqli_close($sql_conn);
       return NULL;
     }
-
-    if($state == "closed"){
-      if(tear_down_queue($course_id, $sql_conn)){
-        mysqli_close($sql_conn);
-        return NULL;
-      }
+  }elseif($state !=NULL){ //opening and pausing
+    $query = "INSERT IGNORE INTO queue_state (course_id, state) VALUES ('".$course_id."','".$state."')";
+    if(!mysqli_query($sql_conn, $query)){
+      mysqli_close($sql_conn);
+      return NULL;
     }
   }else{//Just querying the state of the queue if $state==NULL
     $query  = "SELECT state FROM queue_state WHERE course_id ='".$course_id."'";
     $result = mysqli_query($sql_conn, $query);
     if(!mysqli_num_rows($result)){
       mysqli_close($sql_conn);
-      return NULL;
+      return "closed";
     }
     $entry = mysqli_fetch_assoc($result);
     $state = $entry["state"];
@@ -356,30 +356,6 @@ function change_queue_state($course, $state){
   mysqli_close($sql_conn);
   return $state;
 }
-
-/*
- *Tears down a queue in the appropriate order
- *
- */
-function tear_down_queue($course_id, $sql_conn){
-  if(!$sql_conn){
-    return 1;
-  }
-
-  $query = "DELETE IGNORE FROM ta_status WHERE course_id='".$course_id."'";
-  if(!mysqli_query($sql_conn, $query)){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  $query = "DELETE IGNORE FROM queue WHERE course_id='".$course_id."'";
-  if(!mysqli_query($sql_conn, $query)){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-  return 0;
-}
-
 
 function course_name_to_id($course, $sql_conn){
   if(!$sql_conn){

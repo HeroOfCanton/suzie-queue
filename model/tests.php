@@ -189,7 +189,6 @@ if(!enq_stu("zakraise", "CS 9999", "What is love?", "baby dont hurt me")){
   die();
 }
 
-
 if (open_queue("CS 9999") != "open"){
   echo "Test 33 failed";
   die();
