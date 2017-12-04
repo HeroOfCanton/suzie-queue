@@ -29,30 +29,3 @@
 				<h1 style="color: #e8002b; text-shadow: 2px 2px #000000;">Welcome to the TA Help Queue</h1>
 			</div>
 		</div>
-		
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12">
-					<h2 style="padding-bottom: 25px;">Welcome to the <span style="color: #e8002b;">University of Utah</span> School of Computing TA Help Queue</h2>
-				</div><!--col-sm-12-->
-			</div><!--row-->
-			<div class="row">
-				<div class="col-sm-6">
-					<p style="font-size:150%;"> If you're not sure if your class offers a help queue, you can see a list of classes by clicking below</p>
-				</div><!--col-sm-6-->
-				<div class="col-sm-6">
-					<p style="font-size:150%;"> Authentication with the help queue is done with your CADE login. Please login to be taken to your class page and join a queue. </p>
-				</div><!--col-sm-6-->
-			</div><!--row-->
-		</div><!--container-->
-
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12 text-center">
-					<a href="login.php"><button class="btn"><span>Login</span></button></a>
-					<a href="classes/all_classes.php"><button class="btn"><span>See Classes</span></button></a>
-				</div><!--col-sm-12-->
-			</div><!--row-->
-		</div><!--container-->
-	</body>
-</html>

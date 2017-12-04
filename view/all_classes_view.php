@@ -33,18 +33,67 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 text-center">
-					<div id = content>
+					<div id = class_table>
 						<table align="center" style="margin-left:auto; margin-right:auto;">
- 
 							<tr>
-								<th>Student Name </th>
+								<th>Class Name</th>
+								<th>Course Number</th>
+								<th>Professor</th>
+								<th>Enroll</th>
 							</tr>
-
-							<?= $output ?>
+							<tr>
+								<td>Foundations of CS</td>
+								<td>CS 1030</td>
+								<td>C. Hansen</td>
+								<td>
+									<a href="">
+										<button class="btn">
+											<span>Enroll</span>
+										</button>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Obj. Oriented Prog.</td>
+								<td>CS 1410</td>
+								<td>J. Zachary</td>
+								<td>
+									<a href="">
+										<button class="btn">
+											<span>Enroll</span>
+										</button>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Obj. Oriented Prog.</td>
+								<td>CS 1410</td>
+								<td>D. Parker</td>
+								<td>
+									<a href="">
+										<button class="btn">
+											<span>Enroll</span>
+										</button>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Intro to Alg & D.S.</td>
+								<td>CS 2420</td>
+								<td>P. Jensen</td>
+								<td>
+									<a href="">
+										<button class="btn">
+											<span>Enroll</span>
+										</button>
+									</a>
+								</td>
+							</tr>
 						</table>
 					</div>
 				</div><!--col-sm-12-->
 			</div><!--row-->
 		</div><!--container-->
+		
 	</body>
 </html>
