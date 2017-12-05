@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../model/courses.php';
-require_once '../../view/all_classes_view.php'
+require_once '../../view/all_classes_view.php';
 
 // get the session variables
 session_start();
