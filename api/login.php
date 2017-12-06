@@ -32,5 +32,7 @@ $_SESSION["username"] = $username;
 $_SESSION["authed"]   = TRUE;
 
 $user_json = json_encode($info);
-echo $user_json;
+//echo $user_json;
+
+header('Location: ../view/all_classes_view.html');
 ?>
