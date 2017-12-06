@@ -15,7 +15,7 @@ if (!$_SESSION["username"])
   die();	
 }
 
-if (!$_POST['class'])
+if (!$_POST['course'])
 {
   $return = array(
     "authenticated" => True,
@@ -27,9 +27,9 @@ if (!$_POST['class'])
 }
 
 $username = $_SESSION['username'];
-$class = $_POST['class'];
+$course = $_POST['course'];
 
-if (!add_stud_course($username, $class))
+if (!add_stud_course($username, $course))
 {
   $return = array(
     "authenticated" => True,
