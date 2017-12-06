@@ -35,8 +35,6 @@ if (!rem_stud_course($username, $class))
     "authenticated" => True,
     "Student Course Removed Successfully"
   );
-  $return = json_encode($return);
-  echo $return;
 }
 else
 {
@@ -44,8 +42,8 @@ else
     "authenticated" => True,
     "error" => "Unable to Remove Student Course"
   );
-  $return = json_encode($return);
-  echo $return;
 }
 
+$return = json_encode($return);
+echo $return;
 ?>

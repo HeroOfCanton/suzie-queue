@@ -36,6 +36,4 @@ $return = array(
 
 $return = json_encode($return);
 echo $return;
-
 ?>
-

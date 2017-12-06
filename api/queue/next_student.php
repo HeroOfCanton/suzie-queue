@@ -49,4 +49,3 @@ $return = array("success" => "TA status changed");
 $return = json_encode($return);
 echo $return;
 ?>
-

@@ -29,7 +29,7 @@ if($info == NULL){
 }
 
 $_SESSION["username"] = $username;
-$_SESSION["authed"]   = TRUE;
+$info["authenticated"] = TRUE;
 
 $user_json = json_encode($info);
 echo $user_json;

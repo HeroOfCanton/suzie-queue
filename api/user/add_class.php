@@ -35,8 +35,6 @@ if (!add_stud_course($username, $class))
     "authenticated" => True,
     "Student Course Added Successfully"
   );
-  $return = json_encode($return);
-  echo $return;
 }
 else
 {
@@ -44,8 +42,8 @@ else
     "authenticated" => True,
     "error" => "Unable to Add Student Course"
   );
-  $return = json_encode($return);
-  echo $return;
 }
 
+$return = json_encode($return);
+echo $return;
 ?>

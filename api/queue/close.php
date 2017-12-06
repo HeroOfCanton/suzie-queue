@@ -49,4 +49,3 @@ $return = array("success" => "queue closed");
 $return = json_encode($return);
 echo $return;
 ?>
-

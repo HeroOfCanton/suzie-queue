@@ -48,4 +48,3 @@ $return = array("success" => "queue open");
 $return = json_encode($return);
 echo $return;
 ?>
-
