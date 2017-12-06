@@ -24,10 +24,10 @@
 				  <h1 style="color: #e8002b; text-shadow: 2px 2px #ffffff;">Login Portal</h1>
 			  </div>	
 		  </div>
-		  <form class="form-inline" action="api/login.php" method="post" id="login_form">
+		  <form class="form-inline" action="../api/login.php" method="post" id="login_form">
 			  <div class="form-group">
 				  <label class="sr-only" for="exampleInputEmail3">Login</label>
-				  <input class="form-control" id="Login" name="Login" type="text" pattern="[a-zA-Z0-9]+" value="<?= $_POST['Login']; ?>" placeholder="User Name" required autofocus>
+				  <input class="form-control" id="Login" name="username" type="text" pattern="[a-zA-Z0-9]+" value="<?= $_POST['Login']; ?>" placeholder="User Name" required autofocus>
 			  </div>
 			  <div class="form-group">
 				  <label class="sr-only" for="exampleInputPassword3">Password</label>
