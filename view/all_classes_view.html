@@ -16,6 +16,8 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<script src="./src/classes.js"></script>
 	</head>
 	<body>
 
@@ -39,7 +41,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12">
-					<div id = class_table>
+					<div id ="class_table">
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
@@ -48,67 +50,19 @@
 							<div class="panel-body">
 								<p>The following table contains the list of classes for this semester.</p>
 							</div>
-								<table class="table table-hover" align="center" style="margin-left:auto; margin-right:auto;">
+								<table class="table table-hover" id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
 								<tr>
 									<th>Class Name</th>
 									<th>Course Number</th>
 									<th>Professor</th>
 									<th>Enroll</th>
 								</tr>
-								<tr>
-									<td>Foundations of CS</td>
-									<td>CS 1030</td>
-									<td>C. Hansen</td>
-									<td>
-										<a href="">
-											<button class="btn btn-primary">
-												<span>Enroll</span>
-											</button>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Obj. Oriented Prog.</td>
-									<td>CS 1410</td>
-									<td>J. Zachary</td>
-									<td>
-										<a href="">
-											<button class="btn btn-primary">
-												<span>Enroll</span>
-											</button>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Obj. Oriented Prog.</td>
-									<td>CS 1410</td>
-									<td>D. Parker</td>
-									<td>
-										<a href="">
-											<button class="btn btn-primary">
-												<span>Enroll</span>
-											</button>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Intro to Alg & D.S.</td>
-									<td>CS 2420</td>
-									<td>P. Jensen</td>
-									<td>
-										<a href="">
-											<button class="btn btn-primary">
-												<span>Enroll</span>
-											</button>
-										</a>
-									</td>
-								</tr>
+								<!--classes.js should write here-->
 							</table>
 						</div><!--panel-->
 					</div><!--id-->
 				</div><!--col-sm-12-->
 			</div><!--row-->
 		</div><!--container-->
-		
 	</body>
 </html>
