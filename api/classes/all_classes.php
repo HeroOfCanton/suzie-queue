@@ -1,21 +1,20 @@
 <?php
 
 require_once '../../model/courses.php';
-require_once '../../view/all_classes_view.php';
 
 // get the session variables
-session_start();
+//session_start();
 
 // return authenticated False if user isn't authenticated
-if (!$_SESSION["username"])
-{
-  $return = array("authenticated" => False);
-  $return = json_encode($return);
-  echo $return;
-  die();
-}
+//if (!$_SESSION["username"])
+//{
+//  $return = array("authenticated" => False);
+//  $return = json_encode($return);
+//  echo $return;
+//  die();
+//}
 
-$username = $_SESSION['username'];
+//$username = $_SESSION['username'];
 $all_courses = get_avail_courses();
 
 if ($all_courses == NULL)

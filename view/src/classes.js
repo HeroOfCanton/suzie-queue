@@ -1,18 +1,18 @@
 function renderCourse(course) {
     // #7 continued
     var tableRow = $('<tr>');
-    tableRow.append($('<td>').text(course.name));
-    tableRow.append($('<td>').text(course.id));
-    tableRow.append($('<td>').text(course.teacher));
+    tableRow.append($('<td>').text(course));
+    //tableRow.append($('<td>').text(course.id));
+    //tableRow.append($('<td>').text(course.teacher));
     return tableRow;
 }
 
 function renderCourseTable(courses) {
     // #6
     var table = $('#all_classes');
-    classes.forEach(function (class) {
+    courses.forEach(function (each_class) {
         // #7
-        var renderedCourse = renderCourse(class);
+        var renderedCourse = renderCourse(each_class);
         // #8
         table.append(renderedCourse);
         // You will now see the new table row rendered into the browser at the point
@@ -20,11 +20,11 @@ function renderCourseTable(courses) {
 }
 
 // #3
-$.ready(function () {
+$(function () {
     // #4
     $.ajax({
-        url: "../../api/classes/all_classes.php"
-        dataType: json,
+        url: "../../api/classes/all_classes.php",
+        dataType: "json",
         async: true,
         success: function (coursesResponse, textStatus, jqXHR) {
             // #5
@@ -35,7 +35,7 @@ $.ready(function () {
 
             // coursesResponse should be similar in form to the hardcoded 'classes' object 
             // we defined at the top. This is the data returned from the all_classes endpoint.
-            //renderCourseTable(coursesResponse);
+            renderCourseTable(coursesResponse);
         }
     });
     
