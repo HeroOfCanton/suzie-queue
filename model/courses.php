@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'auth.php';
 
 /*
  *Returns list of all possible courses in LDAP
