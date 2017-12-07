@@ -9,7 +9,7 @@ function renderCourse(course) {
 
 function renderCourseTable(courses) {
     // #6
-    var table = $('#all_classes');
+    var table = $('#my_classes');
     courses.forEach(function (each_class) {
         // #7
         var renderedCourse = renderCourse(each_class);
@@ -23,7 +23,7 @@ function renderCourseTable(courses) {
 $(function () {
     // #4
     $.ajax({
-        url: "../../api/classes/all_classes.php",
+        url: "../../api/user/my_classes.php",
         dataType: "json",
         async: true,
         success: function (coursesResponse, textStatus, jqXHR) {
@@ -31,11 +31,11 @@ $(function () {
             // Unncessary if data type is set properly:
             // coursesResponse = JSON.parse(coursesResponse);
 
-            console.log(coursesResponse.all_courses);
+            console.log(coursesResponse.student_courses);
 
             // coursesResponse should be similar in form to the hardcoded 'classes' object 
             // we defined at the top. This is the data returned from the all_classes endpoint.
-            renderCourseTable(coursesResponse.all_courses);
+            renderCourseTable(coursesResponse.student_courses);
         }
     });
     
