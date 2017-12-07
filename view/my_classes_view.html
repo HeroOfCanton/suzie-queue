@@ -16,6 +16,8 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<script src="./src/classes.js"></script>
 	</head>
 	<body>
 
@@ -24,4 +26,31 @@
 				<h1 style="color: #e8002b; text-shadow: 2px 2px #000000;">My Classes</h1>
 			</div>
 		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div id ="class_table">
+						<div class="panel panel-primary">
+						<!-- Default panel contents -->
+							<div class="panel-heading">
+								<h3 class="panel-title">My Classes</h3>
+							</div>
+							<div class="panel-body">
+								<p>The following table contains this semester's list of classes that you have enrolled in. </br> </br> Yeah, that's preposition at the end there. We're not apologizing.</p>
+							</div>
+								<table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
+								<tr>
+									<th>Class Name</th>
+									<th>Course Number</th>
+									<th>Professor</th>
+									<th>Enroll</th>
+								</tr>
+								<!--classes.js should write here-->
+							</table>
+						</div><!--panel-->
+					</div><!--id-->
+				</div><!--col-sm-12-->
+			</div><!--row-->
+		</div><!--container-->
 	</body>
