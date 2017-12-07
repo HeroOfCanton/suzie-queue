@@ -1,5 +1,6 @@
 <?php
 require_once '../model/auth.php';
+require_once '../model/courses.php';
 
 session_start();
 
@@ -32,7 +33,13 @@ $_SESSION["username"] = $username;
 $info["authenticated"] = TRUE;
 
 $user_json = json_encode($info);
-//echo $user_json;
+echo $user_json;
 
-header('Location: ../view/all_classes_view.html');
+if(get_stud_courses($username) == NULL) {
+  header('Location: ../view/all_classes_view.html');
+}
+else {
+  header('Location: ../view/my_classes_view.html');
+}
+
 ?>
