@@ -2,7 +2,6 @@ function renderCourse(course) {
     // #7 continued
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
-    tableRow.append($('<td><button class="btn btn-primary pull-right"><span>GOTO</span></button>'));
     //tableRow.append($('<td>').text(course.id));
     //tableRow.append($('<td>').text(course.teacher));
     return tableRow;

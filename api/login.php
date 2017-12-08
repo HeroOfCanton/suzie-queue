@@ -35,6 +35,8 @@ $info["authenticated"] = TRUE;
 $user_json = json_encode($info);
 echo $user_json;
 
+//add_stud_course($username, 'Algorithms');
+
 if(get_stud_courses($username) == NULL) {
   header('Location: ../view/all_classes_view.html');
 }
