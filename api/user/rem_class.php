@@ -2,29 +2,13 @@
 // File: rem_class.php
 
 require_once '../../model/courses.php';
+require_once '../helper_functions.php';
 
 // get the session variables
 session_start(); 
 
-// return authenticated False if user isn't authenticated
-if (!$_SESSION["username"])
-{
-  $return = array("authenticated" => False);
-  $return = json_encode($return);
-  echo $return;
-  die();	
-}
-
-if (!$_POST['course'])
-{
-  $return = array(
-    "authenticated" => True,    
-    "error" => "No Class Specified"
-  );
-  $return = json_encode($return);
-  echo $return;
-  die();
-}
+user_authenticated();
+course_posted();
 
 $username = $_SESSION['username'];
 $course = $_POST['course'];
