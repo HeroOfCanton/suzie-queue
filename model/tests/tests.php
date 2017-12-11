@@ -1,8 +1,8 @@
 <?php
 
-require_once 'auth.php';
-require_once 'courses.php';
-require_once 'queue.php';
+require_once '../auth.php';
+require_once '../courses.php';
+require_once '../queue.php';
 
 #test01
 if(!auth(BIND_USER, BIND_PASSWD)){

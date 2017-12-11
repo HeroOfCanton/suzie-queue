@@ -32,9 +32,8 @@ create table enrolled(
   course_id   int,
   primary key (username, course_id),
   foreign key (username) references users(username) ON DELETE CASCADE,
-  foreign key (course_id) references courses(course_id) ON DELETE CASCADE,
+  foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );
-
 
 
 --State of each queue;
@@ -43,7 +42,8 @@ create table queue_state(
   course_id  int,
   state      ENUM('open','paused'),
   time_lim   int DEFAULT 0,
-  foreign key (course_id) references courses(course_id) ON DELETE CASCADE,
+  primary key (course_id),
+  foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );
 
 --Master queue for all courses;
@@ -69,4 +69,3 @@ create table ta_status(
   foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
   foreign key (helping) references queue(position) ON DELETE SET NULL
 );
-

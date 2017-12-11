@@ -59,11 +59,8 @@ function get_queue($course){
 
 /*
  *Enqueue a student at the end of the queue
- *NEED TO FIX THIS TO PREVENT A STUDENT FROM BEING IN THE SAME QUEUE MULTIPLE TIMES
  */
 function enq_stu($username, $course, $question, $location){
-  #VERIFY INPUT
-
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -76,6 +73,7 @@ function enq_stu($username, $course, $question, $location){
   }
 
   if(get_queue_state($course) != "open"){
+    mysqli_close($sql_conn);
     return 1;
   }  
 
@@ -104,7 +102,8 @@ function deq_stu($username, $course){
     return 1;
   }
 
-  $query = "DELETE IGNORE FROM queue WHERE username='".$username."' AND course_id='".$course_id."'";
+  $query = "DELETE FROM queue WHERE username='".$username."' AND course_id='".$course_id."'";
+  //$query = "DELETE queue from queue NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -115,8 +114,6 @@ function deq_stu($username, $course){
 
 
 
-
-
 /*
  *Puts the TA on duty
  *Up to the controller to verify that $username is a TA for $course
@@ -124,10 +121,6 @@ function deq_stu($username, $course){
 function enq_ta($username, $course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
-  }
-
-  if(get_queue_state($course) != "open"){
     return 1;
   }
 
@@ -156,17 +149,13 @@ function deq_ta($username, $course){
     return 1;
   }
 
-  if(get_queue_state($course) != "open"){
-    return 1;
-  }
-
   $course_id = course_name_to_id($course, $sql_conn);
   if($course_id == NULL){
     mysqli_close($sql_conn);
     return 1;
   }
 
-  $query = "DELETE IGNORE FROM ta_status WHERE username='".$username."' AND course_id='".$course_id."'"; 
+  $query = "DELETE FROM ta_status WHERE username='".$username."' AND course_id='".$course_id."'"; 
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -174,16 +163,11 @@ function deq_ta($username, $course){
 
   mysqli_close($sql_conn);
   return 0;
-
 }
 
 function get_ta_status($username, $course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
-  }
-
-  if(get_queue_state($course) != "open"){
     return 1;
   }
 
@@ -259,18 +243,8 @@ function help_next_student($username, $course){
  *Not helping anyone though
  */
 function set_free_ta($username, $course){
- $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
-  }
-
-  if(get_queue_state($course) != "open"){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  if(get_ta_status($username, $course)[0] != "enqueue"){
-    mysqli_close($sql_conn);
     return 1;
   }
 
@@ -317,7 +291,6 @@ function pause_queue($course){
 
 
 //HELPER FUNCTIONS
-
 function change_queue_state($course, $state){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -331,13 +304,19 @@ function change_queue_state($course, $state){
   }
 
   if($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
-    $query = "DELETE IGNORE FROM queue_state WHERE course_id='".$course_id."'";
+    $query = "DELETE FROM queue_state WHERE course_id='".$course_id."'";
     if(!mysqli_query($sql_conn, $query)){
       mysqli_close($sql_conn);
       return NULL;
     }
-  }elseif($state !=NULL){ //opening and pausing
-    $query = "INSERT IGNORE INTO queue_state (course_id, state) VALUES ('".$course_id."','".$state."')";
+  }elseif($state == "paused"){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
+    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','paused') ON DUPLICATE KEY UPDATE state='paused'";
+    if(!mysqli_query($sql_conn, $query)){
+      mysqli_close($sql_conn);
+      return NULL;
+    }
+  }elseif($state == "open"){
+    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','open') ON DUPLICATE KEY UPDATE state='open'";
     if(!mysqli_query($sql_conn, $query)){
       mysqli_close($sql_conn);
       return NULL;
@@ -372,6 +351,4 @@ function course_name_to_id($course, $sql_conn){
 
   return $course_id;
 }
-
-
 ?>

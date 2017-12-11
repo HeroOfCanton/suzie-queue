@@ -14,6 +14,9 @@ function get_avail_courses(){
 
   $query  = "SELECT course_name FROM courses";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    return NULL;
+  }
 
   $courses = array();
   while($entry = mysqli_fetch_assoc($result)){
@@ -23,6 +26,8 @@ function get_avail_courses(){
   mysqli_close($sql_conn);
   return $courses;
 }
+
+
 
 /*
  *Adds the course to the database
@@ -39,8 +44,6 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
     return 1;
   }
   
-  #Check if course_name already exists!
-  
   $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group) VALUES ('".$depart_prefix."','".$course_num."','".$course_name."','".$description."','".$ldap_group."')";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
@@ -53,9 +56,21 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
 
 /*
  *Removes the course from the database
- *IMPLEMENT IN SPRING
  */
 function del_course($course_name){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  $query = "DELETE FROM courses WHERE course_name='".$course_name."'"; 
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_close($sql_conn);
+  return 0;
 }
 
 
@@ -127,10 +142,9 @@ function get_ta_courses($username){
 function get_stud_courses($username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return NULL; //error
+    return NULL;
   }
 
-  #Verify course exists
   $query  = "SELECT course_id FROM enrolled WHERE username ='".$username."'";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
@@ -173,9 +187,7 @@ function add_stud_course($username, $course_name){
     return 1;
   }
 
-  #Verify user exists
-
-  #Verify course exists
+  #MOVE THIS BLOCK OVER TO course_name_to_id HELPER FUNCTION
   $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
@@ -185,7 +197,7 @@ function add_stud_course($username, $course_name){
   $entry = mysqli_fetch_assoc($result);
   $course_id = $entry["course_id"];
 
-  $query = "INSERT IGNORE INTO enrolled (username, course_id) VALUES ( '".$username."','".$course_id."')";
+  $query = "REPLACE enrolled (username, course_id) VALUES ( '".$username."','".$course_id."')";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -204,9 +216,7 @@ function rem_stud_course($username, $course_name){
     return 1;
   }
 
-  #Verify user exists
-
-  #Verify course exists
+  #MOVE THIS BLOCK OVER TO course_name_to_id HELPER FUNCTION
   $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
@@ -216,7 +226,7 @@ function rem_stud_course($username, $course_name){
   $entry = mysqli_fetch_assoc($result);
   $course_id = $entry["course_id"];
 
-  $query = "DELETE IGNORE FROM enrolled WHERE username='".$username."' AND course_id='".$course_id."'";
+  $query = "DELETE FROM enrolled WHERE username='".$username."' AND course_id='".$course_id."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -233,10 +243,8 @@ function rem_stud_course($username, $course_name){
 function get_course_group($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
+    return NULL;
   }
-
-  #Check if course_name already exists!
 
   $query = "SELECT ldap_group FROM courses WHERE course_name ='".$course_name."'";
   $result = mysqli_query($sql_conn, $query);
