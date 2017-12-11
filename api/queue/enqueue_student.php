@@ -4,22 +4,16 @@
 require_once '../../model/auth.php';
 require_once '../../model/course.php';
 require_once '../../model/queue.php';
+require_once '../helper_functions.php';
 
 // get the session variables
 session_start();
 
-// return authenticated False if user isn't authenticated
-if (!$_SESSION["username"])
-{
-  $return = array("authenticated" => False);
-  $return = json_encode($return);
-  echo $return;
-  die();
-}
+user_authenticated();
 
 if (!$_POST["course"] || !$_POST["question"] || !$_POST["location"])
 {
-  $return = array("error" => "Missing course/question/location");
+  $return = array("error" => "Missing course, question, or location");
   $return = json_encode($return);
   echo $return;
   die();

@@ -2,18 +2,12 @@
 //File: my_classes.php 
 
 require_once '../../model/courses.php';
+require_once '../helper_functions.php';
 
 // get the session variables
 session_start(); 
 
-// return authentication False if user isn't authenticated
-if (!$_SESSION["username"])
-{
-  $return = array("authenticated" => False);
-  $return = json_encode($return);
-  echo $return;
-  die();	
-}
+user_authenticated();
 
 $username = $_SESSION['username'];
 $stud_courses = get_stud_courses($username);

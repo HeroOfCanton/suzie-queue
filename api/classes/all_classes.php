@@ -1,6 +1,8 @@
 <?php
+// File: all_classes.php
 
 require_once '../../model/courses.php';
+require_once '../helper_functions.php';
 
 // get the session variables
 //session_start();
@@ -14,7 +16,11 @@ require_once '../../model/courses.php';
 //  die();
 //}
 
+// SHOULD BE ABLE TO CALL THIS INSTEAD OF ABOVE IF STATEMENT
+// user_authenticated();
+
 //$username = $_SESSION['username'];
+
 $all_courses = get_avail_courses();
 
 if ($all_courses == NULL)

@@ -2,18 +2,12 @@
 // File: get_info.php
 
 require_once '../../model/auth.php';
+require_once '../helper_functions.php';
 
 // get the session variables
 session_start();
 
-// return authenticated False if user isn't authenticated
-if (!$_SESSION["username"])
-{
-  $return = array("authenticated" => False);
-  $return = json_encode($return);
-  echo $return;
-  die();
-}
+user_authenticated();
 
 $username = $_SESSION['username'];
 $stud_info = get_info($username);
