@@ -78,7 +78,9 @@ function enq_stu($username, $course, $question, $location){
     return 1;
   }  
 
-  $query = "INSERT INTO queue (username, course_id, question, location) VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') ,'".$question."','".$location."') ON DUPLICATE KEY UPDATE question='".$question."'";
+  $query = "INSERT INTO queue (username, course_id, question, location) 
+            VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') ,'".$question."','".$location."') 
+            ON DUPLICATE KEY UPDATE question='".$question."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -97,7 +99,8 @@ function deq_stu($username, $course){
     return 1;
   }
 
-  $query = "DELETE queue from queue NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
+  $query = "DELETE queue from queue NATURAL JOIN courses 
+            WHERE course_name='".$course_name."' AND username='".$username."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -118,7 +121,8 @@ function enq_ta($username, $course){
     return 1;
   }
 
-  $query = "INSERT INTO ta_status (username, course_id) VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
+  $query = "INSERT INTO ta_status (username, course_id) 
+            VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -137,7 +141,9 @@ function deq_ta($username, $course){
     return 1;
   }
 
-  $query = "DELETE FROM ta_status WHERE username='".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')"; 
+  $query = "DELETE FROM ta_status 
+            WHERE username='".$username."' 
+            AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')"; 
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -153,7 +159,9 @@ function get_ta_status($username, $course){
     return 1;
   }
 
-  $query  = "SELECT * FROM ta_status WHERE username='".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
+  $query  = "SELECT * FROM ta_status 
+             WHERE username='".$username."' 
+             AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
@@ -198,8 +206,11 @@ function help_next_student($username, $course){
     return 1;
   }
 
-  #This SQL command is hacky is hell
-  $query = "SELECT position FROM queue LEFT JOIN ta_status on (queue.position = ta_status.helping) WHERE queue.course_id ='".$course_id."' AND ta_status.helping IS NULL ORDER BY position LIMIT 1";
+  #This block of code sucks
+  $query = "SELECT position FROM queue LEFT JOIN ta_status on (queue.position = ta_status.helping) 
+            WHERE queue.course_id ='".$course_id."' 
+            AND ta_status.helping IS NULL 
+            ORDER BY position LIMIT 1";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', NULL )"; 
@@ -234,7 +245,9 @@ function set_free_ta($username, $course){
     return 1;
   }
 
-  $query = "UPDATE ta_status SET helping = NULL WHERE username = '".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
+  $query = "UPDATE ta_status SET helping = NULL 
+            WHERE username = '".$username."' 
+            AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;

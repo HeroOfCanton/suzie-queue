@@ -112,6 +112,8 @@ function get_ta_courses($username){
   }
  
   $groups = $result["memberof"];
+  unset($groups["count"]);
+
   $courses = array();
   foreach($groups as $group) {
     $group_sam = dn_to_sam($group);
@@ -126,9 +128,8 @@ function get_ta_courses($username){
     while($entry = mysqli_fetch_assoc($result)){
       $courses[] = $entry["course_name"]; 
     }
-    
   }
-
+  
   mysqli_close($sql_conn);
   return $courses;
 }
@@ -161,23 +162,13 @@ function get_stud_courses($username){
  *Assumes the course already exists in the courses table 
  *NOTE: Not meant for TAs
  */
-function add_stud_course($username, $course_name){ 
+function add_stud_course($username, $course){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  #MOVE THIS BLOCK OVER TO course_name_to_id HELPER FUNCTION
-  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
-    return 1;  
-  }
-  $entry = mysqli_fetch_assoc($result);
-  $course_id = $entry["course_id"];
-
-  $query = "REPLACE enrolled (username, course_id) VALUES ( '".$username."','".$course_id."')";
+  $query = "REPLACE enrolled (username, course_id) VALUES ( '".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
