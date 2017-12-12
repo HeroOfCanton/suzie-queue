@@ -57,18 +57,19 @@ function get_queue($course){
 
 
 
-/*
- *Enqueue a student at the end of the queue
+/**
+ *Adds a student to the queue
+ *
+ *@param string $username
+ *@param string $course
+ *@param string $question
+ *@param string $location
+ *
+ *@return int
  */
 function enq_stu($username, $course, $question, $location){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
-  }
-
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
     return 1;
   }
 
@@ -77,7 +78,7 @@ function enq_stu($username, $course, $question, $location){
     return 1;
   }  
 
-  $query = "INSERT INTO queue (username, course_id, question, location) VALUES ('".$username."','".$course_id."','".$question."','".$location."')";
+  $query = "INSERT INTO queue (username, course_id, question, location) VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') ,'".$question."','".$location."') ON DUPLICATE KEY UPDATE question='".$question."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -117,13 +118,7 @@ function enq_ta($username, $course){
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  $query = "INSERT INTO ta_status (username, course_id) VALUES ('".$username."','".$course_id."')";
+  $query = "INSERT INTO ta_status (username, course_id) VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -142,13 +137,7 @@ function deq_ta($username, $course){
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  $query = "DELETE FROM ta_status WHERE username='".$username."' AND course_id='".$course_id."'"; 
+  $query = "DELETE FROM ta_status WHERE username='".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')"; 
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -164,13 +153,7 @@ function get_ta_status($username, $course){
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  $query  = "SELECT * FROM ta_status WHERE username='".$username."' AND course_id='".$course_id."'";
+  $query  = "SELECT * FROM ta_status WHERE username='".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
@@ -187,9 +170,11 @@ function get_ta_status($username, $course){
   return $return;
 }
 
+
+
 /*
  *Sets the TA status to helping the next person in the queue.
- *Call deq_stud() before calling this again, or you'll just get the same person.
+ *Call deq_stud() before calling this again
  */
 function help_next_student($username, $course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -213,7 +198,17 @@ function help_next_student($username, $course){
     return 1;
   }
 
-  $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', (SELECT position FROM queue WHERE course_id ='".$course_id."' ORDER BY position LIMIT 1)  )";
+  #This SQL command is hacky is hell
+  $query = "SELECT position FROM queue LEFT JOIN ta_status on (queue.position = ta_status.helping) WHERE queue.course_id ='".$course_id."' AND ta_status.helping IS NULL ORDER BY position LIMIT 1";
+  $result = mysqli_query($sql_conn, $query);
+  if(!mysqli_num_rows($result)){
+    $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', NULL )"; 
+  }
+  else{
+    $position = mysqli_fetch_assoc($result)['position'];
+    $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', '".$position."'  )"; 
+  }
+
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -221,6 +216,12 @@ function help_next_student($username, $course){
   
   mysqli_close($sql_conn);
   return 0;  
+}
+
+/*
+ *
+ */
+function help_student($TA_username, $stud_username, $course){
 }
 
 /*
@@ -233,13 +234,7 @@ function set_free_ta($username, $course){
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-  
-  $query = "UPDATE ta_status SET helping = NULL WHERE username = '".$username."' AND course_id = '".$course_id."'";
+  $query = "UPDATE ta_status SET helping = NULL WHERE username = '".$username."' AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -249,6 +244,17 @@ function set_free_ta($username, $course){
   return 0;
 }
 
+/*
+ *
+ */
+function increase_stud_priority($stud_username, $course){
+}
+
+/*
+ *
+ */
+function decrease_stud_priority($stud_username, $course){
+}
 
 
 

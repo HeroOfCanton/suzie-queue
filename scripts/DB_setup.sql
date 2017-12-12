@@ -29,7 +29,7 @@ create table courses(
 --Students enrolled in course;
 create table enrolled(
   username    VARCHAR(256),
-  course_id   int,
+  course_id   int NOT NULL,
   primary key (username, course_id),
   foreign key (username) references users(username) ON DELETE CASCADE,
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE
@@ -49,8 +49,8 @@ create table queue_state(
 --Master queue for all courses;
 create table queue(
   position   BIGINT NOT NULL AUTO_INCREMENT,
-  username   VARCHAR(256),
-  course_id  int,
+  username   VARCHAR(256) NOT NULL,
+  course_id  int NOT NULL,
   question   TEXT,
   location   VARCHAR(256),
   primary key (position),
@@ -61,8 +61,8 @@ create table queue(
 
 --State of each TA on duty--
 create table ta_status(
-  username   VARCHAR(256),
-  course_id  int,
+  username   VARCHAR(256) NOT NULL,
+  course_id  int NOT NULL,
   helping    BIGINT,
   primary key (username, course_id),
   foreign key (username) references users(username) ON DELETE CASCADE,
