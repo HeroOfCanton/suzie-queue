@@ -96,14 +96,7 @@ function deq_stu($username, $course){
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  $query = "DELETE FROM queue WHERE username='".$username."' AND course_id='".$course_id."'";
-  //$query = "DELETE queue from queue NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
+  $query = "DELETE queue from queue NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
@@ -220,15 +213,7 @@ function help_next_student($username, $course){
     return 1;
   }
 
-  $query  = "SELECT position FROM queue WHERE course_id ='".$course_id."' ORDER BY position";
-  $result = mysqli_query($sql_conn, $query);  
-  if(!mysqli_num_rows($result)){
-    $position = NULL; //Nobody left to help
-  }else{
-    $position = mysqli_fetch_assoc($result)["position"];
-  }
-  
-  $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."','".$position."')";
+  $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', (SELECT position FROM queue WHERE course_id ='".$course_id."' ORDER BY position LIMIT 1)  )";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;

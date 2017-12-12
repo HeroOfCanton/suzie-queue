@@ -37,8 +37,6 @@ function get_avail_courses(){
  *  the IT people a request for a new group. The group sam goes here.
  */
 function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group){
-  #Check input validity
-
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -145,26 +143,8 @@ function get_stud_courses($username){
     return NULL;
   }
 
-  $query  = "SELECT course_id FROM enrolled WHERE username ='".$username."'";
+  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username='".$username."'";
   $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
-    return array(); //Not in any courses
-  }
-  
-  $courses = array();
-  while($entry = mysqli_fetch_assoc($result)){
-    $course_id = $entry["course_id"];
-    $courses[] = $course_id;
-  }
-  $courses = '('.implode(",",$courses).')';
-
-  $query = "SELECT course_name FROM courses WHERE course_id IN ".$courses."";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
-    return NULL; //error
-  }
 
   $courses = array();
   while($entry = mysqli_fetch_assoc($result)){
@@ -216,17 +196,7 @@ function rem_stud_course($username, $course_name){
     return 1;
   }
 
-  #MOVE THIS BLOCK OVER TO course_name_to_id HELPER FUNCTION
-  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course_name."'";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-  $entry = mysqli_fetch_assoc($result);
-  $course_id = $entry["course_id"];
-
-  $query = "DELETE FROM enrolled WHERE username='".$username."' AND course_id='".$course_id."'";
+  $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
