@@ -172,41 +172,35 @@ if (open_queue("CS 4400: Computer Systems") != "open"){
 
 
 
-#This should fail since the queue is closed
 if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
   echo "Test 32 failed";
   die();
 }
-
-if (open_queue("CS 4400: Computer Systems") != "open"){
-  echo "Test 33 failed";
-  die();
-}
-
 if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
   echo "Test 34 failed";
   die();
 }
-
 if(enq_stu("blakeb", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
   echo "Test 35 failed";
   die();
 }
-
 if(enq_stu("welling", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
   echo "Test 36 failed";
   die(); 
 }
-
 if(enq_stu("erin", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
   echo "Test 36 failed";
   die();
 }
-
 if(enq_ta("mrTA", "CS 4400: Computer Systems")){
   echo "Test 37 failed";
   die();
 }
+if(get_queue_length("CS 4400: Computer Systems") != 4){
+  echo "Test 42 failed";
+  die();
+}
+
 
 
 
@@ -244,6 +238,95 @@ if(help_next_student('mrTA', 'CS 4400: Computer Systems')){
   echo "Test 44 failed";
   die();
 }
+
+
+#close queue
+if (close_queue("CS 4400: Computer Systems") != "closed"){
+  echo "Test 41 failed";
+  die();
+}
+if(!help_next_student('mrsTA', 'CS 4400: Computer Systems')){
+  echo "Test 40 failed";
+  die();
+}
+if(!enq_ta("mrsTA", "CS 4400: Computer Systems")){
+  echo "Test 39 failed";
+  die();
+}
+if(!enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 32 failed";
+  die();
+}
+if(!enq_ta("mrTA", "CS 4400: Computer Systems")){
+  echo "Test 32 failed";
+  die();
+}
+
+
+#open queue
+if (open_queue("CS 4400: Computer Systems") != "open"){
+  echo "Test 42 failed";
+  die();
+}
+if (rem_stud_course("zakraise", "CS 4400: Computer Systems")){
+  echo "Test 11 failed";
+  die();
+}
+if(!enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 34 failed";
+  die();
+}
+if (get_queue_length("CS 4400: Computer Systems") != 0){
+  echo "Test 42 failed";
+  die();
+}
+
+
+
+#unenroll student from course while in queue
+if (open_queue("CS 4400: Computer Systems") != "open"){
+  echo "Test 42 failed";
+  die();
+}
+if (add_stud_course("zakraise", "CS 4400: Computer Systems")){
+  echo "Test 11 failed";
+  die();
+}
+if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 34 failed";
+  die();
+}
+if (rem_stud_course("zakraise", "CS 4400: Computer Systems")){
+  echo "Test 11 failed";
+  die();
+}
+if (get_queue_length("CS 4400: Computer Systems") != 0){
+  echo "Test 42 failed";
+  die();
+}
+
+
+
+#add student to queue
+if (open_queue("CS 4400: Computer Systems") != "open"){
+  echo "Test 42 failed";
+  die();
+}
+if (add_stud_course("zakraise", "CS 4400: Computer Systems")){
+  echo "Test 11 failed";
+  die();
+}
+if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 34 failed";
+  die();
+}
+if (get_queue_length("CS 4400: Computer Systems") != 1){
+  echo "Test 42 failed";
+  die();
+}
+
+
+
 
 
 

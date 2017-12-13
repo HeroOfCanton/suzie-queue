@@ -47,6 +47,8 @@ create table queue_state(
 );
 
 --Master queue for all courses;
+--foreign key contraints guarantee student is enrolled in course
+--  and queue is open
 create table queue(
   position   BIGINT AUTO_INCREMENT,
   username   VARCHAR(256) NOT NULL,
@@ -54,7 +56,7 @@ create table queue(
   question   TEXT,
   location   VARCHAR(256) NOT NULL,
   primary key (position),
-  foreign key (username) references users(username) ON DELETE CASCADE,
+  foreign key (username, course_id) references enrolled(username, course_id) ON DELETE CASCADE,
   foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
   unique (username, course_id)
 );

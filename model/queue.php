@@ -53,8 +53,17 @@ function get_queue($course){
   return $return;
 }
 
+function get_queue_length($course){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
 
-
+  $query  = "SELECT * FROM queue 
+             WHERE course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
+  $result = mysqli_query($sql_conn, $query);
+  return mysqli_num_rows($result);
+}
 
 
 /**
