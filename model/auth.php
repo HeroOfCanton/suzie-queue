@@ -134,7 +134,9 @@ function touch_user($username, $first, $last, $full){
     return 1;
   }
 
-  $query = "INSERT IGNORE INTO users (username, first_name, last_name, full_name) VALUES ('".$username."','".$first."','".$last."','".$full."')";
+  $query = "INSERT INTO users (username, first_name, last_name, full_name, last_login) 
+            VALUES ('".$username."','".$first."','".$last."','".$full."', NOW())
+            ON DUPLICATE KEY UPDATE last_login=NOW()";
   if(!mysqli_query($sql_conn, $query)){
     mysqli_close($sql_conn);
     return 1;
