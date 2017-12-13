@@ -7,9 +7,9 @@ use ta_queue;
 --User data;
 create table users(
   username    VARCHAR(256),
-  first_name  VARCHAR(32),
-  last_name   VARCHAR(32),
-  full_name   VARCHAR(64),
+  first_name  VARCHAR(32) NOT NULL,
+  last_name   VARCHAR(32) NOT NULL,
+  full_name   VARCHAR(64) NOT NULL,
   first_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   last_login  TIMESTAMP,
   primary key (username)
@@ -18,8 +18,8 @@ create table users(
 --Course data;
 create table courses(
   course_id int NOT NULL AUTO_INCREMENT,
-  depart_pref VARCHAR(16),
-  course_num  VARCHAR(16),
+  depart_pref VARCHAR(16) NOT NULL,
+  course_num  VARCHAR(16) NOT NULL,
   course_name VARCHAR(128) UNIQUE,
   description TEXT,
   ldap_group  VARCHAR(256),
@@ -40,19 +40,19 @@ create table enrolled(
 --Closed queues don't appear here
 create table queue_state(
   course_id  int,
-  state      ENUM('open','paused'),
-  time_lim   int DEFAULT 0,
+  state      ENUM('open','paused') NOT NULL,
+  time_lim   int DEFAULT 0 NOT NULL,
   primary key (course_id),
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );
 
 --Master queue for all courses;
 create table queue(
-  position   BIGINT NOT NULL AUTO_INCREMENT,
+  position   BIGINT AUTO_INCREMENT,
   username   VARCHAR(256) NOT NULL,
   course_id  int NOT NULL,
   question   TEXT,
-  location   VARCHAR(256),
+  location   VARCHAR(256) NOT NULL,
   primary key (position),
   foreign key (username) references users(username) ON DELETE CASCADE,
   foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
