@@ -183,55 +183,5 @@ if (get_queue_state("CS 9999") != "closed"){
 }
 
 
-#This should fail since the queue is closed
-if(!enq_stu("zakraise", "CS 9999", "What is love?", "baby dont hurt me")){
-  echo "Test 32 failed";
-  die();
-}
-
-if (open_queue("CS 9999") != "open"){
-  echo "Test 33 failed";
-  die();
-}
-
-if(enq_stu("zakraise", "CS 9999", "What is love?", "baby dont hurt me")){
-  echo "Test 34 failed";
-  die();
-}
-if(enq_stu("zakraise2", "CS 9999", "What is love?", "baby dont hurt me")){
-  echo "Test 35 failed";
-  die();
-}
-if(enq_stu("zakraise3", "CS 9999", "What is love?", "baby dont hurt me")){
-  echo "Test 36 failed";
-  die(); 
-}
-$queue = get_queue("CS 9999");
-
-if(enq_ta("mrTA", "CS 9999")[0]){
-  echo "Test 37 failed";
-  die();
-}
-#$queue = get_queue("CS 9999");
-#echo json_encode($queue, JSON_PRETTY_PRINT);
-
-
-if(help_next_student("mrTA", "CS 9999")){
-  echo "Test 38 failed";
-  die();
-}
-
-#if(set_free_ta("mrTA", "CS 9999")){
-#  echo "Test 39 failed";
-#  die();
-#}
-
-#if (close_queue("CS 9999") != "closed"){
-#  echo "Test 40 failed";
-#  die();
-#}
-
-
-
 echo "All Tests Completed Successfully";
 ?>
