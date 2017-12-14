@@ -66,6 +66,7 @@ function get_queue_length($course){
 }
 
 
+
 /**
  *Adds a student to the queue
  *

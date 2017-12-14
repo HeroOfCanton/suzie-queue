@@ -324,6 +324,17 @@ if (get_queue_length("CS 4400: Computer Systems") != 1){
   echo "Test 42 failed";
   die();
 }
+if(close_queue("CS 4400: Computer Systems") != "closed"){
+  echo "Test 25 failed";
+  die();
+}
+if(get_queue_length("CS 4400: Computer Systems") != 0){
+  echo "Test 42 failed";
+  die();
+}
+
+
+
 
 
 
