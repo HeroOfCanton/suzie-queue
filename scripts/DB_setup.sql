@@ -21,9 +21,11 @@ create table courses(
   depart_pref VARCHAR(16) NOT NULL,
   course_num  VARCHAR(16) NOT NULL,
   course_name VARCHAR(128) UNIQUE,
+  professor   VARCHAR(128), 
   description TEXT,
   ldap_group  VARCHAR(256),
-  primary key (course_id)
+  primary key (course_id),
+  foreign key (professor) references users(username) ON DELETE SET NULL
 );
 
 --Students enrolled in course;

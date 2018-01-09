@@ -39,56 +39,65 @@ if (touch_user("mrsTA", "mrs", "TA", "mrsTA")){
 }
 
 
-if (new_course("CS 1030: Foundations of CS", "CS", "1030", "The hard stuff 1!", "fake 1")){
+if (new_course("CS 1030: Foundations of CS", "CS", "1030", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.1 failed";
+  die();
+}
+
+if (new_course("CS 1410: Introduction to Object-Oriented Programming", "CS", "1410", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.2 failed";
+  die();
+}
+
+if (new_course("CS 2100: Descrete Scructures", "CS", "2100", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.3 failed";
+  die();
+}
+
+if (new_course("CS 2420: Introduction to Algorithms and Data Structures", "CS", "2420", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.4 failed";
+  die();
+}
+
+if (new_course("CS 3100: Models of Computation", "CS", "3100", "The hard stuff 1!", "fake 1", "erin")){
   echo "Test 10.5 failed";
   die();
 }
 
-if (new_course("CS 1410: Introduction to Object-Oriented Programming", "CS", "1410", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 3500: Software Practice 1", "CS", "3500", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.6 failed";
   die();
 }
 
-if (new_course("CS 2100: Descrete Scructures", "CS", "2100", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 3505: Software Practice 2", "CS", "3505", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.7 failed";
   die();
 }
 
-if (new_course("CS 2420: Introduction to Algorithms and Data Structures", "CS", "2420", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 3810: Computer Organization", "CS", "3810", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.8 failed";
   die();
 }
 
-if (new_course("CS 3100: Models of Computation", "CS", "3100", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 4150: Algorithms", "CS", "4150", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.9 failed";
   die();
 }
 
-if (new_course("CS 3500: Software Practice 1", "CS", "3500", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 4400: Computer Systems", "CS", "4400", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.10 failed";
   die();
 }
 
-if (new_course("CS 3505: Software Practice 2", "CS", "3505", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (del_course("CS 4400: Computer Systems")){
+  echo "Test 10.10 failed";
   die();
 }
 
-if (new_course("CS 3810: Computer Organization", "CS", "3810", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
+if (new_course("CS 4400: Computer Systems", "CS", "4400", "The hard stuff 1!", "fake 1", "erin")){
+  echo "Test 10.10 failed";
   die();
 }
-
-if (new_course("CS 4150: Algorithms", "CS", "4150", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
-  die();
-}
-
-if (new_course("CS 4400: Computer Systems", "CS", "4400", "The hard stuff 1!", "fake 1")){
-  echo "Test 10.5 failed";
-  die();
-}
-
 
 
 
@@ -125,8 +134,13 @@ if (add_stud_course("erin", "CS 4400: Computer Systems")){
 
 
 
+$zakraise_courses = get_stud_courses("zakraise");
+if (sizeof($zakraise_courses) != 1){
+  echo "Test 16 failed";
+  die();
+}
 
-if (sizeof(get_stud_courses("zakraise")) != 1){
+if ($zakraise_courses[0] != "CS 4400: Computer Systems"){
   echo "Test 16 failed";
   die();
 }

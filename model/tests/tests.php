@@ -52,14 +52,23 @@ if (touch_user("mrTA", "zane3", "zak3", "zane3 zak3")){
   die();
 }
 
+if (!is_array(get_avail_courses())){
+  echo "Test 9.5 failed";
+  die();
+}
 
-if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake")){
+if (new_course("Computer Systems", "CS", "4400", "The hard stuff!", "fake", "zakraise")){
   echo "Test 10 failed";
   die();
 }
 
-if (!new_course("Computer Systems", "CS", "4401", "The hard stuff 1!", "fake 1")){
+if (!new_course("Computer Systems", "CS", "4401", "The hard stuff 1!", "fake 1", "zakraise")){
   echo "Test 10.5 failed";
+  die();
+}
+
+if (sizeof(get_avail_courses()) != 1){
+  echo "Test 10.6 failed";
   die();
 }
 
@@ -89,7 +98,7 @@ for ($i = 0; $i<10; $i++){
 }
 
 
-if (new_course("Algorithms", "CS", "4150", "Algorithms", "fake")){
+if (new_course("Algorithms", "CS", "4150", "Algorithms", "fake", "zakraise")){
   echo "Test 15 failed";
   die();
 }
@@ -105,7 +114,7 @@ if (sizeof(get_stud_courses("zakraise")) != 2){
 
 
 
-if (new_course("CS 9999", "CS", "9999", "course desc", "cs9999")){
+if (new_course("CS 9999", "CS", "9999", "course desc", "cs9999", "zakraise")){
   echo "Test 17 failed";
   die();
 }

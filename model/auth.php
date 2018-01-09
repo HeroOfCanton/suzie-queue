@@ -37,18 +37,21 @@ function get_info($username){
     return NULL;
   }
 
+  if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result))){ 
+    return NULL;
+  }
   $first_name = $result["givenname"][0];
   $last_name  = $result["sn"][0];
-  $full_name  = $result["displayname"][0]; #We may need to fix this!
-
+  
   #Touches the user entry in the sql table
-  touch_user($username, $first_name, $last_name, $full_name);
+  touch_user($username, $first_name, $last_name, $first_name." ".$last_name);
  
   return array(
     "first_name" => $first_name,
     "last_name"  => $last_name,
   );
 }
+
 
 
 

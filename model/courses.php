@@ -3,13 +3,14 @@ require_once 'config.php';
 require_once 'auth.php';
 
 /*
- *Returns list of all possible courses in LDAP
+ *Returns array of all registered courses
+ *Returns empty array if no courses found
  *Each course has a group in LDAP
  */
 function get_avail_courses(){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return NULL; //error
+    return NULL;
   }
 
   $query  = "SELECT course_name FROM courses";
@@ -27,8 +28,6 @@ function get_avail_courses(){
   return $courses;
 }
 
-
-
 /*
  *Adds the course to the database
  *Only authorized teachers can call this.
@@ -36,18 +35,27 @@ function get_avail_courses(){
  *  When a new course is to be created, they need to send 
  *  the IT people a request for a new group. The group sam goes here.
  */
-function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group){
+function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
   
-  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group) VALUES ('".$depart_prefix."','".$course_num."','".$course_name."','".$description."','".$ldap_group."')";
-  if(!mysqli_query($sql_conn, $query)){
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor)
+            VALUES (?, ?, ?, ?, ?, ?)";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "ssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  } 
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -61,12 +69,20 @@ function del_course($course_name){
     return 1;
   }
 
-  $query = "DELETE FROM courses WHERE course_name='".$course_name."'"; 
-  if(!mysqli_query($sql_conn, $query)){
+  $query = "DELETE FROM courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "s",$course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return 1;
   }
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -77,8 +93,8 @@ function del_course($course_name){
  *Returns a list of TAs for the course.
  *Information is pulled from LDAP
  */
-function get_tas($course){
-  $course_group = get_course_group($course);
+function get_tas($course_name){
+  $course_group = get_course_group($course_name);
   if($course_group == NULL){
     return NULL;
   }
@@ -108,16 +124,20 @@ function get_ta_courses($username){
 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return NULL; //error
+    return NULL;
   }
  
   $groups = $result["memberof"];
   unset($groups["count"]);
 
   $courses = array();
-  foreach($groups as $group) {
+  foreach($groups as $group) { //Iterate groups the user is a member of
     $group_sam = dn_to_sam($group);
+    if($group_sam == NULL){
+      continue; //In theory, this is not possible, but we'll check
+    }
 
+    #group_sam is returned from LDAP, so we won't worry about SQL injection here
     $query  = "SELECT course_name FROM courses WHERE ldap_group ='".$group_sam."'";
     $result = mysqli_query($sql_conn, $query);
     if(!mysqli_num_rows($result)){
@@ -144,15 +164,26 @@ function get_stud_courses($username){
     return NULL;
   }
 
-  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username='".$username."'";
-  $result = mysqli_query($sql_conn, $query);
-
+  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "s", $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);   
+    return NULL;
+  } 
+  mysqli_stmt_bind_result($stmt, $course_name);
+  
   $courses = array();
-  while($entry = mysqli_fetch_assoc($result)){
-    $course_name = $entry["course_name"];
-    $courses[]   = $course_name;
+  while(mysqli_stmt_fetch($stmt)){
+    $courses[] = $course_name;
   }
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $courses;
 }
@@ -162,17 +193,26 @@ function get_stud_courses($username){
  *Assumes the course already exists in the courses table 
  *NOTE: Not meant for TAs
  */
-function add_stud_course($username, $course){ 
+function add_stud_course($username, $course_name){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  $query = "REPLACE enrolled (username, course_id) VALUES ( '".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
-  if(!mysqli_query($sql_conn, $query)){
+  $query = "REPLACE enrolled (username, course_id) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?) )";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -187,11 +227,20 @@ function rem_stud_course($username, $course_name){
     return 1;
   }
 
-  $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE course_name='".$course_name."' AND username='".$username."'";
-  if(!mysqli_query($sql_conn, $query)){
+  $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE username=? AND course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -207,15 +256,22 @@ function get_course_group($course_name){
     return NULL;
   }
 
-  $query = "SELECT ldap_group FROM courses WHERE course_name ='".$course_name."'";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
+  $query = "SELECT ldap_group FROM courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return NULL;
   }
-  $entry = mysqli_fetch_assoc($result);
-  $ldap_group = $entry["ldap_group"];
+  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $ldap_group);
+  mysqli_stmt_fetch($stmt);
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $ldap_group;
 }
