@@ -44,7 +44,9 @@ function get_info($username){
   $last_name  = $result["sn"][0];
   
   #Touches the user entry in the sql table
-  touch_user($username, $first_name, $last_name, $first_name." ".$last_name);
+  if(touch_user($username, $first_name, $last_name, $first_name." ".$last_name)){
+    return NULL;
+  }
  
   return array(
     "first_name" => $first_name,
@@ -138,12 +140,21 @@ function touch_user($username, $first, $last, $full){
   }
 
   $query = "INSERT INTO users (username, first_name, last_name, full_name, last_login) 
-            VALUES ('".$username."','".$first."','".$last."','".$full."', NOW())
+            VALUES (?, ?, ?, ?, NOW())
             ON DUPLICATE KEY UPDATE last_login=NOW()";
-  if(!mysqli_query($sql_conn, $query)){
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "ssss", $username, $first, $last, $full);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }

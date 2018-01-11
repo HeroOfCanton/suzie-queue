@@ -53,16 +53,26 @@ function get_queue($course){
   return $return;
 }
 
-function get_queue_length($course){
+function get_queue_length($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return NULL;
   }
 
-  $query  = "SELECT * FROM queue 
-             WHERE course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
-  $result = mysqli_query($sql_conn, $query);
-  return mysqli_num_rows($result);
+  $query = "SELECT * FROM queue NATURAL JOIN courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_store_result($stmt);
+  return mysqli_stmt_num_rows($stmt);
 }
 
 
@@ -77,24 +87,33 @@ function get_queue_length($course){
  *
  *@return int
  */
-function enq_stu($username, $course, $question, $location){
+function enq_stu($username, $course_name, $question, $location){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  if(get_queue_state($course) != "open"){
+  if(get_queue_state($course_name) != "open"){
     mysqli_close($sql_conn);
     return 1;
   }  
 
   $query = "INSERT INTO queue (username, course_id, question, location) 
-            VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') ,'".$question."','".$location."') 
-            ON DUPLICATE KEY UPDATE question='".$question."'";
-  if(!mysqli_query($sql_conn, $query)){
+            VALUES (?, (SELECT course_id FROM courses WHERE course_name=?), ?, ?) 
+            ON DUPLICATE KEY UPDATE question=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "sssss", $username, $course_name, $question, $location, $question);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -110,11 +129,20 @@ function deq_stu($username, $course){
   }
 
   $query = "DELETE queue from queue NATURAL JOIN courses 
-            WHERE course_name='".$course_name."' AND username='".$username."'";
-  if(!mysqli_query($sql_conn, $query)){
+            WHERE username=? AND course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -125,19 +153,27 @@ function deq_stu($username, $course){
  *Puts the TA on duty
  *Up to the controller to verify that $username is a TA for $course
  */
-function enq_ta($username, $course){
+function enq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
   $query = "INSERT INTO ta_status (username, course_id) 
-            VALUES ('".$username."', (SELECT course_id FROM courses WHERE course_name='".$course."') )";
-  if(!mysqli_query($sql_conn, $query)){
+            VALUES (?, (SELECT course_id FROM courses WHERE course_name=?) )";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return 1;
   }
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -145,47 +181,73 @@ function enq_ta($username, $course){
 /*
  *Removes to TA from duty
  */
-function deq_ta($username, $course){
+function deq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
   $query = "DELETE FROM ta_status 
-            WHERE username='".$username."' 
-            AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')"; 
-  if(!mysqli_query($sql_conn, $query)){
+            WHERE username=? 
+            AND course_id=(SELECT course_id FROM courses WHERE course_name=?)"; 
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return 1;
   }
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
 
-function get_ta_status($username, $course){
+
+/*
+ *Returns 1 if TA not on duty
+ *        2 if on duty, but not helping anyone
+ *        3 if on duty, and helping someone
+ */
+function get_ta_status($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  $query  = "SELECT * FROM ta_status 
-             WHERE username='".$username."' 
-             AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
+  $query  = "SELECT helping FROM ta_status 
+             WHERE username=? 
+             AND course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+  
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
-    return array("dequeue");
+    return NULL;
   }
-  $entry = mysqli_fetch_assoc($result);
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $helping);
+  if(mysqli_stmt_fetch($stmt) ==  NULL){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
 
-  $return = array(
-    "enqueue",
-    "helping" => $entry["helping"]
-  );
-
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return $return;
+
+  if($helping == NULL){
+    return 2;
+  }
+  return 3;
 }
 
 
@@ -194,23 +256,23 @@ function get_ta_status($username, $course){
  *Sets the TA status to helping the next person in the queue.
  *Call deq_stud() before calling this again
  */
-function help_next_student($username, $course){
+function help_next_student($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  if(get_queue_state($course) != "open"){
+  if(get_queue_state($course_name) != "open"){
     mysqli_close($sql_conn);
     return 1;
   }
 
-  if(get_ta_status($username, $course)[0] != "enqueue"){
+  if(get_ta_status($username, $course_name) < 2){ 
     mysqli_close($sql_conn);
     return 1;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
+  $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == NULL){
     mysqli_close($sql_conn);
     return 1;
@@ -248,21 +310,31 @@ function help_student($TA_username, $stud_username, $course){
 /*
  *Keeps the TA on duty in the queue
  *Not helping anyone though
+ *
+ *Note that dequeuing the student the TA is helping frees the TA automatically.
  */
-function set_free_ta($username, $course){
+function set_free_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
   $query = "UPDATE ta_status SET helping = NULL 
-            WHERE username = '".$username."' 
-            AND course_id=(SELECT course_id FROM courses WHERE course_name='".$course."')";
-  if(!mysqli_query($sql_conn, $query)){
+            WHERE username=? 
+            AND course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return 1;
   }
 
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
 }
@@ -285,33 +357,40 @@ function decrease_stud_priority($stud_username, $course){
  *Returns the state of the queue
  *"open", "closed", "paused"
  */
-function get_queue_state($course){
-  return change_queue_state($course, NULL);
+function get_queue_state($course_name){
+  return change_queue_state($course_name, NULL);
 }
 
-function open_queue($course){
-  return change_queue_state($course, "open");
+function open_queue($course_name){
+  return change_queue_state($course_name, "open");
 }
 
-function close_queue($course){
-  return change_queue_state($course, "closed");
+function close_queue($course_name){
+  return change_queue_state($course_name, "closed");
 }
 
-function pause_queue($course){
-  return change_queue_state($course, "paused");
+function pause_queue($course_name){
+  return change_queue_state($course_name, "paused");
 }
 
 
 
 
 //HELPER FUNCTIONS
-function change_queue_state($course, $state){
+
+/*
+ *Changes the state of the course queue
+ *
+ *course_name gets converted to course_id, so this function
+ *is NOT susceptible to SQL injection.
+ */
+function change_queue_state($course_name, $state){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return NULL;
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
+  $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == NULL){
     mysqli_close($sql_conn);
     return NULL;
@@ -350,19 +429,25 @@ function change_queue_state($course, $state){
   return $state;
 }
 
-function course_name_to_id($course, $sql_conn){
+function course_name_to_id($course_name, $sql_conn){
   if(!$sql_conn){
     return NULL;
   }
 
-  $query  = "SELECT course_id FROM courses WHERE course_name ='".$course."'";
-  $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
+  $query = "SELECT course_id FROM courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     return NULL;
   }
-  $entry = mysqli_fetch_assoc($result);
-  $course_id = $entry["course_id"];
+  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $course_id);
+  mysqli_stmt_fetch($stmt);
 
+  mysqli_stmt_close($stmt);
   return $course_id;
 }
 ?>
