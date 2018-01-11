@@ -360,6 +360,51 @@ if(get_ta_status("mrTA", "CS 4400: Computer Systems")  != 2){
   echo "Test 71 failed";
   die();
 }
+if(help_next_student("mrTA", "CS 4400: Computer Systems")){
+  echo "Test 72 failed";
+  die();
+}
+if(get_ta_status("mrTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 73 failed";
+  die();
+}
+if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 74 failed";
+  die();
+}
+if(get_ta_status("mrTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 75 failed";
+  die();
+}
+if(help_next_student("mrTA", "CS 4400: Computer Systems")){
+  echo "Test 76 failed";
+  die();
+}
+if(get_ta_status("mrTA", "CS 4400: Computer Systems")  != 3){
+  echo "Test 77 failed";
+  die();
+}
+if(get_ta_status("mrsTA", "CS 4400: Computer Systems")  != 1){
+  echo "Test 78 failed";
+  die();
+}
+if(enq_ta("mrsTA", "CS 4400: Computer Systems")){
+  echo "Test 79 failed";
+  die();
+}
+if(get_ta_status("mrsTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 80 failed";
+  die();
+}
+if(help_next_student("mrsTA", "CS 4400: Computer Systems")){
+  echo "Test 81 failed";
+  die();
+}
+if(get_ta_status("mrsTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 82 failed";
+  die();
+}
+
 
 
 

@@ -7,7 +7,7 @@ require_once 'config.php';
 /**
  * Returns the state of the queue
  *
- * @param [type] $course
+ * @param string $course
  * @return void
  */
 function get_queue($course){
@@ -56,28 +56,29 @@ function get_queue($course){
 }
 
 /**
- * Undocumented function
+ * Returns the length of the queue
  *
- * @param [type] $course_name
- * @return void
+ * @param string $course_name
+ * @return int length of queue
+ *             -1 on error
  */
 function get_queue_length($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return NULL;
+    return -1;
   }
 
   $query = "SELECT * FROM queue NATURAL JOIN courses WHERE course_name=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return NULL;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "s", $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return NULL;
+    return -1;
   }
   mysqli_stmt_store_result($stmt);
   return mysqli_stmt_num_rows($stmt);
@@ -86,11 +87,11 @@ function get_queue_length($course_name){
 /**
  * Undocumented function
  *
- * @param [type] $username
- * @param [type] $course_name
- * @param [type] $question
- * @param [type] $location
- * @return void
+ * @param string $username
+ * @param string $course_name
+ * @param string $question
+ * @param string $location
+ * @return int 0 on success, 1 on fail
  */
 function enq_stu($username, $course_name, $question, $location){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -128,9 +129,9 @@ function enq_stu($username, $course_name, $question, $location){
  *
  * If a TA is helping this student, SQL will free the TA.
  * 
- * @param [type] $username
- * @param [type] $course
- * @return void
+ * @param string $username
+ * @param string $course
+ * @return 0 on success, 1 on fail
  */
 function deq_stu($username, $course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -158,11 +159,11 @@ function deq_stu($username, $course){
 }
 
 /**
- * Undocumented function
+ * Add TA to queue
  *
- * @param [type] $username
- * @param [type] $course_name
- * @return void
+ * @param string $username
+ * @param string $course_name
+ * @return 0 onsuccess, 1 on fail
  */
 function enq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -190,11 +191,11 @@ function enq_ta($username, $course_name){
 }
 
 /**
- * Undocumented function
+ * Remove TA from queue
  *
- * @param [type] $username
- * @param [type] $course_name
- * @return void
+ * @param string $username
+ * @param string $course_name
+ * @return 0 on success, 1 on fail
  */
 function deq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -269,16 +270,13 @@ function get_ta_status($username, $course_name){
   return 3;
 }
 
-/*
- *Sets the TA status to helping the next person in the queue.
- *Call deq_stud() before calling this again
- */
 /**
- * Undocumented function
+ * Sets the TA status to helping the next person in the queue.
+ * Call deq_stud() before calling this again
  *
- * @param [type] $username
- * @param [type] $course_name
- * @return void
+ * @param string $username
+ * @param string $course_name
+ * @return int 0 on success, 1 on fail
  */
 function help_next_student($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -307,22 +305,28 @@ function help_next_student($username, $course_name){
             WHERE queue.course_id ='".$course_id."' 
             AND ta_status.helping IS NULL 
             ORDER BY position LIMIT 1";
+  $position = null;
   $result = mysqli_query($sql_conn, $query);
-  if(!mysqli_num_rows($result)){
-    $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', NULL )"; 
-  }
-  else{
+  if(mysqli_num_rows($result)){
     $position = mysqli_fetch_assoc($result)['position'];
-    $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES ('".$username."','".$course_id."', '".$position."'  )"; 
   }
 
-  if(!mysqli_query($sql_conn, $query)){
+  $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES (?,?,?)"; 
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  
+  mysqli_stmt_bind_param($stmt, "sis", $username, $course_id, $position);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;  
+  return 0;
 }
 
 /**
@@ -342,11 +346,11 @@ function help_student($TA_username, $stud_username, $course){
  *
  * Note that dequeuing the student the TA is helping frees the TA automatically.
  * 
- * @param [type] $username
- * @param [type] $course_name
- * @return void
+ * @param string $username
+ * @param string $course_name
+ * @return 0 on success, 1 on fail
  */
-function set_free_ta($username, $course_name){
+function free_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;

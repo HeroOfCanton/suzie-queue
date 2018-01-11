@@ -37,7 +37,6 @@ create table enrolled(
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );
 
-
 --State of each queue;
 --Closed queues don't appear here
 create table queue_state(
