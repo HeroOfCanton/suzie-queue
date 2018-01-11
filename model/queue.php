@@ -1,12 +1,14 @@
 <?php
 require_once 'config.php';
+/**
+ * 
+ */
 
-
-/*
- *Returns the state of the queue
- *This function will be called numerous times per minute
- *This function returns all information in the queue
- *  It's up to the controller to implement access control.
+/**
+ * Returns the state of the queue
+ *
+ * @param [type] $course
+ * @return void
  */
 function get_queue($course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -53,6 +55,12 @@ function get_queue($course){
   return $return;
 }
 
+/**
+ * Undocumented function
+ *
+ * @param [type] $course_name
+ * @return void
+ */
 function get_queue_length($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -75,17 +83,14 @@ function get_queue_length($course_name){
   return mysqli_stmt_num_rows($stmt);
 }
 
-
-
 /**
- *Adds a student to the queue
+ * Undocumented function
  *
- *@param string $username
- *@param string $course
- *@param string $question
- *@param string $location
- *
- *@return int
+ * @param [type] $username
+ * @param [type] $course_name
+ * @param [type] $question
+ * @param [type] $location
+ * @return void
  */
 function enq_stu($username, $course_name, $question, $location){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -118,9 +123,14 @@ function enq_stu($username, $course_name, $question, $location){
   return 0;
 }
 
-/*
- *Remove student from queue
- *If a TA is helping this student, SQL will free the TA. 
+/**
+ * Remove student from queue
+ *
+ * If a TA is helping this student, SQL will free the TA.
+ * 
+ * @param [type] $username
+ * @param [type] $course
+ * @return void
  */
 function deq_stu($username, $course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -147,11 +157,12 @@ function deq_stu($username, $course){
   return 0;
 }
 
-
-
-/*
- *Puts the TA on duty
- *Up to the controller to verify that $username is a TA for $course
+/**
+ * Undocumented function
+ *
+ * @param [type] $username
+ * @param [type] $course_name
+ * @return void
  */
 function enq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -178,8 +189,12 @@ function enq_ta($username, $course_name){
   return 0;
 }
 
-/*
- *Removes to TA from duty
+/**
+ * Undocumented function
+ *
+ * @param [type] $username
+ * @param [type] $course_name
+ * @return void
  */
 function deq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -207,16 +222,20 @@ function deq_ta($username, $course_name){
   return 0;
 }
 
-
-/*
- *Returns 1 if TA not on duty
- *        2 if on duty, but not helping anyone
- *        3 if on duty, and helping someone
+/**
+ * Gets the status of the TA for the course
+ *
+ * @param string $username
+ * @param string $course_name
+ * @return int -1 on error
+ *              1 if TA not on duty
+ *              2 if on duty, but not helping anyone
+ *              3 if on duty, and helping someone
  */
 function get_ta_status($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
+    return -11;
   }
 
   $query  = "SELECT helping FROM ta_status 
@@ -226,13 +245,13 @@ function get_ta_status($username, $course_name){
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return NULL;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return NULL;
+    return -1;
   }
   mysqli_stmt_bind_result($stmt, $helping);
   if(mysqli_stmt_fetch($stmt) ==  NULL){
@@ -250,11 +269,16 @@ function get_ta_status($username, $course_name){
   return 3;
 }
 
-
-
 /*
  *Sets the TA status to helping the next person in the queue.
  *Call deq_stud() before calling this again
+ */
+/**
+ * Undocumented function
+ *
+ * @param [type] $username
+ * @param [type] $course_name
+ * @return void
  */
 function help_next_student($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -301,17 +325,26 @@ function help_next_student($username, $course_name){
   return 0;  
 }
 
-/*
+/**
+ * Undocumented function
  *
+ * @param [type] $TA_username
+ * @param [type] $stud_username
+ * @param [type] $course
+ * @return void
  */
 function help_student($TA_username, $stud_username, $course){
 }
 
-/*
- *Keeps the TA on duty in the queue
- *Not helping anyone though
+/**
+ * Sets the TA free from helping anyone,
+ * but does NOT dequeue the student being helped
  *
- *Note that dequeuing the student the TA is helping frees the TA automatically.
+ * Note that dequeuing the student the TA is helping frees the TA automatically.
+ * 
+ * @param [type] $username
+ * @param [type] $course_name
+ * @return void
  */
 function set_free_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -339,50 +372,78 @@ function set_free_ta($username, $course_name){
   return 0;
 }
 
-/*
+/**
+ * Undocumented function
  *
+ * @param [type] $stud_username
+ * @param [type] $course
+ * @return void
  */
 function increase_stud_priority($stud_username, $course){
 }
 
-/*
+/**
+ * Undocumented function
  *
+ * @param [type] $stud_username
+ * @param [type] $course
+ * @return void
  */
 function decrease_stud_priority($stud_username, $course){
 }
 
-
-
-/*
- *Returns the state of the queue
- *"open", "closed", "paused"
+/**
+ * Get the state of the queue
+ *
+ * @param [type] $course_name
+ * @return void
  */
 function get_queue_state($course_name){
   return change_queue_state($course_name, NULL);
 }
 
+/**
+ * Open the queue
+ *
+ * @param [type] $course_name
+ * @return void
+ */
 function open_queue($course_name){
   return change_queue_state($course_name, "open");
 }
 
+/**
+ * Close the queue
+ *
+ * @param [type] $course_name
+ * @return void
+ */
 function close_queue($course_name){
   return change_queue_state($course_name, "closed");
 }
 
+/**
+ * Pause the queue
+ *
+ * @param [type] $course_name
+ * @return void
+ */
 function pause_queue($course_name){
   return change_queue_state($course_name, "paused");
 }
 
 
-
-
 //HELPER FUNCTIONS
-
-/*
- *Changes the state of the course queue
+/**
+ * Changes the state of the course queue
+ * 
+ * I'd like to move the input and output states
+ * from strings to ints
  *
- *course_name gets converted to course_id, so this function
- *is NOT susceptible to SQL injection.
+ * @param string $course_name
+ * @param string $state
+ * @return string $state of queue
+ * @return NULL on error
  */
 function change_queue_state($course_name, $state){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -429,6 +490,21 @@ function change_queue_state($course_name, $state){
   return $state;
 }
 
+/**
+ * Converts the name of a course to the course ID used in SQL
+ * 
+ * I'd like to eventually get rid of this function in favor of 
+ * just embedding subqueries or doing table joins
+ * 
+ * For now though, this function is used mainly to prevent
+ * SQL injection in the function that call it, by verifying
+ * course_name input
+ *
+ * @param string $course_name
+ * @param sql_conn $sql_conn
+ * @return int course_id used in SQL
+ * @return null on error
+ */
 function course_name_to_id($course_name, $sql_conn){
   if(!$sql_conn){
     return NULL;

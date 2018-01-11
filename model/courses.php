@@ -1,11 +1,16 @@
 <?php
 require_once 'config.php';
 require_once 'auth.php';
+/**
+ * Functions for courses
+ * 
+ */
 
-/*
- *Returns array of all registered courses
- *Returns empty array if no courses found
- *Each course has a group in LDAP
+/**
+ * Returns array of all registered courses
+ *
+ * @return array of course names
+ * @return null on fail
  */
 function get_avail_courses(){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -28,13 +33,17 @@ function get_avail_courses(){
   return $courses;
 }
 
-/*
- *Adds the course to the database
- *Only authorized teachers can call this.
- *Course LDAP group should exist first
- *  When a new course is to be created, they need to send 
- *  the IT people a request for a new group. The group sam goes here.
- */
+ /**
+  * Adds a new course to the database
+  *
+  * @param string $course_name
+  * @param string $depart_prefix
+  * @param string $course_num
+  * @param string $description
+  * @param string $ldap_group
+  * @param string $professor
+  * @return int 0 on success, 1 on fail
+  */
 function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -60,8 +69,11 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
   return 0;
 }
 
-/*
- *Removes the course from the database
+/**
+ * Removes the course from the database
+ *
+ * @param string $course_name
+ * @return int 0 on success, 1 on fail
  */
 function del_course($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -87,12 +99,13 @@ function del_course($course_name){
   return 0;
 }
 
-
-
-/*
- *Returns a list of TAs for the course.
- *Information is pulled from LDAP
- */
+ /**
+  * Returns a list of TAs for the course.
+  *
+  * @param string $course_name
+  * @return array of TA usernames
+  * @return null on fail
+  */
 function get_tas($course_name){
   $course_group = get_course_group($course_name);
   if($course_group == NULL){
@@ -112,10 +125,13 @@ function get_tas($course_name){
   return $members;
 }
 
-/*
- *Get courses that the individual is a TA for
- *NOTE: These are taken from LDAP, and not stored in SQL
- */
+ /**
+  * Get courses that the user is a TA for
+  *
+  * @param string $username
+  * @return array of courses the user is a TA for 
+  * @return null on error
+  */
 function get_ta_courses($username){
   $result = srch_by_sam($username);
   if($result == NULL){
@@ -154,10 +170,13 @@ function get_ta_courses($username){
   return $courses;
 }
 
-/*
- *Get courses that the student has joined.
- *NOTE: Does not return courses an individual is a TA for.
- */
+ /**
+  * Get courses that the user has joined as a student
+  *
+  * @param string $username
+  * @return array of courses the user is a student in
+  * @return null on error
+  */
 function get_stud_courses($username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -188,11 +207,13 @@ function get_stud_courses($username){
   return $courses;
 }
 
-/*
- *Add student to course in database
- *Assumes the course already exists in the courses table 
- *NOTE: Not meant for TAs
- */
+ /**
+  * Add user to course as a student
+  *
+  * @param string $username
+  * @param string $course_name
+  * @return int 0 on success, 1 on fail
+  */
 function add_stud_course($username, $course_name){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -217,10 +238,13 @@ function add_stud_course($username, $course_name){
   return 0;
 }
 
-/*
- *Remove student from course in databse
- *NOTE: Not meant for TAs
- */
+ /**
+  * Remove user (student) from course 
+  *
+  * @param string $username
+  * @param string $course_name
+  * @return int 0 on success, 1 on fail
+  */
 function rem_stud_course($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -246,10 +270,14 @@ function rem_stud_course($username, $course_name){
 }
 
 
-
-
-
 ######### HELPER METHODS #########
+/**
+ * Returns the LDAP group for the course
+ *
+ * @param int $course_name
+ * @return string ldap group
+ * @return null on error
+ */
 function get_course_group($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){

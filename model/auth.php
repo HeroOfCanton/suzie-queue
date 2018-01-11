@@ -1,17 +1,18 @@
 <?php
 require_once 'config.php';
-
-/*
- *Functions for Authentication and Authorization.
+/**
+ * Functions for Authentication and Authorization.
  *
- *NOTE: All user and group 'names' are references to 
- *      sAMAccountName, not cn or displayName.
+ * NOTE: All user and group 'names' are references to 
+ *       sAMAccountName, not cn or displayName.
  */
 
-
-/*
- *Returns true if user binds to LDAP
+/**
+ * Authenticates a user
  *
+ * @param string $username
+ * @param string $pass
+ * @return int 1 on success, 0 on failure
  */
 function auth($username, $pass){
   $auth = 0;
@@ -27,9 +28,11 @@ function auth($username, $pass){
   return $auth; 
 }
 
-/*
- *Returns an array of information on $username from LDAP 
+/**
+ * Returns an array of information on the user
  *
+ * @param string $username samaccountname
+ * @return array
  */
 function get_info($username){
   $result = srch_by_sam($username); 
@@ -55,14 +58,11 @@ function get_info($username){
 }
 
 
-
-
-
 //Helper Functions for LDAP: No reason to call these from outside the model.
-
-/*
- *Connect to LDAP server under the bind account in the config file
- *Returns an ldap_connection on success, NULL on failure.
+/**
+ * Connect to Active Directory server
+ *
+ * @return ldap_link
  */
 function _ldap_connect(){
   $ldap_conn = ldap_connect(LDAP_SERVER);
@@ -75,15 +75,21 @@ function _ldap_connect(){
   return NULL;
 }
 
-/*
- *Disconnects the bind account from LDAP
+/**
+ * Disconnect from Active Directory server 
+ *
+ * @param [type] $ldap_conn
+ * @return void
  */
 function _ldap_disconnect($ldap_conn){
   ldap_unbind($ldap_conn);
 }
 
-/*
- *Converts a fully qualified DN to a sAMAccountName
+/**
+ * Converts a distinguishedName to a samaccountname
+ *
+ * @param string $dn
+ * @return string samaccountname
  */
 function dn_to_sam($dn){
   $filter = "(distinguishedName=$dn)";
@@ -104,9 +110,11 @@ function dn_to_sam($dn){
   return $entries[0]["samaccountname"][0];
 }
 
-/*
- *Performs an LDAP query on the sam
- *Returns only the first result since sams are unique
+/**
+ * Returns all LDAP attributes for samaccountname
+ *
+ * @param string $sam
+ * @return array
  */
 function srch_by_sam($sam){
   if(empty($sam)){
@@ -130,8 +138,15 @@ function srch_by_sam($sam){
   return $entries[0];
 }
 
-/*
- *Adds a user to to the "users" table in the database
+/**
+ * Touches the SQL entry for $username.
+ * Updates the login timestamp
+ *
+ * @param string $username
+ * @param string $first
+ * @param string $last
+ * @param string $full
+ * @return int 0 on success, 1 on fail
  */
 function touch_user($username, $first, $last, $full){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
