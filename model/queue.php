@@ -133,7 +133,7 @@ function enq_stu($username, $course_name, $question, $location){
  * @param string $course
  * @return 0 on success, 1 on fail
  */
-function deq_stu($username, $course){
+function deq_stu($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -236,7 +236,7 @@ function deq_ta($username, $course_name){
 function get_ta_status($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return -11;
+    return -1;
   }
 
   $query  = "SELECT helping FROM ta_status 
@@ -272,7 +272,7 @@ function get_ta_status($username, $course_name){
 
 /**
  * Sets the TA status to helping the next person in the queue.
- * Call deq_stud() before calling this again
+ * Call deq_stu() before calling this again
  *
  * @param string $username
  * @param string $course_name
@@ -305,11 +305,8 @@ function help_next_student($username, $course_name){
             WHERE queue.course_id ='".$course_id."' 
             AND ta_status.helping IS NULL 
             ORDER BY position LIMIT 1";
-  $position = null;
   $result = mysqli_query($sql_conn, $query);
-  if(mysqli_num_rows($result)){
-    $position = mysqli_fetch_assoc($result)['position'];
-  }
+  $position = mysqli_fetch_assoc($result)['position'];
 
   $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES (?,?,?)"; 
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -330,14 +327,52 @@ function help_next_student($username, $course_name){
 }
 
 /**
- * Undocumented function
+ * Help particular student in queue
  *
- * @param [type] $TA_username
- * @param [type] $stud_username
- * @param [type] $course
- * @return void
+ * @param string $TA_username
+ * @param string $stud_username
+ * @param string $course
+ * @return int 0 on success, 1 on fail
  */
-function help_student($TA_username, $stud_username, $course){
+function help_student($TA_username, $stud_username, $course_name){
+ $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  if(get_queue_state($course_name) != "open"){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  if(get_ta_status($TA_username, $course_name) < 2){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == NULL){
+    mysqli_close($sql_conn);
+    return 1;
+  } 
+
+  $query = "REPLACE INTO ta_status (username, course_id, helping)
+            VALUES (?,?, (SELECT position FROM queue WHERE username=? AND course_id=?) )";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
 }
 
 /**

@@ -404,7 +404,49 @@ if(get_ta_status("mrsTA", "CS 4400: Computer Systems")  != 2){
   echo "Test 82 failed";
   die();
 }
+if(free_ta("mrsTA", "CS 4400: Computer Systems")){
+  echo "Test 83 failed";
+  die();
+}
+if(free_ta("mrTA", "CS 4400: Computer Systems")){
+  echo "Test 84 failed";
+  die();
+}
+if(help_student("mrTA", "zakraise", "CS 4400: Computer Systems")){
+  echo "Test 85 failed";
+  die();
+}
+if(help_student("mrsTA", "zakraise", "CS 4400: Computer Systems")){
+  echo "Test 86 failed";
+  die();
+}
+if(deq_stu("zakraise", "CS 4400: Computer Systems")){
+  echo "Test 87 failed";
+  die();
+}
+if(get_ta_status("mrTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 88 failed";
+  die();
+}
+if(get_ta_status("mrsTA", "CS 4400: Computer Systems")  != 2){
+  echo "Test 89 failed";
+  die();
+}
 
+
+#invalid input handeling
+if(!help_student("mrlkjlkjTA", "zakraise", "CS 4400: Computer Systems")){
+  echo "Test 90 failed";
+  die();
+}
+#if(!help_student("mrTA", "zalkjlkjkraise", "CS 4400: Computer Systems")){
+#  echo "Test 91 failed: Function should return error, but returned success";
+#  #die();
+#}
+if(!help_student("mrTA", "zakraise", "CS 4400: Cihjkhjkhjkhjkhjkhomputer Systems")){
+  echo "Test 92 failed";
+  die();
+}
 
 
 
