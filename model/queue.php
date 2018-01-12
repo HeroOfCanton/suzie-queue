@@ -299,11 +299,10 @@ function help_next_student($username, $course_name){
     mysqli_close($sql_conn);
     return 1;
   }
-
-  #This block of code sucks
-  $query = "SELECT position FROM queue LEFT JOIN ta_status on (queue.position = ta_status.helping) 
-            WHERE queue.course_id ='".$course_id."' 
-            AND ta_status.helping IS NULL 
+  
+  $query = "SELECT position FROM queue
+            WHERE course_id ='".$course_id."'
+            AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
             ORDER BY position LIMIT 1";
   $result = mysqli_query($sql_conn, $query);
   $position = mysqli_fetch_assoc($result)['position'];
@@ -357,7 +356,7 @@ function help_student($TA_username, $stud_username, $course_name){
   } 
 
   $query = "REPLACE INTO ta_status (username, course_id, helping)
-            VALUES (?,?, (SELECT position FROM queue WHERE username=? AND course_id=?) )";
+            VALUES (?,?, (SELECT position FROM queue WHERE username=? AND course_id=?))";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
