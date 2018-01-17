@@ -85,7 +85,7 @@ function get_queue_length($course_name){
 }
 
 /**
- * Undocumented function
+ * Adds student to queue
  *
  * @param string $username
  * @param string $course_name

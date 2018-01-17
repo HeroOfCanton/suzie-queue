@@ -2,13 +2,27 @@
 // File: rem_class.php
 
 require_once '../../model/courses.php';
-require_once '../helper_functions.php';
 
 // get the session variables
 session_start(); 
 
-user_authenticated();
-course_posted();
+if (!$_SESSION['username'])
+{
+  $return = array("authenticated" => False);
+  echo json_encode($return);
+  die();
+}
+
+if (!$_POST['course'])
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "No course specified"
+  );
+  header('Content-Type: application/json');
+  echo json_encode($return);
+  die();
+}
 
 $username = $_SESSION['username'];
 $course = $_POST['course'];
@@ -17,7 +31,7 @@ if (!rem_stud_course($username, $course))
 {
   $return = array(
     "authenticated" => True,
-    "Student Course Removed Successfully"
+    "message" => "Student Course Removed Successfully"
   );
 }
 else
@@ -28,6 +42,6 @@ else
   );
 }
 
-$return = json_encode($return);
-echo $return;
+header('Content-Type: application/json');
+echo json_encode($return);
 ?>

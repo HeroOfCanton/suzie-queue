@@ -1,0 +1,6 @@
+#!/bin/bash
+wget -qO- --no-check-certificate "https://suzie.eng.utah.edu/zakraise/api/login.php" --post-data="username=irohith&password=holaDefcon2" --save-cookies cookies.txt --keep-session-cookies
+echo ""
+
+
+rm ./cookies.txt

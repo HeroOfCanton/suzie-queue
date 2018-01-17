@@ -2,12 +2,16 @@
 //File: my_classes.php 
 
 require_once '../../model/courses.php';
-require_once '../helper_functions.php';
 
 // get the session variables
 session_start(); 
 
-user_authenticated();
+if (!$_SESSION['username'])
+{
+  $return = array("authenticated" => False);
+  echo json_encode($return);
+  die();
+}
 
 $username = $_SESSION['username'];
 $stud_courses = get_stud_courses($username);
@@ -19,18 +23,15 @@ if (stud_courses == NULL || ta_courses == NULL)
     "authenticated" => True,
     "error" => "Unable to Fetch Classes"
   );
-  $return = json_encode($return);
-  echo $return;
-  die();
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "student_courses" => $stud_courses,
+    "ta_courses"      => $ta_courses
+  );
 }
 
-$return = array(
-  "authenticated" => True,
-  "student_courses" => $stud_courses,
-  "ta_courses"      => $ta_courses
-);
-
-$return = json_encode($return);
-echo $return;
-
+header('Content-Type: application/json');
+echo json_encode($return);
 ?>
