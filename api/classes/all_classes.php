@@ -5,12 +5,12 @@ require_once '../../model/courses.php';
 
 // get the session variables
 session_start();
+header('Content-type: application/json');
 
 // return authenticated False if user isn't authenticated
 if (!$_SESSION["username"])
 {
   $return = array("authenticated" => False);
-  header('Content-type: application/json');
   echo json_encode($return);
   die();
 }
@@ -32,6 +32,5 @@ if ($all_courses == NULL)
   );
 }
 
-header('Content-type: application/json');
 echo json_encode($return);
 ?>

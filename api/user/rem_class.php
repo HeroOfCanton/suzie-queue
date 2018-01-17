@@ -5,6 +5,7 @@ require_once '../../model/courses.php';
 
 // get the session variables
 session_start(); 
+header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
@@ -19,7 +20,6 @@ if (!$_POST['course'])
     "authenticated" => True,
     "error" => "No course specified"
   );
-  header('Content-Type: application/json');
   echo json_encode($return);
   die();
 }
@@ -42,6 +42,5 @@ else
   );
 }
 
-header('Content-Type: application/json');
 echo json_encode($return);
 ?>

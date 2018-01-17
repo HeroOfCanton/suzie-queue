@@ -4,18 +4,22 @@
 require_once '../../model/auth.php';
 require_once '../../model/course.php';
 require_once '../../model/queue.php';
-require_once '../helper_functions.php';
 
 // get the session variables
 session_start();
+header('Content-type: application/json');
 
-user_authenticated();
+if (!$_SESSION['username'])
+{
+  $return = array("authenticated" => False);
+  echo json_encode($return);
+  die();
+}
 
 if (!$_POST["course"] || !$_POST["question"] || !$_POST["location"])
 {
   $return = array("error" => "Missing course, question, or location");
-  $return = json_encode($return);
-  echo $return;
+  echo json_encode($return);
   die();
 }
 
@@ -27,13 +31,11 @@ $location = $_POST['location'];
 if(enq_stu($username, $course, $question, $location))
 {
   $return = array("error" => "Unable to enqueue student");
-  $return = json_encode($return);
-  echo $return;
+  echo json_encode($return);
   die();
 }
 
 $return = array("success" => "Student enqueued");
-$return = json_encode($return);
-echo $return;
+echo json_encode($return);
 ?>
 

@@ -5,11 +5,11 @@ require_once '../../model/auth.php';
 
 // get the session variables
 session_start();
+header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
   $return = array("authenticated" => False);
-  header('Content-Type: application/json');
   echo json_encode($return);
   die();
 }
@@ -31,6 +31,5 @@ if ($stud_info == NULL)
   );
 }
 
-header('Content-Type: application/json');
 echo json_encode($return);
 ?>

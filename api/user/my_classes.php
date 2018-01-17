@@ -5,6 +5,7 @@ require_once '../../model/courses.php';
 
 // get the session variables
 session_start(); 
+header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
@@ -32,6 +33,5 @@ if (stud_courses == NULL || ta_courses == NULL)
   );
 }
 
-header('Content-Type: application/json');
 echo json_encode($return);
 ?>

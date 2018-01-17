@@ -4,7 +4,6 @@
 require_once '../../model/auth.php';
 require_once '../../model/course.php';
 require_once '../../model/queue.php';
-require_once '../helper_functions.php';
 
 // get the session variables
 session_start();

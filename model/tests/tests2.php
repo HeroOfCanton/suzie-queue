@@ -450,7 +450,16 @@ if(!help_student("mrTA", "zakraise", "CS 4400: Cihjkhjkhjkhjkhjkhomputer Systems
 
 
 
-
+#get_queue testing
+if(enq_stu("zakraise", "CS 4400: Computer Systems", "What is love?", "baby dont hurt me")){
+  echo "Test 93 failed";
+  die();
+}
+if(help_next_student("mrsTA", "CS 4400: Computer Systems")){
+  echo "Test 94 failed";
+  die();
+}
+print_r(get_queue( "CS 4400: Computer Systems" ));
 
 echo "All Tests Completed Successfully";
 ?>

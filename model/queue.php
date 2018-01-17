@@ -8,7 +8,8 @@ require_once 'config.php';
  * Returns the state of the queue
  *
  * @param string $course
- * @return void
+ * @return array
+           NULL on error
  */
 function get_queue($course){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -38,14 +39,14 @@ function get_queue($course){
   $return["time_lim"] = $entry["time_lim"];
 
   #Get the state of the TAs
-  $query  = "SELECT * FROM ta_status WHERE course_id ='".$course_id."'";
+  $query  = "SELECT username, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping FROM ta_status WHERE course_id='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   while($entry = mysqli_fetch_assoc($result)){
     $return["TAs"][] = $entry;
   }
 
   #Get the actual queue
-  $query  = "SELECT * FROM queue WHERE course_id ='".$course_id."' ORDER BY position";
+  $query  = "SELECT username, question, location FROM queue WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
   while($entry = mysqli_fetch_assoc($result)){
     $return["queue"][] = $entry;
@@ -255,7 +256,7 @@ function get_ta_status($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_result($stmt, $helping);
-  if(mysqli_stmt_fetch($stmt) ==  NULL){
+  if(mysqli_stmt_fetch($stmt) == NULL){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return 1;
@@ -376,7 +377,7 @@ function help_student($TA_username, $stud_username, $course_name){
 
 /**
  * Sets the TA free from helping anyone,
- * but does NOT dequeue the student being helped
+ * but does NOT dequeue a student they could be helping
  *
  * Note that dequeuing the student the TA is helping frees the TA automatically.
  * 
