@@ -12,7 +12,19 @@ login = function( event ) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
-      window.location.href = '../view/all_classes_view.html';
+
+      var $get_req = $.get("../api/user/my_classes.php");
+      $get_req.done( function(data) {
+        var dataString = JSON.stringify(data);
+        var dataParsed = JSON.parse(dataString);
+        if(dataParsed.student_courses.length === 0){
+          window.location.href = '../view/all_classes_view.html';
+        }
+        else{
+          window.location.href = '../view/my_classes_view.html';
+        }
+      });
+
     }
     else{
       alert('Invalid Login');
