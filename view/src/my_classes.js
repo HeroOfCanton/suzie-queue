@@ -35,6 +35,9 @@ $(function () {
 
             // coursesResponse should be similar in form to the hardcoded 'classes' object 
             // we defined at the top. This is the data returned from the all_classes endpoint.
+            if(!coursesResponse.authenticated){
+              window.location.href = '../view/login_view.html';
+            }
             renderCourseTable(coursesResponse.student_courses);
         }
     });
