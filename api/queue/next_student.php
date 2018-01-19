@@ -2,7 +2,7 @@
 // File: next_student.php
 
 require_once '../../model/auth.php';
-require_once '../../model/course.php';
+require_once '../../model/courses.php';
 require_once '../../model/queue.php';
 
 // get the session variables
