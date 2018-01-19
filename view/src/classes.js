@@ -58,6 +58,16 @@ function enrollCourse(course) {
   });
 }
 
+function dropCourse(course) {
+  url = "../api/user/rem_class.php";
+  var $posting = $.post( url, { course: course} );
+  $posting.done( function(data) {
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+  });
+}
+
+
 // 1. Server returns all_classes_view.php
 // 1.1 Browser parses the markup, creating the Document Object Model (DOM). This will contain a DOM "node" that had the id "classes-table" (or whatever it is).
 // 2. Browser sees script tag for 'src/classes.js', requests that asynchronously
