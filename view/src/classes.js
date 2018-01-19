@@ -30,9 +30,6 @@ $(function () {
             // #5
             // Unncessary if data type is set properly:
             // coursesResponse = JSON.parse(coursesResponse);
-            if(!coursesResponse.authenticated){
-              window.location.href = '../view/login_view.html';
-            }
             console.log(coursesResponse.all_courses);
 
             // coursesResponse should be similar in form to the hardcoded 'classes' object 
