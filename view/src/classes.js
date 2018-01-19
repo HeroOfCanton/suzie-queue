@@ -2,8 +2,8 @@ function renderCourse(course) {
     // #7 continued
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
-    //tableRow.append($('<td>').text(course.id));
-    //tableRow.append($('<td>').text(course.teacher));
+    action = "enrollCourse('"+course+"')";
+    tableRow.append('<td> <button onclick="'+action+'">Enroll</button> </td>');
     return tableRow;
 }
 
@@ -48,6 +48,15 @@ $(function () {
     */
 });
 
+
+function enrollCourse(course) {
+  url = "../../api/user/add_class.php";
+  var $posting = $.post( url, { course: course} );
+  $posting.done( function(data) {
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+  });
+}
 
 // 1. Server returns all_classes_view.php
 // 1.1 Browser parses the markup, creating the Document Object Model (DOM). This will contain a DOM "node" that had the id "classes-table" (or whatever it is).
