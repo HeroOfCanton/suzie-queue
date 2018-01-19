@@ -22,7 +22,7 @@ function renderCourseTable(courses) {
 $(function () {
     // #4
     $.ajax({
-        url: "../../api/user/my_classes.php",
+        url: "../api/user/my_classes.php",
         dataType: "json",
         async: true,
         success: function (coursesResponse, textStatus, jqXHR) {

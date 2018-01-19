@@ -23,7 +23,7 @@ function renderCourseTable(courses) {
 $(function () {
     // #4
     $.ajax({
-        url: "../../api/classes/all_classes.php",
+        url: "../api/classes/all_classes.php",
         dataType: "json",
         async: true,
         success: function (coursesResponse, textStatus, jqXHR) {
@@ -50,7 +50,7 @@ $(function () {
 
 
 function enrollCourse(course) {
-  url = "../../api/user/add_class.php";
+  url = "../api/user/add_class.php";
   var $posting = $.post( url, { course: course} );
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);
