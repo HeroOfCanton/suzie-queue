@@ -2,7 +2,7 @@ function renderCourse(course) {
     // #7 continued
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
-    tableRow.append( '<td> <a href="main_queue_view.html"> <button class="btn btn-primary"><span>GoTo</span> </button></a> </td>'  );
+    tableRow.append( '<td> <a href="main_queue_view.html?course='+course+'"> <button class="btn btn-primary"><span>GoTo</span> </button></a> </td>'  );
     return tableRow;
 }
 
