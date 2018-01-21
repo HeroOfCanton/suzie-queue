@@ -29,6 +29,23 @@ if (!$_POST['course'])
 $username = $_SESSION['username'];
 $course   = $_POST['course'];
 
+//Since this enpoint is used for students to
+//remove themselves, and TAs to remove students,
+//we check if the request came from a TA
+if (in_array($username, get_tas($course)))
+{
+  if (!$_POST['username'])
+  {
+    $return = array(
+      "authenticated" => True,
+      "error" => "TA didn't specify student to remove"
+    );
+    echo json_encode($return);
+    die();
+  }
+  $username = $_POST['username'];
+}
+
 if(deq_stu($username, $course))
 {
   $return = array("error" => "Unable to dequeue student");

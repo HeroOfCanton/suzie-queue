@@ -30,17 +30,17 @@ if (!$_POST['course'])
 $username = $_SESSION['username'];
 $course   = $_POST['course'];
 
-if (!in_array($username, get_tas($course)))
+//For now, these return the same information.
+//Later, we may want the TAs to see more,
+//or the students to see less.
+if (in_array($username, get_tas($course)))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "TA not assigned to course"
-  );
-  echo json_encode($return);
-  die();
+  $queue = get_queue($course);
 }
-
-$queue = get_queue($course);
+else
+{
+  $queue = get_queue($course);
+}
 
 if($queue == NULL)
 {
