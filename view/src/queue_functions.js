@@ -1,16 +1,19 @@
-//GET parsing snippet from CHRIS COYIER
-var query = window.location.search.substring(1);
-var vars = query.split("&");
-for (var i=0;i<vars.length;i++) {
-  var pair = vars[i].split("=");
-  if(pair[0] == "course"){
-    course = decodeURIComponent(pair[1]);
-    break;
+$(document).ready(function(){
+  //GET parsing snippet from CHRIS COYIER
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if(pair[0] == "course"){
+      course = decodeURIComponent(pair[1]);
+      break;
+    }
   }
-}
-is_TA = false;
-get_queue(course);
-setInterval(function(){get_queue(course);}, 5000);
+  is_TA = false;
+  $("#title").text(course+' Queue');
+  get_queue(course);
+  setInterval(function(){get_queue(course);}, 5000);
+});
 
 function get_queue(course) {
   $("#queue tr").remove();
@@ -63,7 +66,7 @@ function get_queue(course) {
 
       $("#join_button").text("Enter Queue");
       $("#join_button").show();
-      $("#state_button").click(function( event ) {
+      $("#join_button").click(function( event ) {
         event.preventDefault();
         enqueue_student(course);
       });
@@ -84,11 +87,12 @@ function close_queue(course){
   url = "../api/queue/close.php";
   posting = $.post( url, { course: course } );
 }
-/*
-enqueue_student = function(){
-  url = "../api/queue/enqueue_student.php";
-}
 
+function enqueue_student(course){
+  url = "../api/queue/enqueue_student.php";
+  posting = $.post( url, { course: course } );
+}
+/*
 dequeue_student = function(){
   url = "../api/queue/dequeue_student.php";
 }
