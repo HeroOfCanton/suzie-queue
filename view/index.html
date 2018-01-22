@@ -9,7 +9,7 @@
 		<meta name="description" content="Senior Project"/>
 
 		<!-- ALL CSS FILES -->
-		<link rel="stylesheet" type="text/css" href="resources/CSS/global.css">
+		<link rel="stylesheet" type="text/css" href="../resources/CSS/global.css">
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Optional theme -->
@@ -18,6 +18,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+                <script src="./src/login.js"></script>
 	</head>
 	<body>
 
@@ -32,7 +33,7 @@
                     <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="resources/img/UHz.png">
+                        <img alt="Brand" src="../resources/img/UHz.png">
                     </a>
                 </div>
 
@@ -41,9 +42,6 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active">
                             <a href="#">Home<span class="sr-only">(current)</span></a>
-                        </li>
-                        <li>
-                            <a href="view/login_view.html">Login</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -64,20 +62,23 @@
 			</div><!--row-->
 			<div class="row">
 				<div class="col-sm-6">
-					<p style="font-size:150%;"> If you're not sure if your class offers a help queue, you can see a list of classes by clicking below</p>
-				</div><!--col-sm-6-->
-				<div class="col-sm-6">
-					<p style="font-size:150%;"> Authentication with the help queue is done with your CADE login. Please login to be taken to your class page and join a queue. </p>
+					<p style="font-size:150%;"> Please login using your CADE credentials. </p>
 				</div><!--col-sm-6-->
 			</div><!--row-->
 		</div><!--container-->
 
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12 text-center">
-					<a href="view/login_view.html"><button class="btn btn-primary"><span>Login</span></button></a>
-				</div><!--col-sm-12-->
-			</div><!--row-->
-		</div><!--container-->
+        <form class="form-inline" action="../api/login.php" method="post" id="login_form" align="center">
+            <div class="form-group">
+                <label class="sr-only" for="exampleInputEmail3">Login</label>
+                <input class="form-control" id="Login" name="username" type="text" pattern="[a-zA-Z0-9]+" placeholder="User Name" required autofocus>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="exampleInputPassword3">Password</label>
+                <input class="form-control" id="password" name="password" type="password" minlength="8"  placeholder="Password" required>
+            </div>
+            <button id="saveForm" name="saveForm" type="submit" value="Submit" class="btn btn-primary">Sign in</button>
+        </form>
+
+
 	</body>
 </html>

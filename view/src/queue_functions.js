@@ -8,32 +8,53 @@ for (var i=0;i<vars.length;i++) {
     break;
   }
 }
+get_queue(course);
+is_TA = false;
 
-get_queue = function(course) {
-  url = "../api/queue/get_queue.php";
-  var $posting = $.post( url, { course: course } );
-
-  $posting.done(function( data ) {
+function get_queue(course) {
+  var url = "../api/queue/get_queue.php";
+  var posting = $.post( url, { course: course } );
+ 
+  var done = function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.error){
-      alert("Error");
-      //put a refresh or redirect or something here
+      alert("Error fetching queue");a
+      return;
     }
-    alert(dataParsed); 
-  });
+    
+    queue_state = dataParsed.state;
+    if(is_TA){
+      if(queue_state == "closed"){
+        $("#state_button").text("OPEN QUEUE");
+        $("#state_button").click(function( event ) {
+          event.preventDefault();
+          open_queue(course);
+        });
+      }else{
+        $("#state_button").text("CLOSE QUEUE");
+        $("#state_button").click(function( event ) {
+          event.preventDefault();
+          close_queue(course);
+        });
+      }
+    }
+      
+  }
+
+  posting.done(done);
 }
 
-open_queue = function(course){
+function open_queue(course){
   url = "../api/queue/open.php";
   posting = $.post( url, { course: course } );
 }
 
-close_queue = function(course){
+function close_queue(course){
   url = "../api/queue/close.php";
   posting = $.post( url, { course: course } );
 }
-
+/*
 enqueue_student = function(){
   url = "../api/queue/enqueue_student.php";
 }
@@ -53,4 +74,7 @@ dequeue_ta = function(){
 next_student = function(){
   url = "../api/queue/next_student.php";
 }
+*/
+
+
 
