@@ -74,6 +74,7 @@ function render_ta_view(dataParsed){
 
 function render_student_view(dataParsed){
   queue = dataParsed.queue;
+  queue_state = dataParsed.state;
   in_queue = false;
   for(session in queue){
     if(my_username == queue[session]["username"]){
