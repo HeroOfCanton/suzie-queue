@@ -36,77 +36,87 @@ function get_queue(course) {
       return;
     }
    
-    queue_state = dataParsed.state;
-    queue = dataParsed.queue;
-    
-    //Rednders the TA table
-    TAs = dataParsed.TAs;
-    for(TA in TAs){
-      ta_username = TAs[TA]["username"];
-      $('#ta_on_duty').append("<h4>"+ta_username+"</h4>");
-    }
-    
-
-    //Renders the queue table
-    if(queue_state == "closed"){
-      $("#queue_state").text("State: Closed");
+    render_ta_table(dataParsed.TAs)
+    if(is_TA){
+      render_ta_view(dataParsed)
     }else{
-      $('#queue_table').show();
-      $("#queue_state").text("State: Open");
-      $('#queue').show();
-      $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
-      for(row in queue){
-        username = queue[row].username;
-        question = queue[row].question;
-        Location = queue[row].location;
-        $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>'); 
-      }
-    }
-
-    if(is_TA){ //TA
-      if(queue_state == "closed"){
-        $("#state_button").text("OPEN QUEUE");
-        $("#state_button").click(function( event ) {
-          event.preventDefault();
-          open_queue(course);
-        });
-      }else{
-        $("#state_button").text("CLOSE QUEUE");
-        $("#state_button").click(function( event ) {
-          event.preventDefault();
-          close_queue(course);
-        });
-      }
-    }else{ //STUDENT
-      in_queue = false;
-      for(session in queue){
-        if(my_username == queue[session]["username"]){
-          in_queue = true;
-          break;
-        }
-      }
-      if(!in_queue){//Not in queue
-        $("#join_button").text("Enter Queue");
-        $("#join_button").show();
-        $("#join_button").click(function( event ) {
-          event.preventDefault();
-          enqueue_student(course, "this is my question", "This is my location");
-        });
-      }
-      else{ //In queue
-        $("#join_button").text("Leave Queue");
-        $("#join_button").show();
-        $("#join_button").click(function( event ) {
-          event.preventDefault();
-          dequeue_student(course);
-        });
-      }
+      render_student_view(dataParsed)
     }
       
   }
 
   posting.done(done);
 }
+
+function render_ta_table(TAs){
+  for(TA in TAs){
+    ta_username = TAs[TA]["username"];
+    $('#ta_on_duty').append("<h4>"+ta_username+"</h4>");
+  }
+}
+
+function render_ta_view(dataParsed){
+  queue_state = dataParsed.state;
+  if(queue_state == "closed"){
+    $("#state_button").text("OPEN QUEUE");
+    $("#state_button").click(function( event ) {
+      event.preventDefault();
+      open_queue(course);
+    });
+  }else{
+    $("#state_button").text("CLOSE QUEUE");
+    $("#state_button").click(function( event ) {
+      event.preventDefault();
+      close_queue(course);
+    });
+  }
+}
+
+function render_student_view(dataParsed){
+  queue = dataParsed.queue;
+  in_queue = false;
+  for(session in queue){
+    if(my_username == queue[session]["username"]){
+      in_queue = true;
+      break;
+    }
+  }
+  if(queue_state == "closed"){
+    $("#queue_state").text("State: Closed");
+    return;
+  }else{
+    $('#queue_table').show();
+    $("#queue_state").text("State: Open");
+    $('#queue').show();
+    $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
+    for(row in queue){
+      username = queue[row].username;
+      question = queue[row].question;
+      Location = queue[row].location;
+      $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+    }
+  }
+
+  if(!in_queue){//Not in queue
+    $("#join_button").text("Enter Queue");
+    $("#join_button").show();
+    $("#join_button").click(function( event ) {
+      event.preventDefault();
+      enqueue_student(course, "this is my question", "This is my location");
+    });
+  }
+  else{ //In queue
+    $("#join_button").text("Leave Queue");
+    $("#join_button").show();
+    $("#join_button").click(function( event ) {
+      event.preventDefault();
+      dequeue_student(course);
+    });
+  }
+}
+
+
+
 
 function open_queue(course){
   url = "../api/queue/open.php";
