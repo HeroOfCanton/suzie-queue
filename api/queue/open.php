@@ -41,10 +41,16 @@ if (!in_array($username, get_tas($course)))
 
 if (open_queue($course) != "open")
 {
-  $return = array("error" => "Unable to open queue");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to open queue"
+  );
 }else
 {
-  $return = array("success" => "Queue opened");
+  $return = array(
+    "authenticated" => True,
+    "success" => "Queue opened"
+  );
 }
 echo json_encode($return);
 ?>

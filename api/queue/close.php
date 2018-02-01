@@ -42,11 +42,15 @@ if (!in_array($username, get_tas($course)))
 
 if(close_queue($course) != "closed")
 {
-  $return = array("error" => "Unable to close queue");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to close queue");
   echo json_encode($return);
   die();
 }
 
-$return = array("success" => "Queue closed");
+$return = array(
+    "authenticated" => True,
+    "success" => "Queue closed");
 echo json_encode($return);
 ?>
