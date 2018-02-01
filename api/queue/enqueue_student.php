@@ -18,7 +18,10 @@ if (!$_SESSION['username'])
 
 if (!$_POST["course"] || !$_POST["question"] || !$_POST["location"])
 {
-  $return = array("error" => "Missing course, question, or location");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Missing course, question, or location"
+  );
   echo json_encode($return);
   die();
 }
@@ -30,12 +33,18 @@ $location = $_POST['location'];
 
 if(enq_stu($username, $course, $question, $location))
 {
-  $return = array("error" => "Unable to enqueue student");
+  $return = array(
+  "authenticated" => True,
+  "error" => "Unable to enqueue student"
+);
   echo json_encode($return);
   die();
 }
 
-$return = array("success" => "Student enqueued");
+$return = array(
+  "authenticated" => True,
+  "success" => "Student enqueued"
+);
 echo json_encode($return);
 ?>
 
