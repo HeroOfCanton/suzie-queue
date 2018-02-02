@@ -212,12 +212,17 @@ function get_stud_courses($username){
   *
   * @param string $username
   * @param string $course_name
-  * @return int 0 on success, 1 on fail
+  * @return int 0 on success, 1 on fail, 2 if user already has TA role
   */
 function add_stud_course($username, $course_name){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
+  }
+
+  //Don't allow user to enroll in course if they're a TA
+  if (in_array($username, get_tas($course_name))){
+    return 2;
   }
 
   $query = "REPLACE enrolled (username, course_id) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?) )";

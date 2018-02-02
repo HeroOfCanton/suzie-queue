@@ -27,18 +27,26 @@ if (!$_POST['course'])
 $username = $_SESSION['username'];
 $course = $_POST['course'];
 
-if (!add_stud_course($username, $course))
+$ret = add_stud_course($username, $course);
+if ($ret == 0)
 {
   $return = array(
     "authenticated" => True,
     "message" => "Student Course Added Successfully"
   );
 }
-else
+elseif ($ret == 1)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to Add Student Course"
+  );
+}
+elseif ($ret == 2)
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "Already registered as TA for course"
   );
 }
 
