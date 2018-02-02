@@ -11,9 +11,7 @@ $(document).ready(function(){
   }
   is_TA = false;
   $("#title").text(course+' Queue');
-  get_info();
-  get_queue(course); //we should make this call synchronous
-  setInterval(function(){get_queue(course);}, 5000);
+  start();
 });
 
 function get_queue(course) {
@@ -42,9 +40,10 @@ function get_queue(course) {
     }else{
       render_student_view(dataParsed)
     }
-      
+    
+    //Schedule the queue to refresh again. This way the calls can't overlap
+    setTimeout(function(){get_queue(course);}, 5000);  
   }
-
   posting.done(done);
 }
 
@@ -69,7 +68,9 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       close_queue(course);
     });
+    
   }
+  $("#state_button").show();
 }
 
 function render_student_view(dataParsed){
@@ -132,6 +133,15 @@ function close_queue(course){
 function enqueue_student(course, question, Location){
   url = "../api/queue/enqueue_student.php";
   posting = $.post( url, { course: course, question: question, location: Location } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }
+
+  }
+  posting.done(done);
 }
 
 function dequeue_student(course){
@@ -139,13 +149,27 @@ function dequeue_student(course){
   posting = $.post( url, { course: course } );
 }
 
-function get_info(){
+function start(){
   url = "../api/user/get_info.php";
   posting = $.post( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     my_username = dataParsed.student_info["username"];
+    url = "../api/user/my_classes.php";
+    posting = $.get( url);
+    var done = function(data){
+      var dataString = JSON.stringify(data);
+      var dataParsed = JSON.parse(dataString);
+      if($.inArray(course, dataParsed["ta_courses"]) != -1){
+        is_TA = true;
+      }
+      else if($.inArray(course, dataParsed["student_courses"]) == -1){
+        alert("Not enrolled in course");
+      }
+      get_queue(course); //we should make this call synchronous
+    }
+    posting.done(done);
   } 
   posting.done(done);
 }
