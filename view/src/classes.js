@@ -31,7 +31,7 @@ function renderCourseTable(allCourses, myCourses) {
     }
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text( course_name ));
-    tableRow.append('<td> <button onclick="'+action+'">'+text+'</button> </td>');
+    tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
     table.append(tableRow);
   }
 }
