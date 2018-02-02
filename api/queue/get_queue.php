@@ -44,7 +44,10 @@ else
 
 if($queue == NULL)
 {
-  $return = array("error" => "Unable to fetch queue state");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to fetch queue state"
+  );
   echo json_encode($return);
 }
 

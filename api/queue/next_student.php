@@ -42,11 +42,17 @@ if (!in_array($username, get_tas($course)))
 
 if(help_next_student($username, $course))
 {
-  $return = array("error" => "Unable to change TA status");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to change TA status"
+  );
   echo json_encode($return);
   die();
 }
 
-$return = array("success" => "TA status changed");
+$return = array(
+  "authenticated" => True,
+  "success" => "TA status changed"
+);
 echo json_encode($return);
 ?>

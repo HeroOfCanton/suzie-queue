@@ -48,12 +48,18 @@ if (in_array($username, get_tas($course)))
 
 if(deq_stu($username, $course))
 {
-  $return = array("error" => "Unable to dequeue student");
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to dequeue student"
+  );
   echo json_encode($return);
   die();
 }
 
-$return = array("success" => "Student dequeued");
+$return = array(
+  "authenticated" => True,  
+  "success" => "Student dequeued"
+);
 echo json_encode($return);
 ?>
 
