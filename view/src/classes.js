@@ -42,6 +42,9 @@ function enrollCourse(course) {
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
+    if(dataParsed["error"]){
+      alert(dataParsed["error"])
+    }
     location.reload(); 
   });
 }
