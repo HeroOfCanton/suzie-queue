@@ -9,16 +9,43 @@ $(document).ready(function(){
       break;
     }
   }
-  is_TA = false;
-  $("#title").text(course+' Queue');
   start();
 });
+
+function start(){
+  $("#title").text(course+' Queue');
+  url = "../api/user/get_info.php";
+  posting = $.post( url);
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    my_username = dataParsed.student_info["username"];
+    url = "../api/user/my_classes.php";
+    posting = $.get( url);
+    var done = function(data){
+      var dataString = JSON.stringify(data);
+      var dataParsed = JSON.parse(dataString);
+      if($.inArray(course, dataParsed["ta_courses"]) != -1){
+        is_TA = true;
+      }
+      else if($.inArray(course, dataParsed["student_courses"]) != -1){
+        is_TA = false;
+      }
+      else{
+        alert("Not enrolled in course");
+      }
+      get_queue(course); //This function calls itself every 5 seconds
+    }
+    posting.done(done);
+  }
+  posting.done(done);
+}
 
 function get_queue(course) {
   $("#queue tr").remove();
   $("#ta_on_duty h4").remove();
   $("#state_button").hide();
-  $("#join_button").unbind("click");
+  $("#state_button").unbind("click");
   $("#join_button").hide();
   $("#join_button").unbind("click");
   $('#queue_table').hide(); 
@@ -33,11 +60,20 @@ function get_queue(course) {
       alert("Error fetching queue");
       return;
     }
-   
+
+    if(dataParsed.state == "closed"){
+      $("#queue_state").text("State: Closed");
+    }else{ //Queue is open
+      $("#queue_state").text("State: Open");
+    }
+  
+    //This block of code does the majority of the rendering 
     render_ta_table(dataParsed.TAs)
     if(is_TA){
+      render_queue_table(dataParsed.queue, "student");
       render_ta_view(dataParsed)
     }else{
+      render_queue_table(dataParsed.queue, "student");
       render_student_view(dataParsed)
     }
     
@@ -47,6 +83,7 @@ function get_queue(course) {
   posting.done(done);
 }
 
+//Shows the TAs that are on duty
 function render_ta_table(TAs){
   for(TA in TAs){
     ta_username = TAs[TA]["username"];
@@ -68,34 +105,17 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       close_queue(course);
     });
-    
   }
   $("#state_button").show();
 }
 
 function render_student_view(dataParsed){
   queue = dataParsed.queue;
-  queue_state = dataParsed.state;
   in_queue = false;
   for(session in queue){
     if(my_username == queue[session]["username"]){
       in_queue = true;
       break;
-    }
-  }
-  if(queue_state == "closed"){
-    $("#queue_state").text("State: Closed");
-    return;
-  }else{
-    $('#queue_table').show();
-    $("#queue_state").text("State: Open");
-    $('#queue').show();
-    $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
-    for(row in queue){
-      username = queue[row].username;
-      question = queue[row].question;
-      Location = queue[row].location;
-      $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
     }
   }
 
@@ -104,7 +124,7 @@ function render_student_view(dataParsed){
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      enqueue_student(course, "this is my question", "This is my location");
+      enqueue_student(course, "question"    , "location");
     });
   }
   else{ //In queue
@@ -117,9 +137,25 @@ function render_student_view(dataParsed){
   }
 }
 
+//Displays the queue table
+function render_queue_table(queue, role){
+  $('#queue_table').show();
+  $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
+  for(row in queue){
+    username = queue[row].username;
+    question = queue[row].question;
+    Location = queue[row].location;
+    $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+  }
+  $('#queue').show();
+}
 
 
 
+
+
+
+//API Endpoint calls
 function open_queue(course){
   url = "../api/queue/open.php";
   posting = $.post( url, { course: course } );
@@ -139,54 +175,43 @@ function enqueue_student(course, question, Location){
     if($.inArray(course, dataParsed["error"]) != -1){
       alert(dataParsed["error"]);
     }
-
   }
   posting.done(done);
 }
 
-function dequeue_student(course){
+/*
+ *Students call dequeue_student(course, null) to dequeue themselves
+ *TAs call dequeue_student(course, username) to dequeue student
+ */
+function dequeue_student(course, username){
   url = "../api/queue/dequeue_student.php";
-  posting = $.post( url, { course: course } );
-}
-
-function start(){
-  url = "../api/user/get_info.php";
-  posting = $.post( url);
+  if(username == null){
+    posting = $.post( url, { course: course } );
+  }
+  else{
+    posting = $.post( url, { course: course, username: username } );
+  }
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    my_username = dataParsed.student_info["username"];
-    url = "../api/user/my_classes.php";
-    posting = $.get( url);
-    var done = function(data){
-      var dataString = JSON.stringify(data);
-      var dataParsed = JSON.parse(dataString);
-      if($.inArray(course, dataParsed["ta_courses"]) != -1){
-        is_TA = true;
-      }
-      else if($.inArray(course, dataParsed["student_courses"]) == -1){
-        alert("Not enrolled in course");
-      }
-      get_queue(course); //we should make this call synchronous
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
     }
-    posting.done(done);
-  } 
+  }
   posting.done(done);
 }
 
-/*
-enqueue_ta = function(){
+enqueue_ta = function(course){
   url = "../api/queue/enqueue_ta.php";
+  posting = $.post( url, { course: course } );
 }
 
-dequeue_ta = function(){
+dequeue_ta = function(course){
   url = "../api/queue/dequeue_ta.php";
+  posting = $.post( url, { course: course } );
 }
 
-next_student = function(){
+next_student = function(course){
   url = "../api/queue/next_student.php";
+  posting = $.post( url, { course: course } );
 }
-*/
-
-
-
