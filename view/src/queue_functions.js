@@ -34,21 +34,16 @@ function start(){
       else{
         alert("Not enrolled in course");
       }
-      get_queue(course); //This function calls itself every 5 seconds
+      get_queue(course, 5000); //This function calls itself every 5 seconds
     }
     posting.done(done);
   }
   posting.done(done);
 }
 
-function get_queue(course) {
-  $("#queue tr").remove();
-  $("#ta_on_duty h4").remove();
+function get_queue(course, refresh) {
   $("#state_button").hide();
   $("#state_button").unbind("click");
-  $("#join_button").hide();
-  $("#join_button").unbind("click");
-  $('#queue_table').hide(); 
  
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
@@ -70,7 +65,7 @@ function get_queue(course) {
     //This block of code does the majority of the rendering 
     render_ta_table(dataParsed.TAs)
     if(is_TA){
-      render_queue_table(dataParsed.queue, "student");
+      render_queue_table(dataParsed.queue, "ta");
       render_ta_view(dataParsed)
     }else{
       render_queue_table(dataParsed.queue, "student");
@@ -78,13 +73,16 @@ function get_queue(course) {
     }
     
     //Schedule the queue to refresh again. This way the calls can't overlap
-    setTimeout(function(){get_queue(course);}, 5000);  
+    if(refresh != 0){
+      setTimeout(function(){get_queue(course, refresh);}, refresh);
+    }
   }
   posting.done(done);
 }
 
 //Shows the TAs that are on duty
 function render_ta_table(TAs){
+  $("#ta_on_duty h4").remove();
   for(TA in TAs){
     ta_username = TAs[TA]["username"];
     $('#ta_on_duty').append("<h4>"+ta_username+"</h4>");
@@ -119,6 +117,7 @@ function render_student_view(dataParsed){
     }
   }
 
+  $("#join_button").unbind("click");
   if(!in_queue){//Not in queue
     $("#join_button").text("Enter Queue");
     $("#join_button").show();
@@ -139,15 +138,15 @@ function render_student_view(dataParsed){
 
 //Displays the queue table
 function render_queue_table(queue, role){
-  $('#queue_table').show();
+  $("#queue tr").remove();
   $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
   for(row in queue){
     username = queue[row].username;
     question = queue[row].question;
     Location = queue[row].location;
+    //If role is TA, add button to help to student
     $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
   }
-  $('#queue').show();
 }
 
 
@@ -156,6 +155,7 @@ function render_queue_table(queue, role){
 
 
 //API Endpoint calls
+//This code should be fine for alpha
 function open_queue(course){
   url = "../api/queue/open.php";
   posting = $.post( url, { course: course } );
@@ -174,6 +174,8 @@ function enqueue_student(course, question, Location){
     var dataParsed = JSON.parse(dataString);
     if($.inArray(course, dataParsed["error"]) != -1){
       alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
     }
   }
   posting.done(done);
@@ -196,6 +198,8 @@ function dequeue_student(course, username){
     var dataParsed = JSON.parse(dataString);
     if($.inArray(course, dataParsed["error"]) != -1){
       alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
     }
   }
   posting.done(done);
