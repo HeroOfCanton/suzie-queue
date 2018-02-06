@@ -53,7 +53,6 @@ function enrollCourse(course) {
     if(dataParsed["error"]){
       alert(dataParsed["error"])
     }else{
-      //location.reload();
       get_classes(); 
     }
   });
@@ -68,7 +67,6 @@ function dropCourse(course) {
     if(dataParsed["error"]){
       alert(dataParsed["error"])
     }else{
-      //location.reload();
       get_classes();
     }
   });

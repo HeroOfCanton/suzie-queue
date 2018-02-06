@@ -16,6 +16,13 @@ $get_req.done( function(data) {
   var dataString = JSON.stringify(data);
   var dataParsed = JSON.parse(dataString);
   if(!dataParsed.authenticated){
-    window.location.href = '../view/login_view.html';
+    window.location.href = '../view/index.html';
   }
 });
+
+function logout(){
+  var $get_req = $.get("../api/logout.php");
+  $get_req.done( function(data) {
+    location.reload();
+  });
+}
