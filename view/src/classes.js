@@ -1,4 +1,6 @@
-$(function () {
+get_classes();
+
+function get_classes(){
   var $url = "../api/classes/all_classes.php";
   var $get = $.get( $url );
   $get.done(function(data){
@@ -11,27 +13,33 @@ $(function () {
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      myCourses = dataParsed.student_courses;
-      renderCourseTable(allCourses, myCourses);
+      renderCourseTable(allCourses, dataParsed);
     });
   });
-});
+}
 
-function renderCourseTable(allCourses, myCourses) {
+function renderCourseTable(allCourses, dataParsed) {
+  $('#all_classes tr').remove();
   var table = $('#all_classes');
+  myCourses = dataParsed.student_courses;
+  ta_courses= dataParsed.ta_courses;
   for(course in allCourses){
-    course_name = allCourses[course];
-    if( $.inArray(course_name, myCourses) >= 0 ){
+    var course_name = allCourses[course];
+    var tableRow = $('<tr>');
+    tableRow.append($('<td>').text( course_name ));
+    if( $.inArray(course_name, ta_courses) >= 0 ){
+      tableRow.append('<td> <button class="btn btn-primary" disabled> TA </button> </td>');
+    }
+    else if( $.inArray(course_name, myCourses) >= 0 ){
       text = "Leave";
       action = "dropCourse('"+course_name+"')";
+      tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
     }
     else{
       text = "Enroll";
       action = "enrollCourse('"+course_name+"')";
+      tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
     }
-    var tableRow = $('<tr>');
-    tableRow.append($('<td>').text( course_name ));
-    tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
     table.append(tableRow);
   }
 }
@@ -44,8 +52,10 @@ function enrollCourse(course) {
     var dataParsed = JSON.parse(dataString);
     if(dataParsed["error"]){
       alert(dataParsed["error"])
+    }else{
+      //location.reload();
+      get_classes(); 
     }
-    location.reload(); 
   });
 }
 
@@ -55,6 +65,11 @@ function dropCourse(course) {
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    location.reload(); 
+    if(dataParsed["error"]){
+      alert(dataParsed["error"])
+    }else{
+      //location.reload();
+      get_classes();
+    }
   });
 }
