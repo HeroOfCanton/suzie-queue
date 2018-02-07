@@ -123,7 +123,31 @@ function render_student_view(dataParsed){
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      enqueue_student(course, "question"    , "location");
+      dialog = $( "#dialog-form" ).dialog({
+        autoOpen: false,
+        height: 400,
+        width: 350,
+        modal: true,
+        buttons: {
+          "Enter Queue": enqueue_student(course, question, location),
+          Cancel: function() {
+            dialog.dialog( "close" );
+          }
+        },
+        close: function() {
+          form[ 0 ].reset();
+          allFields.removeClass( "ui-state-error" );
+        }
+      });
+ 
+      form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        enqueue_student(course, question, location)
+      });
+ 
+      $( "#join_button" ).button().on( "click", function() {
+        dialog.dialog( "open" );
+      });
     });
   }
   else{ //In queue
@@ -148,11 +172,6 @@ function render_queue_table(queue, role){
     $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
   }
 }
-
-
-
-
-
 
 //API Endpoint calls
 //This code should be fine for alpha
@@ -204,6 +223,14 @@ function dequeue_student(course, username){
   }
   posting.done(done);
 }
+
+function set_location(){
+    location = document.getElementById("location").value;
+} 
+
+function set_question(){
+    question = document.getElementById("question").value;
+} 
 
 enqueue_ta = function(course){
   url = "../api/queue/enqueue_ta.php";

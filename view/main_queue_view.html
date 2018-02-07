@@ -86,9 +86,8 @@
                 			<h1 class="panel-title" align="center" style="text-decoration: underline;">TA Announcements</h1>
                 		</div>
                 		<div class="panel-body">
-                    		<p>- Assembly is hard</br> 
-                    		   
-                    		</p>
+                    		<p>- Assembly is hard <br/>
+                            </p>
                 		</div>
             		</div>
 				</div>
@@ -101,9 +100,9 @@
                 		</div>
                 		<div class="panel-body">
                     		<p>
-                    		   Mon 1-3p </br>
-                    		   Wed 1-3p </br>
-                    		   Fri 2-5p </br>
+                    		   Mon 1-3p <br/>
+                    		   Wed 1-3p <br/>
+                    		   Fri 2-5p <br/>
                     		</p>
                 		</div>
             		</div>
@@ -121,19 +120,22 @@
 				</div><!--col-sm-8-->
 			</div><!--row-->
 			<div class="row">
-
-
- 			<form id="question_form">
-  			  Location: <input type="text" name="Location">
-                          <textarea name="question" form="question_form">Enter text here...</textarea>
-  			  <input type="submit">
-			</form>
-
 				<div class="col-sm-3">
 					<button class="btn btn-success pull-right" id="state_button"></button>
-                                        <button class="btn btn-success pull-right" id="join_button"></button>
+                    <button class="btn btn-success pull-right" id="join_button"></button>
+                    <div id="dialog-form" title="Location and Question">
+                        <p class="validateTips">All form fields are required.</p>
+                        <form>
+                            <fieldset>
+                                <label for="location">Location</label>
+                                    <input type="text" name="location" id="location" class="text" onchange="set_location()">
+                                <label for="question">Question</label>
+                                    <input type="text" name="question" id="question" value="" class="text" onchange="set_question()">
+                            </fieldset>
+                        </form>
+                    </div> 
 				</div>
-
 			</div>
 		</div><!--container-->
 	</body>
+</html>
