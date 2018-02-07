@@ -8,8 +8,5 @@ $_SESSION = array();
 
 $return = array("authenticated" => False);
 echo json_encode($return);
-die();
-
-echo json_encode($return);
 session_destroy();
 ?>
