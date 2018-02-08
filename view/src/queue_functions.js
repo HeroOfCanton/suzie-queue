@@ -160,6 +160,11 @@ function render_ta_view(dataParsed){
 
 function render_student_view(dataParsed){
   queue = dataParsed.queue;
+  if(dataParsed.state == "closed"){
+    $("#join_button").hide();
+    return;
+  }
+
   in_queue = false;
   for(session in queue){
     if(my_username == queue[session]["username"]){
@@ -306,7 +311,6 @@ function help_student(course, username){
   posting = $.post( url, { course: course, student: username } );
   var done = function(data){
     var dataString = JSON.stringify(data);
-    alert(dataString);
     var dataParsed = JSON.parse(dataString);
     if($.inArray(course, dataParsed["error"]) != -1){
       alert(dataParsed["error"]);
