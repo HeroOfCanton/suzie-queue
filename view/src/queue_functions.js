@@ -9,6 +9,33 @@ $(document).ready(function(){
       break;
     }
   }
+
+  dialog = $( "#dialog-form" ).dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    buttons: {
+      "Enter Queue": enqueue_student(course, question, location),
+      Cancel: function() {
+        dialog.dialog( "close" );
+      }
+    },
+    close: function() {
+      form[ 0 ].reset();
+      allFields.removeClass( "ui-state-error" );
+    }
+  });
+ 
+  form = dialog.find( "form" ).on( "submit", function( event ) {
+    event.preventDefault();
+    enqueue_student(course, question, location)
+  });
+
+  $( "#join_button" ).button().on( "click", function() {
+    dialog.dialog( "open" );
+  });
+  
   start();
 });
 
@@ -123,32 +150,7 @@ function render_student_view(dataParsed){
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      dialog = $( "#dialog-form" ).dialog({
-        autoOpen: false,
-        height: 400,
-        width: 350,
-        modal: true,
-        buttons: {
-          "Enter Queue": enqueue_student(course, question, location),
-          Cancel: function() {
-            dialog.dialog( "close" );
-          }
-        },
-        close: function() {
-          form[ 0 ].reset();
-          allFields.removeClass( "ui-state-error" );
-        }
-      });
- 
-      form = dialog.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        enqueue_student(course, question, location)
-      });
- 
-      $( "#join_button" ).button().on( "click", function() {
-        dialog.dialog( "open" );
-      });
-    });
+      
   }
   else{ //In queue
     $("#join_button").text("Leave Queue");
@@ -168,7 +170,9 @@ function render_queue_table(queue, role){
     username = queue[row].username;
     question = queue[row].question;
     Location = queue[row].location;
-    //If role is TA, add button to help to student
+    if(is_TA) {
+      ta_buttonc =
+    }
     $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
   }
 }
