@@ -34,6 +34,7 @@ $(document).ready(function(){
     }
   });
   $("#duty_button").hide();
+  $("#state_button").hide();
   start();
 });
 
@@ -67,9 +68,6 @@ function start(){
 }
 
 function get_queue(course, refresh) {
-  $("#state_button").hide();
-  $("#state_button").unbind("click");
-
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
 
@@ -115,6 +113,9 @@ function render_ta_table(TAs){
 }
 
 function render_ta_view(dataParsed){
+  $("#state_button").hide();
+  $("#state_button").unbind("click");
+
   queue_state = dataParsed.state;
   if(queue_state == "closed"){
     $("#state_button").text("OPEN QUEUE");
@@ -302,4 +303,17 @@ next_student = function(course){
   posting = $.post( url, { course: course } );
 }
 
-
+function help_student(course, username){
+  url = "../api/queue/help_student.php";
+  posting = $.post( url, { course: course, username: username } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+}
