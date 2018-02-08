@@ -24,7 +24,7 @@ $(document).ready(function(){
     buttons: {
       "Enter Queue": function() {
 	  lab_location = document.getElementById("location").value;
-	  question = document.getElementById("question").value; 
+	  question = document.getElementById("question").value;
 	  enqueue_student(course, question, lab_location);
 	  dialog.dialog( "close" );
       },
@@ -68,7 +68,7 @@ function start(){
 function get_queue(course, refresh) {
   $("#state_button").hide();
   $("#state_button").unbind("click");
- 
+
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
 
@@ -85,8 +85,8 @@ function get_queue(course, refresh) {
     }else{ //Queue is open
       $("#queue_state").text("State: Open");
     }
-  
-    //This block of code does the majority of the rendering 
+
+    //This block of code does the majority of the rendering
     render_ta_table(dataParsed.TAs)
     if(is_TA){
       render_queue_table(dataParsed.queue, "ta");
@@ -95,7 +95,7 @@ function get_queue(course, refresh) {
       render_queue_table(dataParsed.queue, "student");
       render_student_view(dataParsed)
     }
-    
+
     //Schedule the queue to refresh again. This way the calls can't overlap
     if(refresh != 0){
       setTimeout(function(){get_queue(course, refresh);}, refresh);
@@ -180,12 +180,14 @@ function render_queue_table(queue, role){
 	    being_helped = true;
 	  });
 	  new_row.append(help_button);
-	  $('#join_button').hide();
     }
     $('#queue').append(new_row);
   }
   if(being_helped) {
     $(this).closest('table').children('tr:first').css("background-color", "#b3ffb3");
+  }
+  if(is_TA){
+      $('#join_button').hide();
   }
 }
 
@@ -239,7 +241,7 @@ function dequeue_student(course, username){
     }
   }
   posting.done(done);
-} 
+}
 
 enqueue_ta = function(course){
   url = "../api/queue/enqueue_ta.php";
