@@ -33,6 +33,7 @@ $(document).ready(function(){
       }
     }
   });
+  $('#duty_button').hide();
   start();
 });
 
@@ -127,8 +128,22 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       close_queue(course);
     });
+    if(!dataParsed.TAs) {
+      $("duty_button").text("ON DUTY");
+      $("duty_button").click(function(event){
+         enqueue_ta(course); 
+      });
+    }
+    else{
+      $("duty_button").text("OFF DUTY");
+      $("duty_button").click(function(event){
+         dequeue_ta(course); 
+      });
+    }
   }
   $("#state_button").show();
+  $('#join_button').hide();
+  $('#duty_button').show();
 }
 
 function render_student_view(dataParsed){
@@ -186,9 +201,6 @@ function render_queue_table(queue, role){
   if(being_helped) {
     $(this).closest('table').children('tr:first').css("background-color", "#b3ffb3");
   }
-  if(is_TA){
-      $('#join_button').hide();
-  }
 }
 
 //API Endpoint calls
@@ -223,7 +235,7 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, username){
-    being_helped = false;
+  being_helped = false;
   url = "../api/queue/dequeue_student.php";
   if(username == null){
     posting = $.post( url, { course: course } );
@@ -243,12 +255,12 @@ function dequeue_student(course, username){
   posting.done(done);
 }
 
-enqueue_ta = function(course){
+function enqueue_ta(course){
   url = "../api/queue/enqueue_ta.php";
   posting = $.post( url, { course: course } );
 }
 
-dequeue_ta = function(course){
+function dequeue_ta(course){
   url = "../api/queue/dequeue_ta.php";
   posting = $.post( url, { course: course } );
 }
