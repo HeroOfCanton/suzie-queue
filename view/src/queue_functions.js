@@ -1,3 +1,8 @@
+var dialog;
+var form;
+var location = "gen_location";
+var question = "gen_question";
+
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
   var query = window.location.search.substring(1);
@@ -150,7 +155,8 @@ function render_student_view(dataParsed){
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      
+      enqueue_student(course, location, question);
+    });
   }
   else{ //In queue
     $("#join_button").text("Leave Queue");
@@ -171,7 +177,7 @@ function render_queue_table(queue, role){
     question = queue[row].question;
     Location = queue[row].location;
     if(is_TA) {
-      ta_buttonc =
+      ta_button = true;
     }
     $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
   }
