@@ -1,7 +1,8 @@
 var dialog;
 var form;
-var location = "gen_location";
-var question = "gen_question";
+var lab_location;
+var question;
+var being_helped = false;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -21,26 +22,17 @@ $(document).ready(function(){
     width: 350,
     modal: true,
     buttons: {
-      "Enter Queue": enqueue_student(course, question, location),
+      "Enter Queue": function() {
+	  lab_location = document.getElementById("location").value;
+	  question = document.getElementById("question").value; 
+	  enqueue_student(course, question, lab_location);
+	  dialog.dialog( "close" );
+      },
       Cancel: function() {
         dialog.dialog( "close" );
       }
-    },
-    close: function() {
-      form[ 0 ].reset();
-      allFields.removeClass( "ui-state-error" );
     }
   });
- 
-  form = dialog.find( "form" ).on( "submit", function( event ) {
-    event.preventDefault();
-    enqueue_student(course, question, location)
-  });
-
-  $( "#join_button" ).button().on( "click", function() {
-    dialog.dialog( "open" );
-  });
-  
   start();
 });
 
@@ -155,7 +147,7 @@ function render_student_view(dataParsed){
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      enqueue_student(course, location, question);
+      dialog.dialog( "open" );
     });
   }
   else{ //In queue
@@ -176,10 +168,24 @@ function render_queue_table(queue, role){
     username = queue[row].username;
     question = queue[row].question;
     Location = queue[row].location;
+    var new_row = $('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
     if(is_TA) {
-      ta_button = true;
+      var dequeue_button = $('<button class="btn btn-primary" ><span>Dequeue Student</span> </button>');
+	dequeue_button.click(function(event) {
+	 dequeue_student(course, username);
+	});
+      new_row.append(dequeue_button);
+	var help_button = $('<button class="btn btn-primary" ><span>Help Student</span> </button>');
+	help_button.click(function(){
+	    being_helped = true;
+	});
+	new_row.append(help_button);
+	$('#join_button').hide();
     }
-    $('#queue').append('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+      if(being_helped) {
+	  $(this).closest('table').children('tr:first').css("background-color", "#b3ffb3");
+      }
+    $('#queue').append(new_row);
   }
 }
 
@@ -215,6 +221,7 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, username){
+    being_helped = false;
   url = "../api/queue/dequeue_student.php";
   if(username == null){
     posting = $.post( url, { course: course } );
@@ -232,14 +239,6 @@ function dequeue_student(course, username){
     }
   }
   posting.done(done);
-}
-
-function set_location(){
-    location = document.getElementById("location").value;
-} 
-
-function set_question(){
-    question = document.getElementById("question").value;
 } 
 
 enqueue_ta = function(course){
