@@ -33,7 +33,7 @@ $(document).ready(function(){
       }
     }
   });
-  $('#duty_button').hide();
+  $("#duty_button").hide();
   start();
 });
 
@@ -128,22 +128,33 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       close_queue(course);
     });
-    if(!dataParsed.TAs) {
-      $("duty_button").text("ON DUTY");
-      $("duty_button").click(function(event){
-         enqueue_ta(course); 
+
+    TAs_on_duty = dataParsed.TAs;
+    on_duty= false;
+    for(var entry = 0; entry < TAs_on_duty.length; entry++){
+      if(TAs_on_duty[entry].username == my_username){
+        on_duty = true;
+      }
+    } 
+    
+    if(!on_duty) {
+      $("#duty_button").text("ON DUTY");
+      $("#duty_button").click(function(event){
+         event.preventDefault();
+	 enqueue_ta(course); 
       });
     }
     else{
-      $("duty_button").text("OFF DUTY");
-      $("duty_button").click(function(event){
+      $("#duty_button").text("OFF DUTY");
+      $("#duty_button").click(function(event){
+	 event.preventDefault();
          dequeue_ta(course); 
       });
     }
   }
   $("#state_button").show();
-  $('#join_button').hide();
-  $('#duty_button').show();
+  $("#join_button").hide();
+  $("#duty_button").show();
 }
 
 function render_student_view(dataParsed){
@@ -258,14 +269,37 @@ function dequeue_student(course, username){
 function enqueue_ta(course){
   url = "../api/queue/enqueue_ta.php";
   posting = $.post( url, { course: course } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
 }
 
 function dequeue_ta(course){
   url = "../api/queue/dequeue_ta.php";
   posting = $.post( url, { course: course } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+
 }
 
 next_student = function(course){
   url = "../api/queue/next_student.php";
   posting = $.post( url, { course: course } );
 }
+
+
