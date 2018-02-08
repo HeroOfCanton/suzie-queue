@@ -37,6 +37,7 @@ function get_queue($course){
   $entry    = mysqli_fetch_assoc($result);
   $return["state"]    = $entry["state"];
   $return["time_lim"] = $entry["time_lim"];
+  $return["TAs"]      = [];
 
   #Get the state of the TAs
   $query  = "SELECT username, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping FROM ta_status WHERE course_id='".$course_id."'";
