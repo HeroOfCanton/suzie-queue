@@ -303,9 +303,10 @@ next_student = function(course){
 
 function help_student(course, username){
   url = "../api/queue/help_student.php";
-  posting = $.post( url, { course: course, username: username } );
+  posting = $.post( url, { course: course, student: username } );
   var done = function(data){
     var dataString = JSON.stringify(data);
+    alert(dataString);
     var dataParsed = JSON.parse(dataString);
     if($.inArray(course, dataParsed["error"]) != -1){
       alert(dataParsed["error"]);
