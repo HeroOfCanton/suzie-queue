@@ -152,10 +152,10 @@ function render_ta_view(dataParsed){
          dequeue_ta(course); 
       });
     }
+    $("#duty_button").show();
   }
   $("#state_button").show();
   $("#join_button").hide();
-  $("#duty_button").show();
 }
 
 function render_student_view(dataParsed){
