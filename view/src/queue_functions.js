@@ -199,19 +199,17 @@ function render_queue_table(queue, role){
     if(is_TA) {
       var dequeue_button = $('<button class="btn btn-primary" ><span>Dequeue Student</span> </button>');
 	  dequeue_button.click(function(event) {
-	    dequeue_student(course, username);
+	  dequeue_student(course, username);
 	  });
       new_row.append(dequeue_button);
 	  var help_button = $('<button class="btn btn-primary" ><span>Help Student</span> </button>');
 	  help_button.click(function(){
-	    being_helped = true;
+	    help_student(course, username);
+	    $(this).closest('tr').css("background-color", "#b3ffb3");
 	  });
 	  new_row.append(help_button);
     }
     $('#queue').append(new_row);
-  }
-  if(being_helped) {
-    $(this).closest('table').children('tr:first').css("background-color", "#b3ffb3");
   }
 }
 
