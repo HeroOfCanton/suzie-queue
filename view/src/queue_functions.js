@@ -1,8 +1,5 @@
 var dialog;
 var form;
-var lab_location;
-var question;
-var being_helped = false;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -88,10 +85,10 @@ function get_queue(course, refresh) {
     //This block of code does the majority of the rendering
     render_ta_table(dataParsed.TAs)
     if(is_TA){
-      render_queue_table(dataParsed.queue, "ta");
+      render_queue_table(dataParsed, "ta");
       render_ta_view(dataParsed)
     }else{
-      render_queue_table(dataParsed.queue, "student");
+      render_queue_table(dataParsed, "student");
       render_student_view(dataParsed)
     }
 
@@ -118,6 +115,7 @@ function render_ta_view(dataParsed){
 
   queue_state = dataParsed.state;
   if(queue_state == "closed"){
+    document.getElementById("state_button").style.background='ForestGreen';
     $("#state_button").text("OPEN QUEUE");
     $("#state_button").click(function( event ) {
       event.preventDefault();
@@ -125,6 +123,7 @@ function render_ta_view(dataParsed){
     });
     $("#duty_button").hide();
   }else{
+    document.getElementById("state_button").style.background='FireBrick';
     $("#state_button").text("CLOSE QUEUE");
     $("#state_button").click(function( event ) {
       event.preventDefault();
@@ -140,6 +139,7 @@ function render_ta_view(dataParsed){
     } 
     
     if(!on_duty) {
+      document.getElementById("duty_button").style.background='ForestGreen';
       $("#duty_button").text("GO ON DUTY");
       $("#duty_button").click(function(event){
          event.preventDefault();
@@ -147,6 +147,7 @@ function render_ta_view(dataParsed){
       });
     }
     else{
+      document.getElementById("duty_button").style.background='FireBrick';
       $("#duty_button").text("GO OFF DUTY");
       $("#duty_button").click(function(event){
 	 event.preventDefault();
@@ -194,26 +195,38 @@ function render_student_view(dataParsed){
 }
 
 //Displays the queue table
-function render_queue_table(queue, role){
+function render_queue_table(dataParsed, role){
+  var queue = dataParsed.queue;
+  var TAs   = dataParsed.TAs;
   $("#queue tr").remove();
   $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
+  
+  helping = [];
+  for(TA in TAs ){
+    helping.push(TAs[TA].helping)
+  }
+
   for(row in queue){
     username = queue[row].username;
     question = queue[row].question;
     Location = queue[row].location;
     var new_row = $('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+    
+    if( helping.indexOf(username, 0) != -1 ){
+      new_row.css("background-color", "#b3ffb3");
+    }
+
     if(is_TA) {
-      var dequeue_button = $('<button class="btn btn-primary" ><span>Dequeue Student</span> </button>');
-	  dequeue_button.click(function(event) {
-	  dequeue_student(course, username);
-	  });
+      var dequeue_button = $('<button class="btn btn-primary" ><span>Dequeue</span> </button>');
+      dequeue_button.click(function(event) {
+        dequeue_student(course, username);
+      });
+      var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
+      help_button.click(function(){
+        help_student(course, username);
+      });
+      new_row.append(help_button);
       new_row.append(dequeue_button);
-	  var help_button = $('<button class="btn btn-primary" ><span>Help Student</span> </button>');
-	  help_button.click(function(){
-	    help_student(course, username);
-	    $(this).closest('tr').css("background-color", "#b3ffb3");
-	  });
-	  new_row.append(help_button);
     }
     $('#queue').append(new_row);
   }
@@ -227,7 +240,7 @@ function open_queue(course){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -242,7 +255,7 @@ function close_queue(course){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -257,7 +270,7 @@ function enqueue_student(course, question, Location){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -271,7 +284,6 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, username){
-  being_helped = false;
   url = "../api/queue/dequeue_student.php";
   if(username == null){
     posting = $.post( url, { course: course } );
@@ -282,7 +294,7 @@ function dequeue_student(course, username){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -297,7 +309,7 @@ function enqueue_ta(course){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -312,7 +324,7 @@ function dequeue_ta(course){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
@@ -333,7 +345,7 @@ function help_student(course, username){
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    if($.inArray(course, dataParsed["error"]) != -1){
+    if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
       get_queue(course, 0); //refreshes the page
