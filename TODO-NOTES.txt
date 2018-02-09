@@ -1,0 +1,52 @@
+﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
+
+-automatic location generation when entering queue
+-TA/faculty toggle abilities (e.g. does logging out remove you from queue)
+-TA/faculty ability to freeze queue so no one new can enter
+-Have different background colors for TAs
+-Have CADE handle authentication (or whatever Jim said)
+-Logout on main queue page doesn't go to login page
+-Spinners or progress/waiting indicators for slow loads
+-Success is falsely returned when a student (or TA) removes self (or another student) from a non-existent class.
+-Should logging out remove you from all queues?
+-Should some requests be GET, or DELETE, etc. instead of POST?
+-main queue page should display name, not username
+-In our DB courses table, does the name need to include the dept and course num? Is this redundant?
+-Dequeuing a student from a queue they’re not in returns success. Problem? 
+-Removing a course that a student’s not enrolled in returns success. Problem?
+-Adding a course that a student’s already enrolled in returns success. Problem?
+-Conversely to the 3 notes above, putting a TA on duty for a class they’re already on duty for returns failure.
+What convention should we use? 
+-Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
+-Lock navbar in place when scrolling
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
+
+Daniel,
+In a meeting with some of my TAs this morning, the topic of the TA call queue came up and I took the opportunity to get
+some ideas from them on what they would like to see in a new app.  Here are some notes.  Feel free to ask about anything
+that does not make sense.
+
+-Ensure that only students currently enrolled in the class can sign in (with an access code or something). It doesn't
+happen much, but occasionally students from the wrong class sign in.
+
+-Include a utility for TAs to directly message students currently in the queue (collectively or individually). This can be
+useful if a student's location is incorrect, or to warn that TA hours are ending soon.
+
+-(This is a bit specific to CS at the U, but...)  Have a map of the CADE lab to show where students in the queue are sitting,
+so the TA can locate them quickly.
+
+-Include push notifications to the TAs on duty for when a student enters the queue.  During slow times, when the queue is empty,
+some TAs are late noticing that a student has entered.
+
+-Allow a TA-supplied list of common issues/questions for students to choose from when entering the queue, to make it easier to
+answer for a group of students.
+
+-When students enter the queue, have a "subject" line to fill (in addition to name and location).
+
+-Allow TAs to reorder the queue and undo removing a student.
+
+-Capture a history/activity log for a session, for TAs and instructors to look at later and assess things like how long a TA is
+spending with students, which students use the queue most often, etc.
+
