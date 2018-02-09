@@ -11,7 +11,7 @@
 //server side anyway, we run no risk of leaking any 
 //information implementing the login redirects on the 
 //client side
-var $get_req = $.get("../api/user/my_classes.php");
+var $get_req = $.get("../api/classes/all_classes.php");
 $get_req.done( function(data) {
   var dataString = JSON.stringify(data);
   var dataParsed = JSON.parse(dataString);
