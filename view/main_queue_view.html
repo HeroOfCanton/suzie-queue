@@ -21,6 +21,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- queue source -->
         <script src="./src/queue_functions.js"></script>
+        <script src="./src/login_redirect.js"></script>
 	</head>
 	<body>
 
@@ -43,9 +44,6 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#" onclick="logout();">Logout</a>
-                        </li>
-                        <li>
                             <a href="all_classes_view.html">All Classes</a>
                         </li>
                         <li>
@@ -56,6 +54,9 @@
                         </li>
                         <li>
                             <a href="main_stats_view.html">Statistics</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="logout();">Logout</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->

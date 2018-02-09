@@ -113,8 +113,8 @@ function render_ta_table(TAs){
 }
 
 function render_ta_view(dataParsed){
-  $("#state_button").hide();
   $("#state_button").unbind("click");
+  $("#duty_button").unbind("click");
 
   queue_state = dataParsed.state;
   if(queue_state == "closed"){
@@ -123,6 +123,7 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       open_queue(course);
     });
+    $("#duty_button").hide();
   }else{
     $("#state_button").text("CLOSE QUEUE");
     $("#state_button").click(function( event ) {
@@ -139,14 +140,14 @@ function render_ta_view(dataParsed){
     } 
     
     if(!on_duty) {
-      $("#duty_button").text("ON DUTY");
+      $("#duty_button").text("GO ON DUTY");
       $("#duty_button").click(function(event){
          event.preventDefault();
 	 enqueue_ta(course); 
       });
     }
     else{
-      $("#duty_button").text("OFF DUTY");
+      $("#duty_button").text("GO OFF DUTY");
       $("#duty_button").click(function(event){
 	 event.preventDefault();
          dequeue_ta(course); 
@@ -223,11 +224,31 @@ function render_queue_table(queue, role){
 function open_queue(course){
   url = "../api/queue/open.php";
   posting = $.post( url, { course: course } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
 }
 
 function close_queue(course){
   url = "../api/queue/close.php";
   posting = $.post( url, { course: course } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if($.inArray(course, dataParsed["error"]) != -1){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
 }
 
 function enqueue_student(course, question, Location){
