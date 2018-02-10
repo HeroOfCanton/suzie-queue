@@ -32,6 +32,7 @@ $(document).ready(function(){
   });
   $("#duty_button").hide();
   $("#state_button").hide();
+  $("#join_button").hide();
   start();
 });
 
