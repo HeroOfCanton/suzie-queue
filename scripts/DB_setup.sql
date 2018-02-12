@@ -64,11 +64,36 @@ create table queue(
 
 --State of each TA on duty--
 create table ta_status(
-  username   VARCHAR(256) NOT NULL,
-  course_id  int NOT NULL,
-  helping    BIGINT,
-  primary key (username, course_id),
-  foreign key (username) references users(username) ON DELETE CASCADE,
-  foreign key (course_id) references queue_state(course_id) ON DELETE CASCADE,
-  foreign key (helping) references queue(position) ON DELETE SET NULL
+  username     VARCHAR(256) NOT NULL,
+  course_id    int NOT NULL,
+  helping      BIGINT,
+  state_tmstmp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  primary key  (username, course_id),
+  foreign key  (username) references users(username) ON DELETE CASCADE,
+  foreign key  (course_id) references queue_state(course_id) ON DELETE CASCADE,
+  foreign key  (helping) references queue(position) ON DELETE SET NULL
 );
+
+
+
+--LOGS--
+create table student_log(
+  id             BIGINT AUTO_INCREMENT,
+  username       VARCHAR(256) NOT NULL,
+  course_id      int NOT NULL,
+  question       TEXT,
+  location       VARCHAR(256) NOT NULL,
+  enter_tmstmp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  exit_tmstmp    TIMESTAMP,
+  primary key    (id),
+  foreign key    (username)  references users(username)    ON DELETE CASCADE,
+  foreign key    (course_id) references courses(course_id) ON DELETE CASCADE  
+);
+
+CREATE TRIGGER log_student_entry AFTER INSERT ON queue FOR EACH ROW 
+INSERT INTO student_log (username, course_id, question, location) 
+VALUES (NEW.username, NEW.course_id, NEW.question, NEW.location);
+
+CREATE TRIGGER log_student_exit AFTER DELETE ON queue FOR EACH ROW
+UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP 
+WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
