@@ -37,8 +37,15 @@ function get_queue($course){
   $entry    = mysqli_fetch_assoc($result);
   $return["state"]    = $entry["state"];
   $return["time_lim"] = $entry["time_lim"];
-  $return["announce"] = $entry["announcements"];
+  $return["announce"] = [];
   $return["TAs"]      = [];
+
+  #Get the announcements
+  $query  = "SELECT announcement FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
+  $result = mysqli_query($sql_conn, $query);
+  while($entry = mysqli_fetch_assoc($result)){
+    $return["announce"][] = $entry["announcement"];
+  }
 
   #Get the state of the TAs
   $query  = "SELECT username, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping FROM ta_status WHERE course_id='".$course_id."'";

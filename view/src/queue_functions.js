@@ -77,16 +77,10 @@ function get_queue(course, refresh) {
       return;
     }
 
-    if(dataParsed.state == "closed"){
-      $("#queue_state").text("State: Closed");
-    }else{ //Queue is open
-      $("#queue_state").text("State: Open");
-    }
+    $("#queue_state").text("State: "+dataParsed.state);
 
     //Render the announcements box
-    ann = dataParsed.announce;
-    $("#announcements").text(ann);
-
+    render_ann_box(dataParsed.announce);
 
     //This block of code does the majority of the rendering
     render_ta_table(dataParsed.TAs)
@@ -104,6 +98,14 @@ function get_queue(course, refresh) {
     }
   }
   posting.done(done);
+}
+
+
+function render_ann_box(anns){
+  $("#announcements").text("");
+  for(ann in anns){
+    $("#announcements").append(anns[ann]+"<br>");
+  }
 }
 
 //Shows the TAs that are on duty
@@ -205,19 +207,21 @@ function render_queue_table(dataParsed, role){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
   $("#queue tr").remove();
-  $('#queue').append("<tr> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
+  $('#queue').append("<tr> <th>Pos.</th> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
   
   helping = [];
   for(TA in TAs ){
     helping.push(TAs[TA].helping)
   }
 
+  var i = 1;
   for(row in queue){
     let username = queue[row].username;
     var question = queue[row].question;
     var Location = queue[row].location;
-    var new_row = $('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
-    
+    var new_row = $('<tr> <td>'+i+'</td> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+    i++;   
+ 
     if( helping.indexOf(username, 0) != -1 ){
       new_row.css("background-color", "#b3ffb3");
     }
@@ -230,11 +234,12 @@ function render_queue_table(dataParsed, role){
       if( helping.indexOf(username, 0) != -1 ){
         var help_button = $('<button class="btn btn-primary" ><span>Release</span> </button>');
         help_button.click(function(event){
-          help_student(course, username); //FIX ME
+          release_ta(course);
         });
       }else{
         var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
         help_button.click(function(event){
+          enqueue_ta(course); //Maybe make this cleaner. 
           help_student(course, username);
         });
       }
@@ -308,6 +313,21 @@ function dequeue_student(course, username){
   else{
     posting = $.post( url, { course: course, username: username } );
   }
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+}
+
+function release_ta(course){
+  url = "../api/queue/release_ta.php";
+  posting = $.post( url, { course: course } );
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);

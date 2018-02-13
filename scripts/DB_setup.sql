@@ -43,7 +43,6 @@ create table queue_state(
   course_id     int,
   state         ENUM('open','paused') NOT NULL,
   time_lim      int DEFAULT 0 NOT NULL,
-  announcements TEXT,
   primary key (course_id),
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );
@@ -73,6 +72,18 @@ create table ta_status(
   foreign key  (username) references users(username) ON DELETE CASCADE,
   foreign key  (course_id) references queue_state(course_id) ON DELETE CASCADE,
   foreign key  (helping) references queue(position) ON DELETE SET NULL
+);
+
+
+
+--Announcements--
+create table announcements(
+  id             BIGINT AUTO_INCREMENT,
+  course_id      int NOT NULL,
+  announcement   TEXT,
+  tmstmp         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  primary key    (id),
+  foreign key    (course_id) references courses(course_id) ON DELETE CASCADE
 );
 
 
