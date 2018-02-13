@@ -37,6 +37,7 @@ function get_queue($course){
   $entry    = mysqli_fetch_assoc($result);
   $return["state"]    = $entry["state"];
   $return["time_lim"] = $entry["time_lim"];
+  $return["announce"] = $entry["announcements"];
   $return["TAs"]      = [];
 
   #Get the state of the TAs
@@ -174,13 +175,14 @@ function enq_ta($username, $course_name){
   }
 
   $query = "INSERT INTO ta_status (username, course_id) 
-            VALUES (?, (SELECT course_id FROM courses WHERE course_name=?) )";
+            VALUES (?, (SELECT course_id FROM courses WHERE course_name=?) )
+            ON DUPLICATE KEY UPDATE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
+  mysqli_stmt_bind_param($stmt, "sss", $username, $course_name, $username);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);

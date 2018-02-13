@@ -15,7 +15,7 @@
 -Dequeuing a student from a queue they’re not in returns success. Problem? 
 -Removing a course that a student’s not enrolled in returns success. Problem?
 -Adding a course that a student’s already enrolled in returns success. Problem?
--Conversely to the 3 notes above, putting a TA on duty for a class they’re already on duty for returns failure.
+Fixed: -Conversely to the 3 notes above, putting a TA on duty for a class they’re already on duty for returns failure.
 What convention should we use? 
 -Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
 -Lock navbar in place when scrolling
