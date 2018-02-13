@@ -83,6 +83,11 @@ function get_queue(course, refresh) {
       $("#queue_state").text("State: Open");
     }
 
+    //Render the announcements box
+    ann = dataParsed.announce;
+    $("#announcements").text(ann);
+
+
     //This block of code does the majority of the rendering
     render_ta_table(dataParsed.TAs)
     if(is_TA){
@@ -208,9 +213,9 @@ function render_queue_table(dataParsed, role){
   }
 
   for(row in queue){
-    username = queue[row].username;
-    question = queue[row].question;
-    Location = queue[row].location;
+    let username = queue[row].username;
+    var question = queue[row].question;
+    var Location = queue[row].location;
     var new_row = $('<tr> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
     
     if( helping.indexOf(username, 0) != -1 ){
@@ -222,12 +227,23 @@ function render_queue_table(dataParsed, role){
       dequeue_button.click(function(event) {
         dequeue_student(course, username);
       });
-      var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
-      help_button.click(function(){
-        help_student(course, username);
-      });
+      if( helping.indexOf(username, 0) != -1 ){
+        var help_button = $('<button class="btn btn-primary" ><span>Release</span> </button>');
+        help_button.click(function(event){
+          help_student(course, username); //FIX ME
+        });
+      }else{
+        var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
+        help_button.click(function(event){
+          help_student(course, username);
+        });
+      }
+      new_row.append("<td>");
       new_row.append(help_button);
+      new_row.append("</td>");
+      new_row.append("<td>");
       new_row.append(dequeue_button);
+      new_row.append("</td>");
     }
     $('#queue').append(new_row);
   }

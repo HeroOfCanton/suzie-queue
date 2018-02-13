@@ -4,17 +4,16 @@
 -TA/faculty toggle abilities (e.g. does logging out remove you from queue)
 -TA/faculty ability to freeze queue so no one new can enter
 -Have different background colors for TAs
--Have CADE handle authentication (or whatever Jim said)
--Logout on main queue page doesn't go to login page
+-Have CIS handle authentication
+Fixed: -Logout on main queue page doesn't go to login page
 -Spinners or progress/waiting indicators for slow loads
 -Success is falsely returned when a student (or TA) removes self (or another student) from a non-existent class.
 -Should logging out remove you from all queues?
--Should some requests be GET, or DELETE, etc. instead of POST?
 -main queue page should display name, not username
--In our DB courses table, does the name need to include the dept and course num? Is this redundant?
--Dequeuing a student from a queue they’re not in returns success. Problem? 
--Removing a course that a student’s not enrolled in returns success. Problem?
--Adding a course that a student’s already enrolled in returns success. Problem?
+Not a Problem: -In our DB courses table, does the name need to include the dept and course num? Is this redundant?
+Not a Problem: -Dequeuing a student from a queue they’re not in returns success. Problem? 
+Not a Problem: -Removing a course that a student’s not enrolled in returns success. Problem?
+Not a Problem: -Adding a course that a student’s already enrolled in returns success. Problem?
 Fixed: -Conversely to the 3 notes above, putting a TA on duty for a class they’re already on duty for returns failure.
 What convention should we use? 
 -Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
@@ -43,7 +42,7 @@ some TAs are late noticing that a student has entered.
 -Allow a TA-supplied list of common issues/questions for students to choose from when entering the queue, to make it easier to
 answer for a group of students.
 
--When students enter the queue, have a "subject" line to fill (in addition to name and location).
+Done: -When students enter the queue, have a "subject" line to fill (in addition to name and location).
 
 -Allow TAs to reorder the queue and undo removing a student.
 
