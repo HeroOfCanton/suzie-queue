@@ -1,5 +1,7 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Any reason we're displaying 'Pos.' in the queue? This seems unecessary.
+-make student question optionally visible to other students?
 -set Announcements box at constant size (instead of growing/shrinking) and use scroll bar when necessary
 -on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -automatic location generation when entering queue
