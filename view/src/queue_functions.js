@@ -12,6 +12,10 @@ $(document).ready(function(){
       break;
     }
   }
+  if(typeof course === 'undefined'){
+    alert("No course specified");
+    window.location ='./my_classes.html';
+  }
 
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
