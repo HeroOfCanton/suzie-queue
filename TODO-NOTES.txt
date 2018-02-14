@@ -1,5 +1,7 @@
 ï»¿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-set Announcements box at constant size (instead of growing/shrinking) and use scroll bar when necessary
+-on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -automatic location generation when entering queue
 -TA/faculty toggle abilities (e.g. does logging out remove you from queue)
 -TA/faculty ability to freeze queue so no one new can enter
@@ -18,7 +20,8 @@ Fixed: -Conversely to the 3 notes above, putting a TA on duty for a class theyâ€
 What convention should we use? 
 -Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
 -Lock navbar in place when scrolling
-
+-Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds
+-TA/faculty ability to delete announcements
 
 ~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
 
