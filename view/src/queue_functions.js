@@ -14,7 +14,7 @@ $(document).ready(function(){
   }
   if(typeof course === 'undefined'){
     alert("No course specified");
-    window.location ='./my_classes.html';
+    window.location ='./my_classes.php';
   }
 
   dialog = $( "#dialog-form" ).dialog({

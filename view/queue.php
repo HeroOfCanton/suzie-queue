@@ -1,3 +1,7 @@
+<?php
+  include "router.php"
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
@@ -44,16 +48,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="classes.html">All Classes</a>
+                            <a href="classes.php">All Classes</a>
                         </li>
                         <li>
-                            <a href="my_classes.html">My Classes</a>
+                            <a href="my_classes.php">My Classes</a>
                         </li>
                         <li class="active">
                             <a href="#">Queue</a>
-                        </li>
-                        <li>
-                            <a href="main_stats_view.html">Statistics</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout</a>

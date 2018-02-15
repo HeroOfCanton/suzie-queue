@@ -18,10 +18,10 @@ login = function( event ) {
         var dataString = JSON.stringify(data);
         var dataParsed = JSON.parse(dataString);
         if(dataParsed.student_courses.length === 0){
-          window.location.href = '../view/classes.html';
+          window.location.href = '../view/classes.php';
         }
         else{
-          window.location.href = '../view/my_classes.html';
+          window.location.href = '../view/my_classes.php';
         }
       });
 
