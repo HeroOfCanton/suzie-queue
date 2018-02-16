@@ -46,6 +46,9 @@ function get_info($username){
   $first_name = $result["givenname"][0];
   $last_name  = $result["sn"][0];
   
+  $first_name = ucwords(strtolower($first_name));
+  $last_name  = ucwords(strtolower($last_name));
+  
   #Touches the user entry in the sql table
   if(touch_user($username, $first_name, $last_name, $first_name." ".$last_name)){
     return NULL;

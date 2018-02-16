@@ -48,14 +48,18 @@ function get_queue($course){
   }
 
   #Get the state of the TAs
-  $query  = "SELECT username, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping FROM ta_status WHERE course_id='".$course_id."'";
+  $query  = "SELECT ta_status.username, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping 
+             FROM ta_status INNER JOIN users on ta_status.username = users.username 
+             WHERE course_id='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   while($entry = mysqli_fetch_assoc($result)){
     $return["TAs"][] = $entry;
   }
 
   #Get the actual queue
-  $query  = "SELECT username, question, location FROM queue WHERE course_id ='".$course_id."' ORDER BY position";
+  $query  = "SELECT queue.username, users.full_name, queue.question, queue.location 
+             FROM queue INNER JOIN users on queue.username = users.username
+             WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
   while($entry = mysqli_fetch_assoc($result)){
     $return["queue"][] = $entry;

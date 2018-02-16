@@ -74,12 +74,10 @@
 							<div class="panel-heading">
 								<h3 class="panel-title">My Classes</h3>
 							</div>
-							<div class="panel-body">
-								<p>The following table contains this semester's list of classes that you have enrolled in. </br> </br> Yeah, that's a preposition at the end there. We're not apologizing.</p>
-							</div>
+							<div class="panel-body"></div>
 								<table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
 								<tr>
-									<th>Class Name</th>
+									<th>Class</th>
 									<th>Role</th>
 									<th>Queue</th>
 								</tr>

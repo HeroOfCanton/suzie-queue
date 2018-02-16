@@ -24,6 +24,7 @@ create table courses(
   professor   VARCHAR(128), 
   description TEXT,
   ldap_group  VARCHAR(256),
+  access_code VARCHAR(16),
   primary key (course_id),
   foreign key (professor) references users(username) ON DELETE SET NULL
 );

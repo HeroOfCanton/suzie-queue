@@ -116,8 +116,8 @@ function render_ann_box(anns){
 function render_ta_table(TAs){
   $("#ta_on_duty h4").remove();
   for(TA in TAs){
-    ta_username = TAs[TA]["username"];
-    $('#ta_on_duty').append("<h4>"+ta_username+"</h4>");
+    full_name = TAs[TA]["full_name"];
+    $('#ta_on_duty').append("<h4>"+full_name+"</h4>");
   }
 }
 
@@ -220,10 +220,11 @@ function render_queue_table(dataParsed, role){
 
   var i = 1;
   for(row in queue){
-    let username = queue[row].username;
-    var question = queue[row].question;
-    var Location = queue[row].location;
-    var new_row = $('<tr> <td>'+i+'</td> <td>'+username+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+    let username  = queue[row].username;
+    let full_name = queue[row].full_name;
+    var question  = queue[row].question;
+    var Location  = queue[row].location;
+    var new_row = $('<tr> <td>'+i+'</td> <td>'+full_name+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
     i++;   
  
     if( helping.indexOf(username, 0) != -1 ){

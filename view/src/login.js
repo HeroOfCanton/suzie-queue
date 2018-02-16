@@ -17,7 +17,7 @@ login = function( event ) {
       $get_req.done( function(data) {
         var dataString = JSON.stringify(data);
         var dataParsed = JSON.parse(dataString);
-        if(dataParsed.student_courses.length === 0){
+        if(dataParsed.student_courses.length + dataParsed.ta_courses.length === 0){
           window.location.href = '../view/classes.php';
         }
         else{

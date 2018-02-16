@@ -128,9 +128,9 @@
                         <form>
                             <fieldset>
                                 <label for="location">Location</label>
-                                    <input type="text" name="location" id="location" class="text">
+                                    <input type="text" name="location" id="location" class="text" maxlength="50">
                                 <label for="question">Question</label>
-                                    <input type="text" name="question" id="question" value="" class="text">
+                                    <input type="text" name="question" id="question" value="" class="text" maxlength="50">
                             </fieldset>
                         </form>
                     </div> 
