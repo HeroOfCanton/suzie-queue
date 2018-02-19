@@ -36,7 +36,7 @@ function auth($username, $pass){
  */
 function get_info($username){
   $result = srch_by_sam($username); 
-  if($result == NULL){
+  if(is_null($result)){
     return NULL;
   }
 
@@ -99,7 +99,7 @@ function dn_to_sam($dn){
   $filter = "(distinguishedName=$dn)";
   $ldap_conn = _ldap_connect();
 
-  if($ldap_conn == NULL){
+  if(is_null($ldap_conn)){
     return NULL;
   }
 
@@ -126,7 +126,7 @@ function srch_by_sam($sam){
   }
 
   $ldap_conn = _ldap_connect();
-  if($ldap_conn == NULL){
+  if(is_null($ldap_conn)){
     return NULL;
   }
 

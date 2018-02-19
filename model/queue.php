@@ -18,7 +18,7 @@ function get_queue($course){
   }
 
   $course_id = course_name_to_id($course, $sql_conn);
-  if($course_id == NULL){
+  if(is_null($course_id)){
     mysqli_close($sql_conn);
     return NULL;
   } 
@@ -310,7 +310,7 @@ function help_next_student($username, $course_name){
   }
 
   $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == NULL){
+  if(is_null($course_id)){
     mysqli_close($sql_conn);
     return 1;
   }
@@ -365,7 +365,7 @@ function help_student($TA_username, $stud_username, $course_name){
   }
 
   $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == NULL){
+  if(is_null($course_id)){
     mysqli_close($sql_conn);
     return 1;
   } 
@@ -505,7 +505,7 @@ function change_queue_state($course_name, $state){
   }
 
   $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == NULL){
+  if(is_null($course_id)){
     mysqli_close($sql_conn);
     return NULL;
   }
@@ -550,7 +550,7 @@ function change_queue_state($course_name, $state){
  * just embedding subqueries or doing table joins
  * 
  * For now though, this function is used mainly to prevent
- * SQL injection in the function that call it, by verifying
+ * SQL injection in the functions that call it, by verifying
  * course_name input
  *
  * @param string $course_name

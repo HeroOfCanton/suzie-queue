@@ -108,12 +108,12 @@ function del_course($course_name){
   */
 function get_tas($course_name){
   $course_group = get_course_group($course_name);
-  if($course_group == NULL){
+  if(is_null($course_group)){
     return NULL;
   }
 
   $result = srch_by_sam($course_group);
-  if($result == NULL){
+  if(is_null($result)){
     return NULL;
   }
 
@@ -134,7 +134,7 @@ function get_tas($course_name){
   */
 function get_ta_courses($username){
   $result = srch_by_sam($username);
-  if($result == NULL){
+  if(is_null($result)){
     return NULL;
   } 
 
@@ -149,7 +149,7 @@ function get_ta_courses($username){
   $courses = array();
   foreach($groups as $group) { //Iterate groups the user is a member of
     $group_sam = dn_to_sam($group);
-    if($group_sam == NULL){
+    if(is_null($group_sam)){
       continue; //In theory, this is not possible, but we'll check
     }
 
