@@ -26,7 +26,7 @@ if(!auth($username, $password))
 
 $info = get_info($username);
 
-if($info == NULL)
+if(is_null($info))
 {
   $return = array("error" => "Unable to Retrieve Info");
   echo json_encode($return);
@@ -35,7 +35,7 @@ if($info == NULL)
 
 $ta_courses = get_ta_courses($username);
 
-if($ta_courses == NULL)
+if(is_null($ta_courses))
 {
   $return = array("error" => "Unable to Retrieve group status");
   echo json_encode($return);

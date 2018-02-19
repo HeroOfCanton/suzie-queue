@@ -27,7 +27,7 @@ login = function( event ) {
 
     }
     else{
-      alert('Invalid Login');
+      alert(dataParsed.error);
     }
   });
 }

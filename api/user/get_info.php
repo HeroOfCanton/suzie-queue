@@ -17,7 +17,7 @@ if (!$_SESSION['username'])
 $username = $_SESSION['username'];
 $stud_info = get_info($username);
 
-if ($stud_info == NULL)
+if (is_null($stud_info))
 {
   $return = array(
     "authenticated" => True,

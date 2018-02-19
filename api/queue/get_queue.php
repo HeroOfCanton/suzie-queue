@@ -43,7 +43,7 @@ else
   $queue = get_queue($course);
 }
 
-if($queue == NULL)
+if(is_null($queue))
 {
   $return = array(
     "authenticated" => True,

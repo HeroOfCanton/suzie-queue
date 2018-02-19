@@ -18,7 +18,7 @@ if (!$_SESSION["username"])
 $username = $_SESSION['username'];
 $all_courses = get_avail_courses();
 
-if ($all_courses == NULL)
+if (is_null($all_courses))
 {
   $return = array(
     "authenticated" => True,

@@ -14,11 +14,11 @@ if (!$_SESSION['username'])
   die();
 }
 
-$username = $_SESSION['username'];
+$username     = $_SESSION['username'];
 $stud_courses = get_stud_courses($username);
 $ta_courses   = $_SESSION['ta_courses'];
 
-if (stud_courses == NULL || ta_courses == NULL)
+if (is_null(stud_courses) || is_null(ta_courses))
 {
   $return = array(
     "authenticated" => True,
