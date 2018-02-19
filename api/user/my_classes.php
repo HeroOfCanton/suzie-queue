@@ -16,7 +16,7 @@ if (!$_SESSION['username'])
 
 $username = $_SESSION['username'];
 $stud_courses = get_stud_courses($username);
-$ta_courses   = get_ta_courses($username);
+$ta_courses   = $_SESSION['ta_courses'];
 
 if (stud_courses == NULL || ta_courses == NULL)
 {

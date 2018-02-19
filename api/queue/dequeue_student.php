@@ -26,14 +26,14 @@ if (!$_POST['course'])
   die();
 }
 
-$username = $_SESSION['username'];
-$course   = $_POST['course'];
+$username   = $_SESSION['username'];
+$course     = $_POST['course'];
+$ta_courses = $_SESSION["ta_courses"];
 
 //Since this enpoint is used for students to
 //remove themselves, and TAs to remove students,
 //we check if the request came from a TA
-if (in_array($username, get_tas($course)))
-{
+if (in_array($course, $ta_courses)){
   if (!$_POST['username'])
   {
     $return = array(

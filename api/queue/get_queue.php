@@ -27,13 +27,14 @@ if (!$_POST['course'])
   die();
 }
 
-$username = $_SESSION['username'];
-$course   = $_POST['course'];
+$username   = $_SESSION['username'];
+$course     = $_POST['course'];
+$ta_courses = $_SESSION["ta_courses"];
 
 //For now, these return the same information.
 //Later, we may want the TAs to see more,
 //or the students to see less.
-if (in_array($username, get_tas($course)))
+if (in_array($course, $ta_courses))
 {
   $queue = get_queue($course);
 }

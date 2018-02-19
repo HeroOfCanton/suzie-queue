@@ -33,8 +33,18 @@ if($info == NULL)
   die();
 }
 
-$_SESSION["username"] = $username;
-$info["authenticated"] = TRUE;
+$ta_courses = get_ta_courses($username);
+
+if($ta_courses == NULL)
+{
+  $return = array("error" => "Unable to Retrieve group status");
+  echo json_encode($return);
+  die();
+}
+
+$_SESSION["ta_courses"] = $ta_courses;
+$_SESSION["username"]   = $username;
+$info["authenticated"]  = TRUE;
 
 echo json_encode($info);
 ?>

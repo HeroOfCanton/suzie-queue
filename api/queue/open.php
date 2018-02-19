@@ -26,10 +26,11 @@ if (!$_POST['course'])
   die();
 }
 
-$username = $_SESSION['username'];
-$course   = $_POST['course'];
+$username   = $_SESSION['username'];
+$course     = $_POST['course'];
+$ta_courses = $_SESSION["ta_courses"];
 
-if (!in_array($username, get_tas($course)))
+if (!in_array($course, $ta_courses))
 {
   $return = array(
     "authenticated" => True,
