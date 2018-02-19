@@ -53,9 +53,10 @@
                         <li>
                             <a href="my_classes.php">My Classes</a>
                         </li>
-                        <li class="active">
-                            <a href="#">Queue</a>
-                        </li>
+<!--                        THIS QUEUE TAB CURRENTLY SERVES NO PURPOSE-->
+<!--                        <li class="active">-->
+<!--                            <a href="#">Queue</a>-->
+<!--                        </li>-->
                         <li>
                             <a href="#" onclick="logout();">Logout</a>
                         </li>
@@ -76,7 +77,7 @@
 				<div class="col-sm-2">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
-                			<h3 class="panel-title">TA on Duty</h3>
+                			<h3 class="panel-title">TA(s) on Duty</h3>
                 		</div>
                 		<div class="panel-body" id="ta_on_duty">
                 		</div>
@@ -85,7 +86,7 @@
 				<div class="col-sm-8 col-sm-offset-1">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
-                			<h1 class="panel-title" align="center" style="text-decoration: underline;">TA Announcements</h1>
+                			<h3 class="panel-title">Announcements</h3>
                 		</div>
                 		<div class="panel-body" style="max-height: 150; overflow-y: scroll;"  id=announcements></div>
             		</div>

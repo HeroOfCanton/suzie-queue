@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Queue API for University of Utah College of Engineering
+  description: Below are endpoints/functionalities which can aid in designing a queue for the UofU COE.
+  version: 1.0.0
+
+servers:
+  - url: https://suzie.eng.utah.edu/blakeb/api
+    description: API endpoints are located here and in subdirectories.
+
+
+# HERE'S A GOOD TUTORIAL FOR A SWAGGER SPEC:
+#     https://swagger.io/docs/specification/basic-structure/
+
+# I BELIEVE THE ONLY PARAMETERS TO SPECIFY FOR THESE ENDPOINTS ARE COOKIES
+
+
+paths:
+  /login.php:
+    post:
+      summary: Login
+      description: Login a user with the specified CADE credentials
+      requestBody:
+        required: true
+        content:
+          formData:
+            # CAN'T FIGURE THIS PART OUT
+            
+      responses:
+        '200':    # status code
+          description: A JSON array of user data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
