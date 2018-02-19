@@ -11,7 +11,7 @@ if(strpos($REQUEST_URI, 'index.php')){
 }
 else{
   if (!$_SESSION["username"]){
-    header("Location: ./index.php");
+    header("Location: ../index.php");
     die();
   }
 }

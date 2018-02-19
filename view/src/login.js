@@ -4,7 +4,7 @@ login = function( event ) {
   var $form = $( this ),
   $username = $form.find( "input[name='username']" ).val(),
   $password = $form.find( "input[name='password']" ).val(),
-  url = "../api/login.php";
+  url = "./api/login.php";
 
   var $posting = $.post( url, { username: $username, password: $password } );
 
@@ -13,15 +13,15 @@ login = function( event ) {
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
 
-      var $get_req = $.get("../api/user/my_classes.php");
+      var $get_req = $.get("./api/user/my_classes.php");
       $get_req.done( function(data) {
         var dataString = JSON.stringify(data);
         var dataParsed = JSON.parse(dataString);
         if(dataParsed.student_courses.length + dataParsed.ta_courses.length === 0){
-          window.location.href = '../view/classes.php';
+          window.location.href = './view/classes.php';
         }
         else{
-          window.location.href = '../view/my_classes.php';
+          window.location.href = './view/my_classes.php';
         }
       });
 
