@@ -25,7 +25,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- queue source -->
         <script src="./src/queue_functions.js"></script>
-        <script src="./src/login_redirect.js"></script>
+        <script src="./src/logout.js"></script>
 	</head>
 	<body>
 
