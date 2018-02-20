@@ -1,5 +1,5 @@
 <?php
-// File: next_student.php
+// File: help_student.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
@@ -30,7 +30,7 @@ if (!$_POST['student'])
 {
   $return = array(
     "authenticated" => True,
-    "error" => "No user specified"
+    "error" => "No student specified"
   );
   echo json_encode($return);
   die();

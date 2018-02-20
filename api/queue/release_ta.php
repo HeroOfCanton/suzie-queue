@@ -1,5 +1,5 @@
 <?php
-// File: next_student.php
+// File: release_ta.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
