@@ -1,5 +1,17 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
+'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course
+doesn't exist still in one SQL call. Again, this isn't real high priority and is sorta convention. But I think
+ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
+for example, that a queue is closed even though the queue doesn't even exist.
+-Chrome Observation: If, for example, blakeb logs in on one tab and then rohith logs in on another tab IN THE
+SAME BROWSER, the browser will treat blakeb as rohith from that point on. In other words, Chrome won't allow
+two separate user sessions within the same browser.
+-Should we delete the 'announcements' column in 'queue_state' since they have their own table?
+-max on duty TAs box wider so a name doesn't take two lines to display
+-Is 'state' column necessary in queue_state table? Closed queues are simply deleted. Maybe change table name
+to 'open_queues' and delete 'state'?
 -We need a team logo (Jim)
 -Any reason we're displaying 'Pos.' in the queue? This seems unecessary.
 -make student question optionally visible to other students?
@@ -23,6 +35,10 @@ What convention should we use?
 -Lock navbar in place when scrolling
 -Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds
 -TA/faculty ability to delete announcements
+-Some of our endpoints might be better suited for other operations, e.g. GET get_queue.php
+-Probably isn't a problem, but the 'Try it out' functionality on the swagger UI only works when the UI is running
+on our server (which is mainly how it will be used anyway). It doesn't work when running the UI from swagger editor
+on my (Blake) laptop.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
 
