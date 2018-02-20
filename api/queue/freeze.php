@@ -1,5 +1,5 @@
 <?php
-// File: close.php
+// File: open.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
@@ -7,7 +7,7 @@ require_once '../../model/queue.php';
 
 // get the session variables
 session_start();
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
@@ -40,17 +40,17 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if(close_queue($course) != "closed")
+if (pause_queue($course) != "paused")
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to close queue"
+    "error" => "Unable to freeze queue"
   );
 }else
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Queue closed"
+    "success" => "Queue frozen"
   );
 }
 echo json_encode($return);

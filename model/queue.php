@@ -476,7 +476,7 @@ function close_queue($course_name){
 }
 
 /**
- * Pause the queue
+ * Pause (freeze) the queue
  *
  * @param [type] $course_name
  * @return void
