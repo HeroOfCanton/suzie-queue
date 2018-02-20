@@ -8,5 +8,5 @@ define("BASE_OU",     "DC=users,DC=coe,DC=utah,DC=edu");
 define("SQL_SERVER",  "localhost");
 define("SQL_USER",    "root");
 define("SQL_PASSWD",  "root_sql");
-define("DATABASE",    "ta_queue");
+define("DATABASE",    "alpha");
 ?>

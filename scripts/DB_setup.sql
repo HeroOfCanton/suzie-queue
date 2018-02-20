@@ -1,8 +1,8 @@
-drop database ta_queue;
+drop database alpha;
 
-create database ta_queue;
+create database alpha;
 
-use ta_queue;
+use alpha;
 
 --User data;
 create table users(

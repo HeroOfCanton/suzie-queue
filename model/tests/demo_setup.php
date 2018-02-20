@@ -50,7 +50,7 @@ if (new_course("CS 4150: Algorithms", "CS", "4150", "The hard stuff 1!", "fake 1
   die();
 }
 
-if (new_course("CS 4400: Computer Systems", "CS", "4400", "The hard stuff 1!", "fake 1")){
+if (new_course("CS 4400: Computer Systems", "CS", "4400", "The hard stuff 1!", "cs4400-queue-test")){
   echo "Test 10.5 failed";
   die();
 }
