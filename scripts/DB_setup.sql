@@ -42,7 +42,7 @@ create table enrolled(
 --Closed queues don't appear here
 create table queue_state(
   course_id     int,
-  state         ENUM('open','paused') NOT NULL,
+  state         ENUM('open','frozen') NOT NULL,
   time_lim      int DEFAULT 0 NOT NULL,
   primary key (course_id),
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE

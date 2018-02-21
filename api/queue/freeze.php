@@ -40,7 +40,7 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if (pause_queue($course) != "paused")
+if (freeze_queue($course) != "frozen")
 {
   $return = array(
     "authenticated" => True,

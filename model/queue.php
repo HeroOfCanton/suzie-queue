@@ -354,7 +354,7 @@ function help_student($TA_username, $stud_username, $course_name){
     return 1;
   }
 
-  if(get_queue_state($course_name) != "open"){
+  if(get_queue_state($course_name) == "closed"){
     mysqli_close($sql_conn);
     return 1;
   }
@@ -448,7 +448,7 @@ function decrease_stud_priority($stud_username, $course){
 /**
  * Get the state of the queue
  *
- * @param [type] $course_name
+ * @param string $course_name
  * @return void
  */
 function get_queue_state($course_name){
@@ -458,7 +458,7 @@ function get_queue_state($course_name){
 /**
  * Open the queue
  *
- * @param [type] $course_name
+ * @param string $course_name
  * @return void
  */
 function open_queue($course_name){
@@ -468,7 +468,7 @@ function open_queue($course_name){
 /**
  * Close the queue
  *
- * @param [type] $course_name
+ * @param string $course_name
  * @return void
  */
 function close_queue($course_name){
@@ -476,13 +476,13 @@ function close_queue($course_name){
 }
 
 /**
- * Pause (freeze) the queue
+ * Freeze the queue
  *
- * @param [type] $course_name
+ * @param string $course_name
  * @return void
  */
-function pause_queue($course_name){
-  return change_queue_state($course_name, "paused");
+function freeze_queue($course_name){
+  return change_queue_state($course_name, "frozen");
 }
 
 
@@ -516,8 +516,8 @@ function change_queue_state($course_name, $state){
       mysqli_close($sql_conn);
       return NULL;
     }
-  }elseif($state == "paused"){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
-    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','paused') ON DUPLICATE KEY UPDATE state='paused'";
+  }elseif($state == "frozen"){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
+    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','frozen') ON DUPLICATE KEY UPDATE state='frozen'";
     if(!mysqli_query($sql_conn, $query)){
       mysqli_close($sql_conn);
       return NULL;

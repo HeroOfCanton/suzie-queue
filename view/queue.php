@@ -122,8 +122,9 @@
 			<div class="row">
 				<div class="col-sm-2">
 				  <button class="btn btn-success pull-right" id="duty_button"></button>
-					<button class="btn btn-success pull-right" id="state_button"></button>
-                    <button class="btn btn-success pull-right" id="join_button"></button>
+				  <button class="btn btn-success pull-right" id="state_button"></button>
+                                  <button class="btn btn-success pull-right" id="freeze_button"></button>
+                                  <button class="btn btn-success pull-right" id="join_button"></button>
                     <div id="dialog-form" title="Location and Question">
                         <p class="validateTips">All form fields are required.</p>
                         <form>

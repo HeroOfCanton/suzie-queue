@@ -36,6 +36,7 @@ $(document).ready(function(){
   });
   $("#duty_button").hide();
   $("#state_button").hide();
+  $("#freeze_button").hide();
   $("#join_button").hide();
   start();
 });
@@ -124,6 +125,7 @@ function render_ta_table(TAs){
 function render_ta_view(dataParsed){
   $("#state_button").unbind("click");
   $("#duty_button").unbind("click");
+  $("#freeze_button").unbind("click");
 
   queue_state = dataParsed.state;
   if(queue_state == "closed"){
@@ -134,13 +136,30 @@ function render_ta_view(dataParsed){
       open_queue(course);
     });
     $("#duty_button").hide();
-  }else{
+    $("#freeze_button").hide();
+  }else{ //open or frozen
     document.getElementById("state_button").style.background='FireBrick';
     $("#state_button").text("CLOSE QUEUE");
     $("#state_button").click(function( event ) {
       event.preventDefault();
       close_queue(course);
     });
+   
+    if(queue_state == "open"){ 
+      document.getElementById("freeze_button").style.background='Aqua';
+      $("#freeze_button").text("FREEZE QUEUE");
+      $("#freeze_button").click(function( event ) {
+        event.preventDefault();
+        freeze_queue(course);
+      });
+    }else{ //frozen
+      document.getElementById("freeze_button").style.background='Orange';
+      $("#freeze_button").text("RESUME QUEUE");
+      $("#freeze_button").click(function( event ) {
+        event.preventDefault();
+        open_queue(course);
+      });
+    }
 
     TAs_on_duty = dataParsed.TAs;
     on_duty= false;
@@ -167,24 +186,26 @@ function render_ta_view(dataParsed){
       });
     }
     $("#duty_button").show();
+    $("#freeze_button").show();
   }
   $("#state_button").show();
-  $("#join_button").hide();
 }
 
 function render_student_view(dataParsed){
   queue = dataParsed.queue;
-  if(dataParsed.state == "closed"){
-    $("#join_button").hide();
-    return;
-  }
-
+  
   in_queue = false;
   for(session in queue){
     if(my_username == queue[session]["username"]){
       in_queue = true;
       break;
     }
+  }
+ 
+  var state = dataParsed.state; 
+  if(state == "closed" || (state == "frozen" && !in_queue )){
+    $("#join_button").hide();
+    return;
   }
 
   $("#join_button").unbind("click");
@@ -290,6 +311,22 @@ function close_queue(course){
   }
   posting.done(done);
 }
+
+function freeze_queue(course){
+  url = "../api/queue/freeze.php";
+  posting = $.post( url, { course: course } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+}
+
 
 function enqueue_student(course, question, Location){
   url = "../api/queue/enqueue_student.php";
