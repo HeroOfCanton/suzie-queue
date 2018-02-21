@@ -1,5 +1,5 @@
 <?php
-// File: enqueue_ta.php
+// File: open.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
@@ -7,9 +7,8 @@ require_once '../../model/queue.php';
 
 // get the session variables
 session_start();
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
-// return authenticated False if user isn't authenticated
 if (!$_SESSION['username'])
 {
   $return = array("authenticated" => False);
@@ -27,35 +26,43 @@ if (!$_POST['course'])
   die();
 }
 
+if (!$_POST['time_lim'])
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "No time_lim specified"
+  );
+  echo json_encode($return);
+  die();
+}
+
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
+$time_lim   = $_POST['time_lim'];
 $ta_courses = $_SESSION["ta_courses"];
 
-//For now, these return the same information.
-//Later, we may want the TAs to see more,
-//or the students to see less.
-if (in_array($course, $ta_courses)) //TA
-{
-  $return = get_queue($course);
-}
-elseif (in_array($course, get_stud_courses($username))) //Student
-{
-  $return = get_queue($course);
-}else //Not in course
+if (!in_array($course, $ta_courses))
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Not enrolled in course"
+    "error" => "TA not assigned to course"
   );
+  echo json_encode($return);
+  die();
 }
 
-if(is_null($return))
+if (set_time_lim($time_lim, $course))
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to fetch queue state"
+    "error" => "Unable to set time limit"
+  );
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "success" => "Time limit set"
   );
 }
-
-echo json_encode($return, JSON_PRETTY_PRINT);
+echo json_encode($return);
 ?>

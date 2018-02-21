@@ -69,7 +69,7 @@
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
 					<div id ="class_table">
-						<div class="panel panel-danger">
+						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
 								<h3 class="panel-title">All Available Classes</h3>

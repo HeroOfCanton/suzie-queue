@@ -54,14 +54,9 @@ function start(){
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
+      is_TA = false;
       if($.inArray(course, dataParsed["ta_courses"]) != -1){
         is_TA = true;
-      }
-      else if($.inArray(course, dataParsed["student_courses"]) != -1){
-        is_TA = false;
-      }
-      else{
-        alert("Not enrolled in course");
       }
       get_queue(course, 5000); //This function calls itself every 5 seconds
     }
@@ -78,7 +73,7 @@ function get_queue(course, refresh) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.error){
-      alert("Error fetching queue");
+      alert(dataParsed.error);
       return;
     }
 

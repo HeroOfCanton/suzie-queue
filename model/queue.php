@@ -426,6 +426,44 @@ function free_ta($username, $course_name){
 }
 
 /**
+ * Set the time limit for the queue or 0 for no limit.
+ *
+ * @param string $time_lim in minutes
+ * @param string $course_name
+ * @return 0 on success, 1 on sql fail, 2 on invalid course/closed course
+ */
+function set_time_lim($time_lim, $course_name){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  $query = "UPDATE queue_state SET time_lim = ? 
+            WHERE course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "is", $time_lim, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  if(!mysqli_stmt_affected_rows($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 2;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
+
+/**
  * Undocumented function
  *
  * @param [type] $stud_username

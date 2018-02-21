@@ -22,7 +22,6 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
 -Not a Problem: Adding a course that a student’s already enrolled in returns success. Problem?
 What convention should we use? 
--Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
 -Lock navbar in place when scrolling
 -Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds
 -TA/faculty ability to delete announcements
@@ -38,7 +37,7 @@ In a meeting with some of my TAs this morning, the topic of the TA call queue ca
 some ideas from them on what they would like to see in a new app.  Here are some notes.  Feel free to ask about anything
 that does not make sense.
 
--Ensure that only students currently enrolled in the class can sign in (with an access code or something). It doesn't
+Done: -Ensure that only students currently enrolled in the class can sign in (with an access code or something). It doesn't
 happen much, but occasionally students from the wrong class sign in.
 
 -Include a utility for TAs to directly message students currently in the queue (collectively or individually). This can be
