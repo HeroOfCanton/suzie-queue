@@ -229,11 +229,15 @@ function render_queue_table(dataParsed, role){
   $("#queue tr").remove();
   $('#queue').append("<tr> <th>Pos.</th> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
   
-  helping = [];
+  helping = {};
   for(TA in TAs ){
-    helping.push(TAs[TA].helping)
+    if(TAs[TA].helping != null){
+      helping[TAs[TA].helping] = TAs[TA].state_tmstmp;  
+    }
   }
-
+  
+  time_lim = dataParsed.time_lim;
+ 
   var i = 1;
   for(row in queue){
     let username  = queue[row].username;
@@ -243,8 +247,24 @@ function render_queue_table(dataParsed, role){
     var new_row = $('<tr> <td>'+i+'</td> <td>'+full_name+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
     i++;   
  
-    if( helping.indexOf(username, 0) != -1 ){
+    if( username in helping ){
       new_row.css("background-color", "#b3ffb3");
+      //Do timer logic here
+      if(time_lim>0){
+        start_time = helping[username];
+
+        //Date conversion from dzone.com
+        var regex=/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
+        var parts=start_time.replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
+        start_time = new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5])   
+        
+        now     = new Date(Date.now());
+        elapsed = (now - start_time)/(1000*60);
+        time_rem = Math.ceil(time_lim - elapsed);
+        if(time_rem <=0){
+          new_row.css("background-color", "#fe2b40");
+        }
+      }
     }
 
     if(is_TA) {
@@ -252,7 +272,7 @@ function render_queue_table(dataParsed, role){
       dequeue_button.click(function(event) {
         dequeue_student(course, username);
       });
-      if( helping.indexOf(username, 0) != -1 ){
+      if( username in helping ){
         var help_button = $('<button class="btn btn-primary" ><span>Release</span> </button>');
         help_button.click(function(event){
           release_ta(course);
