@@ -1,5 +1,8 @@
 get_classes();
 
+
+
+
 function get_classes(){
   var $url = "../api/classes/all_classes.php";
   var $get = $.get( $url );
@@ -24,7 +27,7 @@ function renderCourseTable(allCourses, dataParsed) {
   myCourses = dataParsed.student_courses;
   ta_courses= dataParsed.ta_courses;
   for(course in allCourses){
-    var course_name = allCourses[course];
+    var course_name = course;
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text( course_name ));
     if( $.inArray(course_name, ta_courses) >= 0 ){
@@ -33,20 +36,38 @@ function renderCourseTable(allCourses, dataParsed) {
     else if( $.inArray(course_name, myCourses) >= 0 ){
       text = "Leave";
       action = "dropCourse('"+course_name+"')";
-      tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+      if(allCourses[course_name]["acc_req"]){
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
+      }else{
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+      }
     }
     else{
       text = "Enroll";
-      action = "enrollCourse('"+course_name+"')";
-      tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+      if(allCourses[course_name]["acc_req"]){
+        action = "prompt_acc_code('"+course_name+"')";
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
+      }else{
+        action = "enrollCourse('"+course_name+"', null)";
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+      }
     }
     table.append(tableRow);
   }
 }
 
-function enrollCourse(course) {
+function prompt_acc_code(course_name){
+  var code = prompt("Please enter the course access code:");
+  enrollCourse(course_name, code);
+}
+
+function enrollCourse(course, code) {
   url = "../api/user/add_class.php";
-  var $posting = $.post( url, { course: course} );
+  if(code == null){
+    var $posting = $.post( url, { course: course } );
+  }else{
+    var $posting = $.post( url, { course: course, acc_code: code } );
+  }
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);

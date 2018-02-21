@@ -24,10 +24,16 @@ if (!$_POST['course'])
   die();
 }
 
+$acc_code = NULL;
+if ($_POST['acc_code'])
+{
+  $acc_code = $_POST['acc_code'];
+}
+
 $username = $_SESSION['username'];
 $course = $_POST['course'];
 
-$ret = add_stud_course($username, $course);
+$ret = add_stud_course($username, $course, $acc_code);
 if ($ret == 0)
 {
   $return = array(
@@ -49,6 +55,14 @@ elseif ($ret == 2)
     "error" => "Already registered as TA for course"
   );
 }
+elseif ($ret == 3)
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "Invalid Access Code"
+  );
+}
+
 
 echo json_encode($return);
 ?>

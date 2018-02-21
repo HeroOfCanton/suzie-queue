@@ -88,6 +88,7 @@
 						</div><!--panel-->
 					</div><!--id-->
 				</div><!--col-sm-12-->
+
 			</div><!--row-->
 		</div><!--container-->
 	</body>

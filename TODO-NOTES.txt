@@ -5,21 +5,13 @@
 doesn't exist still in one SQL call. Again, this isn't real high priority and is sorta convention. But I think
 ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
 for example, that a queue is closed even though the queue doesn't even exist.
--Chrome Observation: If, for example, blakeb logs in on one tab and then rohith logs in on another tab IN THE
-SAME BROWSER, the browser will treat blakeb as rohith from that point on. In other words, Chrome won't allow
-two separate user sessions within the same browser.
--Should we delete the 'announcements' column in 'queue_state' since they have their own table?
 -max on duty TAs box wider so a name doesn't take two lines to display
--Is 'state' column necessary in queue_state table? Closed queues are simply deleted. Maybe change table name
-to 'open_queues' and delete 'state'?
 -We need a team logo (Jim)
--Any reason we're displaying 'Pos.' in the queue? This seems unecessary.
 -make student question optionally visible to other students?
 -set Announcements and On Duty TA boxes at a constant size (instead of growing/shrinking) and use scroll bar when necessary
 -on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -automatic location generation when entering queue
 -TA/faculty toggle abilities (e.g. does logging out remove you from queue)
--TA/faculty ability to freeze queue so no one new can enter
 -Have different background colors for TAs
 -Have CIS handle authentication
 -Spinners or progress/waiting indicators for slow loads
@@ -29,7 +21,6 @@ to 'open_queues' and delete 'state'?
 -Not a Problem: Dequeuing a student from a queue they’re not in returns success. Problem?
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
 -Not a Problem: Adding a course that a student’s already enrolled in returns success. Problem?
-Fixed: -Conversely to the 3 notes above, putting a TA on duty for a class they’re already on duty for returns failure.
 What convention should we use? 
 -Switch NATURAL JOIN to INNER JOIN...ON. Apparently natural joins are more susceptible to bugs and are bad practice.
 -Lock navbar in place when scrolling

@@ -18,7 +18,7 @@ function get_avail_courses(){
     return NULL;
   }
 
-  $query  = "SELECT course_name FROM courses";
+  $query  = "SELECT course_name, access_code FROM courses";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     return NULL;
@@ -26,7 +26,13 @@ function get_avail_courses(){
 
   $courses = array();
   while($entry = mysqli_fetch_assoc($result)){
-    $courses[] = $entry["course_name"];
+
+    $acc_req = false;
+    if(!is_null($entry["access_code"])){
+      $acc_req = true;
+    }
+
+    $courses += [ $entry["course_name"] => array("acc_req" => $acc_req)  ];
   }
 
   mysqli_close($sql_conn);
@@ -42,22 +48,23 @@ function get_avail_courses(){
   * @param string $description
   * @param string $ldap_group
   * @param string $professor
+  * @param string $acc_code
   * @return int 0 on success, 1 on fail
   */
-function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor){
+function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
-  
-  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor)
-            VALUES (?, ?, ?, ?, ?, ?)";
+ 
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor, access_code)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "ssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor);
+  mysqli_stmt_bind_param($stmt, "sssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -212,9 +219,9 @@ function get_stud_courses($username){
   *
   * @param string $username
   * @param string $course_name
-  * @return int 0 on success, 1 on fail, 2 if user already has TA role
+  * @return int 0 on success, 1 on fail, 2 if user already has TA role, 3 on invalid access code
   */
-function add_stud_course($username, $course_name){ 
+function add_stud_course($username, $course_name, $acc_code){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -222,8 +229,19 @@ function add_stud_course($username, $course_name){
 
   //Don't allow user to enroll in course if they're a TA
   if (in_array($username, get_tas($course_name))){
+    mysqli_close($sql_conn);
     return 2;
   }
+
+  $real_acc_code = get_course_acc_code($course_name); 
+  if($real_acc_code == -1 ){
+    mysqli_close($sql_conn);
+    return 1;//error
+  } elseif((!is_null($real_acc_code)) &&  $acc_code != $real_acc_code){
+    mysqli_close($sql_conn);
+    return 3;//invalid access code
+  }
+  //Proper access code, or one isn't required
 
   $query = "REPLACE enrolled (username, course_id) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?) )";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -308,4 +326,31 @@ function get_course_group($course_name){
   mysqli_close($sql_conn);
   return $ldap_group;
 }
+
+function get_course_acc_code($course_name){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  $query = "SELECT access_code FROM courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_result($stmt, $access_code);
+  mysqli_stmt_fetch($stmt);
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $access_code;
+}
+
 ?>
