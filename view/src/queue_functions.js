@@ -228,11 +228,11 @@ function render_queue_table(dataParsed, role){
   var TAs   = dataParsed.TAs;
   $("#queue tr").remove();
   $('#queue').append("<tr> <th>Pos.</th> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
-  
+ 
   helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
-      helping[TAs[TA].helping] = TAs[TA].state_tmstmp;  
+      helping[TAs[TA].helping] = TAs[TA].duration;  
     }
   }
   
@@ -249,20 +249,14 @@ function render_queue_table(dataParsed, role){
  
     if( username in helping ){
       new_row.css("background-color", "#b3ffb3");
-      //Do timer logic here
       if(time_lim>0){
-        start_time = helping[username];
+        duration = helping[username];
+        fields = duration.split(':');
+        duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
+        time_rem = time_lim*60-duration;
 
-        //Date conversion from dzone.com
-        var regex=/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
-        var parts=start_time.replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
-        start_time = new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5])   
-        
-        now     = new Date(Date.now());
-        elapsed = (now - start_time)/(1000*60);
-        time_rem = Math.ceil(time_lim - elapsed);
         if(time_rem <=0){
-          new_row.css("background-color", "#fe2b40");
+          new_row.css("background-color", "#fe2b40"); //User is over time limit
         }
       }
     }
