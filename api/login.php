@@ -5,6 +5,7 @@ require_once '../model/auth.php';
 require_once '../model/courses.php';
 
 session_start();
+$_SESSION = array();
 header('Content-Type: application/json');
 
 if(!$_POST['username'] || !$_POST['password'])
