@@ -1,5 +1,7 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Will release_ta.php work with multiple TAs helping multiple students?
+-destroy_session() on unsuccessful logins? Are these undestroyed sessions eating up memory?
 -Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
 'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course
 doesn't exist still in one SQL call. Again, this isn't real high priority and is sorta convention. But I think
@@ -25,10 +27,11 @@ What convention should we use?
 -Lock navbar in place when scrolling
 -Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds
 -TA/faculty ability to delete announcements
--Some of our endpoints might be better suited for other operations, e.g. GET get_queue.php
+-Some of our endpoints might be better suited for other operations, e.g. GET get_queue.php. GET is faster than POST.
 -Probably isn't a problem, but the 'Try it out' functionality on the swagger UI only works when the UI is running
 on our server (which is mainly how it will be used anyway). It doesn't work when running the UI from swagger editor
 on my (Blake) laptop.
+-Consider changing HTTP response status codes for errors to, for example, 400 instead of 200 (200 indicates success)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
 

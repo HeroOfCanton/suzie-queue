@@ -1,7 +1,8 @@
 swagger: "2.0"
 info:
-
-  description: "Below are endpoints/functionalities which can aid in designing a TA queue for the UofU COE."
+  description: "Below are endpoints/functionalities which can aid in designing a TA queue for the UofU COE.\n\n
+  NOTE:\n
+  You must first login using `login.php` to use the other endpoints. Please remember to logout with `logout.php` when finished."
   version: "1.0.0"
   title: "Queue API for University of Utah College of Engineering"
   # termsOfService: "http://swagger.io/terms/"
@@ -16,7 +17,12 @@ basePath: "/blakeb/api"
 schemes:
 - "https"
 
-# tags:
+consumes:
+  - "application/x-www-form-urlencoded"
+produces:
+  - "application/json"
+
+#tags:
 # - name: "pet"
 #   description: "Everything about your Pets"
 #   externalDocs:
@@ -32,31 +38,129 @@ schemes:
 
 paths:
   /login.php:
-      post:
-        summary: "Login a user."
-        description: "Login a user with the specified CADE username and password."
-        consumes:
-          - "application/x-www-form-urlencoded"
-        produces:
-          - "application/json"
+    post:
+      summary: "Login a user"
+      description: "Login a user with the specified CADE username and password
+      and get their info"
+      parameters:
+      - name: "username"
+        in: "formData"
+        description: "CADE username"
+        type: "string"
+        required: true
+      - name: "password"
+        in: "formData"
+        description: "CADE password"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              username:
+                type: "string"
+                # example: "c00lperson"
+              first_name:
+                type: "string"
+                # example: "Morgan"
+              last_name:
+                type: "string"
+                # example: "Thompson"
+              authenticated:
+                type: "boolean"
+                # example: true
+  /logout.php:
+    get:
+      summary: "Logout a user"
+      description: "Logout the user who sent the request"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+  /user/my_classes.php:
+    get:
+      summary: "Get user enrolled/TA-ed courses"
+      description: "Get all the courses the user has enrolled in or TAs"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_courses:
+                type: "array"
+                items:
+                  type: "string"
+              ta_courses:
+                type: "array"
+                items:
+                  type: "string"
 
-        parameters:
-        - name: "username"
-          in: "formData"
-          description: "CADE username"
-          required: "true"
-          type: "string"
-        - name: "password"
-          in: "formData"
-          description: "CADE password"
-          required: "true"
-          type: "string"
+# NOT SURE WHAT TO PUT FOR THESE
 
-        responses:
-          200:
-            description: "OK"
-          405:
-            description: "Invalid input"
+# Supported authentication methods are:
+# -Basic authentication
+# -API key (as a header or query parameter)
+# -OAuth 2 common flows (implicit, password, application and access code)
+
+# securityDefinitions:
+#   BasicAuth:
+#     type: basic
+
+# THIS MIGHT GO IN EACH OPERATION
+# security:
+#   - BasicAuth: []
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3.0 SPEC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#openapi: 3.0.0
+#info:
+#  title: Queue API for University of Utah College of Engineering
+#  description: Below are endpoints/functionalities which can aid in designing a queue for the UofU COE.
+#  version: 1.0.0
+#
+#servers:
+#  - url: https://suzie.eng.utah.edu/blakeb/api
+#    description: API endpoints are located here and in subdirectories.
+#
+#
+## HERE'S A GOOD TUTORIAL FOR A SWAGGER SPEC:
+##     https://swagger.io/docs/specification/basic-structure/
+#
+## I BELIEVE THE ONLY PARAMETERS TO SPECIFY FOR THESE ENDPOINTS ARE COOKIES
+#
+#
+#paths:
+#  /login.php:
+#    post:
+#      summary: Login
+#      description: Login a user with the specified CADE credentials
+#      requestBody:
+#        required: true
+#        content:
+#          formData:
+#            # CAN'T FIGURE THIS PART OUT
+#
+#      responses:
+#        '200':    # status code
+#          description: A JSON array of user data
+#          content:
+#            application/json:
+#              schema:
+#                type: array
+#                items:
+#                  type: string
 
 
 
