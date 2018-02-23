@@ -470,7 +470,8 @@ function set_time_lim($time_lim, $course_name){
  * @param [type] $course
  * @return void
  */
-function increase_stud_priority($stud_username, $course){
+function increase_stud_priority($stud_username, $course_name){
+  return change_stud_priority($stud_username, $course_name, "increase");
 }
 
 /**
@@ -480,7 +481,8 @@ function increase_stud_priority($stud_username, $course){
  * @param [type] $course
  * @return void
  */
-function decrease_stud_priority($stud_username, $course){
+function decrease_stud_priority($stud_username, $course_name){
+  return change_stud_priority($stud_username, $course_name, "decrease");
 }
 
 /**
@@ -617,4 +619,70 @@ function course_name_to_id($course_name, $sql_conn){
   mysqli_stmt_close($stmt);
   return $course_id;
 }
+
+/**
+ * Undocumented function
+ *
+ * @param [type] $stud_username
+ * @param [type] $course
+ * @return void
+ */
+function change_stud_priority($stud_username, $course_name, $operation){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  $query = "SELECT position, username, course_id, question, location FROM queue WHERE username=? AND course_id=(SELECT course_id from courses where course_name=?)";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, "ss", $stud_username, $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    return 1;
+  }
+  mysqli_stmt_bind_result($stmt, $position1, $username1, $course_id, $question1, $location1);
+  mysqli_stmt_fetch($stmt);
+  mysqli_stmt_close($stmt);
+
+
+  if($operation == "increase"){
+    $query = "SELECT position, username, course_id, question, location FROM queue 
+              WHERE position<'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
+              ORDER BY position DESC LIMIT 1";
+  }elseif($operation == "decrease"){
+    $query = "SELECT position, username, course_id, question, location FROM queue 
+              WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
+              ORDER BY position ASC LIMIT 1";
+  }else{
+    return 1;
+  }
+  $result = mysqli_query($sql_conn, $query);
+  $entry = mysqli_fetch_assoc($result);
+  if(!$entry){
+    return 1;
+  }
+
+  $position2 = $entry['position'];
+  $username2 = $entry['username'];
+  $question2 = $entry['question'];
+  $location2 = $entry['location'];
+
+  $query = "DELETE FROM queue WHERE position = '".$position1."'";
+  $result = mysqli_query($sql_conn, $query);
+  $query = "DELETE FROM queue WHERE position = '".$position2."'";
+  $result = mysqli_query($sql_conn, $query);
+
+  $query = "INSERT INTO queue (position, username, course_id, question, location) 
+            VALUES ('".$position2."', '".$username1."', '".$course_id."', '".$question1."', '".$location1."')";
+  mysqli_query($sql_conn, $query);
+  $query = "INSERT INTO queue (position, username, course_id, question, location) 
+            VALUES ('".$position1."', '".$username2."', '".$course_id."', '".$question2."', '".$location2."');";
+  mysqli_query($sql_conn, $query);
+
+  return 0;
+}
+
 ?>
