@@ -61,7 +61,7 @@ if ($res)
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Course created"
+    "success" => "Course created/updated"
   );
 }
 echo json_encode($return);

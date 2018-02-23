@@ -58,13 +58,14 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
   }
  
   $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor, access_code)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE description=?, ldap_group=?, professor=?, access_code=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "sssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code);
+  mysqli_stmt_bind_param($stmt, "sssssssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code, $description, $ldap_group, $professor, $acc_code);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
