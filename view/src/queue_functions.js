@@ -279,11 +279,27 @@ function render_queue_table(dataParsed, role){
           help_student(course, username);
         });
       }
+      var increase_button = $('<button type="button" class="btn btn-primary btn-arrow-left">up</button>');
+      increase_button.click(function(event){
+        inc_priority(course, username); 
+      });
+      var decrease_button = $('<button type="button" class="btn btn-primary btn-arrow-left">down</button>');
+      decrease_button.click(function(event){
+        dec_priority(course, username);
+      });
+
+
       new_row.append("<td>");
       new_row.append(help_button);
       new_row.append("</td>");
       new_row.append("<td>");
       new_row.append(dequeue_button);
+      new_row.append("</td>");
+      new_row.append("<td>");
+      new_row.append(increase_button);
+      new_row.append("</td>");
+      new_row.append("<td>");
+      new_row.append(decrease_button);
       new_row.append("</td>");
     }
     $('#queue').append(new_row);
@@ -420,7 +436,36 @@ function dequeue_ta(course){
     }
   }
   posting.done(done);
+}
 
+function inc_priority(course, student){
+  url = "../api/queue/inc_priority.php";
+  posting = $.post( url, { course: course, student: student } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+}
+
+function dec_priority(course, student){
+  url = "../api/queue/dec_priority.php";
+  posting = $.post( url, { course: course, student: student } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
 }
 
 next_student = function(course){
