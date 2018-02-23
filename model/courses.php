@@ -48,7 +48,7 @@ function get_avail_courses(){
   * @param string $description
   * @param string $ldap_group
   * @param string $professor
-  * @param string $acc_code
+  * @param string $acc_code, null if none
   * @return int 0 on success, 1 on fail
   */
 function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code){

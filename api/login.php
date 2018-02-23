@@ -34,6 +34,14 @@ if(is_null($info))
   die();
 }
 
+$is_admin = is_admin($username);
+if(is_null($is_admin))
+{
+  $return = array("error" => "Unable to Retrieve group status");
+  echo json_encode($return);
+  die();
+}
+
 $ta_courses = get_ta_courses($username);
 
 if(is_null($ta_courses))
@@ -45,6 +53,7 @@ if(is_null($ta_courses))
 
 $_SESSION["ta_courses"] = $ta_courses;
 $_SESSION["username"]   = $username;
+$_SESSION["is_admin"]   = $is_admin;
 $info["authenticated"]  = TRUE;
 
 echo json_encode($info);

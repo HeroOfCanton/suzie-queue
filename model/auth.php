@@ -61,6 +61,30 @@ function get_info($username){
   );
 }
 
+/**
+ * Returns whether or not $username is a queue admin
+ *
+ * @param string $username samaccountname
+ * @return true if queue admin, false if not
+ */
+function is_admin($username){
+  $result = srch_by_sam(ADMIN_GROUP);
+  if(is_null($result)){
+    return NULL;
+  }
+
+  $members = $result["member"];
+  foreach($members as &$member) {
+    $member = dn_to_sam($member);
+    if($member == $username){
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
 
 //Helper Functions for LDAP: No reason to call these from outside the model.
 /**

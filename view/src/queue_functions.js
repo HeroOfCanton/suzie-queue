@@ -102,9 +102,10 @@ function get_queue(course, refresh) {
 
 
 function render_ann_box(anns){
-  $("#announcements").text("");
+  $("#anns tr").remove();
   for(ann in anns){
-    $("#announcements").append(anns[ann]+"<br>");
+    var new_row = $('<tr>  <td><b>'+anns[ann]["tmstmp"]+':</b></td>  <td><b>'+anns[ann]["announcement"]+'</b></td> </tr>');
+    $('#anns').append(new_row);
   }
 }
 
@@ -141,7 +142,7 @@ function render_ta_view(dataParsed){
     });
    
     if(queue_state == "open"){ 
-      document.getElementById("freeze_button").style.background='Aqua';
+      document.getElementById("freeze_button").style.background='#1B4F72';
       $("#freeze_button").text("FREEZE QUEUE");
       $("#freeze_button").click(function( event ) {
         event.preventDefault();

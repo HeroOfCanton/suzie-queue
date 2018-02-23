@@ -88,7 +88,7 @@
                 		<div class="panel-heading">
                 			<h3 class="panel-title">Announcements</h3>
                 		</div>
-                		<div class="panel-body" style="max-height: 150; overflow-y: scroll;"  id=announcements></div>
+                                <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 150px; overflow-y: scroll;"> </table>
             		</div>
 				</div>
 			</div>
