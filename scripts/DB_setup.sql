@@ -97,6 +97,7 @@ create table student_log(
   question       TEXT,
   location       VARCHAR(256) NOT NULL,
   enter_tmstmp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  help_tmstmp    TIMESTAMP,
   exit_tmstmp    TIMESTAMP,
   primary key    (id),
   foreign key    (username)  references users(username)    ON DELETE CASCADE,
@@ -110,3 +111,8 @@ VALUES (NEW.username, NEW.course_id, NEW.question, NEW.location);
 CREATE TRIGGER log_student_exit AFTER DELETE ON queue FOR EACH ROW
 UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP 
 WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
+
+CREATE TRIGGER log_student_help AFTER INSERT ON ta_status FOR EACH ROW
+UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP
+WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id  ORDER BY id DESC LIMIT 1;
+
