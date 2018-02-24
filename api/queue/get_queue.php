@@ -37,10 +37,12 @@ $ta_courses = $_SESSION["ta_courses"];
 if (in_array($course, $ta_courses)) //TA
 {
   $return = get_queue($course);
+  $return["authenticated"] = True;
 }
 elseif (in_array($course, get_stud_courses($username))) //Student
 {
   $return = get_queue($course);
+  $return["authenticated"] = True;
 }else //Not in course
 {
   $return = array(

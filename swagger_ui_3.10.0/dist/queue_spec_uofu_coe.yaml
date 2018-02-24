@@ -1,10 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Below are endpoints/functionalities which can aid in designing a TA queue for the UofU COE.\n\n
-  NOTE:\n
-  You must first login using `login.php` to use the other endpoints. Please remember to logout with `logout.php` when finished."
-  version: "1.0.0"
   title: "Queue API for University of Utah College of Engineering"
+  version: "1.0.0"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\nNOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)*.\n- Currently the only status code returned is 200. All JSON examples shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures, typcially `error` messages, are also possible responses. The response `authenticated: false` indicates you have not logged in, although this is also returned on logout."
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "doublezane@gmail.com"
@@ -22,26 +20,22 @@ consumes:
 produces:
   - "application/json"
 
-#tags:
-# - name: "pet"
-#   description: "Everything about your Pets"
-#   externalDocs:
-#     description: "Find out more"
-#     url: "http://swagger.io"
-# - name: "store"
-#   description: "Access to Petstore orders"
-# - name: "user"
-#   description: "Operations about user"
-#   externalDocs:
-#     description: "Find out more about our store"
-#     url: "http://swagger.io"
+tags:
+  - name: "Login/Logout"
+  - name: "Courses"
+    description: "Course functionalities"
+  - name: "User"
+    description: "User functionalities"
+  - name: "Queue"
+    description: "Queue functionalities"
 
 paths:
   /login.php:
     post:
       summary: "Login a user"
-      description: "Login a user with the specified CADE username and password
-      and get their info"
+      description: "Login a user with the specified CADE username and password and get their info."
+      tags:
+        - "Login/Logout"
       parameters:
       - name: "username"
         in: "formData"
@@ -74,7 +68,9 @@ paths:
   /logout.php:
     get:
       summary: "Logout a user"
-      description: "Logout the user who sent the request"
+      description: "Logout the user who sent the request. Naturally, the value of `authenticated` will always be false."
+      tags:
+        - "Login/Logout"
       responses:
         200:
           description: "Success"
@@ -83,10 +79,33 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
+  /classes/all_classes.php:
+    get:
+      summary: "Get all courses"
+      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *key* is a course name (represented below as `additionalPropX`) and the *value* is another object: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
+      tags:
+        - "Courses"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              all_courses:
+                type: "object"
+                additionalProperties:
+                  type: "object"
+                  properties:
+                    acc_req:
+                      type: "boolean"
   /user/my_classes.php:
     get:
-      summary: "Get user enrolled/TA-ed courses"
-      description: "Get all the courses the user has enrolled in or TAs"
+      summary: "Get user enrolled courses"
+      description: "Get all the courses the user has enrolled in or TAs."
+      tags:
+        - "User"
       responses:
         200:
           description: "Success"
@@ -103,6 +122,169 @@ paths:
                 type: "array"
                 items:
                   type: "string"
+  /queue/get_queue.php:
+    post:
+      summary: "Get a queue"
+      description: "Get the queue state for the specified course including the TAs on duty, course announcements, and time limit per student."
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              state:
+                type: "string"
+              time_lim:
+                type: "string"
+              announce:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    announcement:
+                      type: "string"
+                    tmstmp:
+                      type: "string"
+              TAs:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    username:
+                      type: "string"
+                    duration:
+                      type: "string"
+                    full_name:
+                      type: "string"
+                    helping:
+                      type: "string"
+              queue:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    username:
+                      type: "string"
+                    full_name:
+                      type: "string"
+                    question:
+                      type: "string"
+                    location:
+                      type: "string"
+  /queue/open.php:
+    post:
+      summary: "Open a queue (TA)"
+      description: "Open the queue for the specified course to allow students to enter."
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/close.php:
+    post:
+      summary: "Close a queue (TA)"
+      description: "Close the queue for the specified course. This removes all students from the queue and prevents new entries until the queue is opened."
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/enqueue_ta.php:
+    post:
+      summary: "Put TA on duty (TA)"
+      description: "Put the TA on duty for the specified course.**The queue must be opened.**"
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/dequeue_ta.php:
+    post:
+      summary: "Take TA off duty (TA)"
+      description: "Take the TA off duty for the specified course."
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/enqueue_student.php:
+    post:
+      summary: "Enter a queue"
+      description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in course\n- course queue must be open\n- TAs cannot enter their own queues"
+      tags:
+        - "Queue"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "question"
+        in: "formData"
+        description: "question/subject for TA"
+        type: "string"
+        required: true
+      - name: "location"
+        in: "formData"
+        description: "location of student"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+
+definitions:
+  success:
+    properties:
+      authenticated:
+        type: "boolean"
+      success:
+        type: "string"
+
 
 # NOT SURE WHAT TO PUT FOR THESE
 
@@ -121,79 +303,15 @@ paths:
 
 
 
+
+
+
+
+
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3.0 SPEC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-#openapi: 3.0.0
-#info:
-#  title: Queue API for University of Utah College of Engineering
-#  description: Below are endpoints/functionalities which can aid in designing a queue for the UofU COE.
-#  version: 1.0.0
-#
-#servers:
-#  - url: https://suzie.eng.utah.edu/blakeb/api
-#    description: API endpoints are located here and in subdirectories.
-#
-#
-## HERE'S A GOOD TUTORIAL FOR A SWAGGER SPEC:
-##     https://swagger.io/docs/specification/basic-structure/
-#
-## I BELIEVE THE ONLY PARAMETERS TO SPECIFY FOR THESE ENDPOINTS ARE COOKIES
-#
-#
-#paths:
-#  /login.php:
-#    post:
-#      summary: Login
-#      description: Login a user with the specified CADE credentials
-#      requestBody:
-#        required: true
-#        content:
-#          formData:
-#            # CAN'T FIGURE THIS PART OUT
-#
-#      responses:
-#        '200':    # status code
-#          description: A JSON array of user data
-#          content:
-#            application/json:
-#              schema:
-#                type: array
-#                items:
-#                  type: string
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
