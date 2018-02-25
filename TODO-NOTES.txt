@@ -1,5 +1,7 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
+-help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
 -for get_queue.php, should time_lim be an integer instead of string?
 -destroy_session() on unsuccessful logins? Are these undestroyed sessions eating up memory?
 -Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
@@ -18,11 +20,11 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -Have CIS handle authentication
 -Spinners or progress/waiting indicators for slow loads
 -Success is falsely returned when a student (or TA) removes self (or another student) from a non-existent class.
+-Success if falsely returned when a TA tries to dequeue a student from a course they don't TA
 -Should logging out remove you from all queues?
 -Not a Problem: In our DB courses table, does the name need to include the dept and course num? Is this redundant?
 -Not a Problem: Dequeuing a student from a queue they’re not in returns success. Problem?
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
--Not a Problem: Adding a course that a student’s already enrolled in returns success. Problem?
 What convention should we use? 
 -Lock navbar in place when scrolling
 -Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds

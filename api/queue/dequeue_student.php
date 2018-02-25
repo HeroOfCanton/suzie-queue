@@ -43,10 +43,10 @@ if (in_array($course, $ta_courses)){
     echo json_encode($return);
     die();
   }
-  $username = $_POST['username'];
+  $username = $_POST['username']; // Set to dequeue another student
 }
 
-if(deq_stu($username, $course))
+if(deq_stu($username, $course)) // Dequeue yourself
 {
   $return = array(
     "authenticated" => True,

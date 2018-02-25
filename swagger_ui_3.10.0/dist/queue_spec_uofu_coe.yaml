@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   title: "Queue API for University of Utah College of Engineering"
   version: "1.0.0"
-  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\nNOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)*.\n- Currently the only status code returned is 200. All JSON examples shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures, typcially `error` messages, are also possible responses. The response `authenticated: false` indicates you have not logged in, although this is also returned on logout."
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\nNOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA/faculty to successfully use endpoints marked with *(TA)*; otherwise endpoints are open to all users.\n- Currently the only status code returned is 200. All JSON structures shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures are also possible responses (see *Models* at the bottom of this page).\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a user un-enrolling from a non-existent course) or incorrect (e.g. a TA dequeing a student from a queue for which the TA is not assigned). In short, be sure your posted arguments make logical sense."
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "doublezane@gmail.com"
@@ -79,10 +79,11 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
+                example: false
   /classes/all_classes.php:
     get:
       summary: "Get all courses"
-      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *key* is a course name (represented below as `additionalPropX`) and the *value* is another object: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
+      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalPropX`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
       tags:
         - "Courses"
       responses:
@@ -279,11 +280,29 @@ paths:
 
 definitions:
   success:
+    description: "Many endpoints return this simple JSON structure upon a successful request."
     properties:
       authenticated:
+        description: "this will always be 'true' when logged in"
         type: "boolean"
       success:
+        description: "the result of your request"
         type: "string"
+  error:
+    description: "Most endpoints return this JSON structure upon a failed request."
+    properties:
+      authenticated:
+        description: "this will always be 'true' when logged in"
+        type: "boolean"
+      error:
+        description: "what went wrong with your request"
+        type: "string"
+  no_login:
+    description: "This JSON structure indicates you have not logged in."
+    properties:
+      authenticated:
+        description: "this will always be 'false' when not logged in"
+        type: "boolean"
 
 
 # NOT SURE WHAT TO PUT FOR THESE
