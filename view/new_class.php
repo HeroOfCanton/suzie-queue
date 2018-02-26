@@ -23,7 +23,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
                 <script src="./src/logout.js"></script>
-		<script src="./src/classes.js"></script>
+		<script src="./src/create_class.js"></script>
 	</head>
 	<body>
 
@@ -51,11 +51,11 @@
                           </a>
                           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="new_class.php">Create Class</a>
-                            <a class="dropdown-item" href="edit_class.php">Edit Class</a>                          
+                            <a class="dropdown-item" href="edit_class.php">Edit Class</a>
                           </div>
                         </li>
-                        <li class="active">
-                            <a href="#">All Classes</a>
+                        <li>
+                            <a href="classes.php">All Classes</a>
                         </li>
                         <li>
                             <a href="my_classes.php">My Classes</a>
@@ -70,7 +70,7 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">List of all Classes</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">New Class</h1>
 			</div>
 		</div>
 
@@ -81,19 +81,46 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title">All Available Classes</h3>
-							</div>
-							<div class="panel-body">
-								<p>The following table contains the list of classes for this semester.</p>
-							</div>
-								<table class="table table-hover" id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
-                                                                <tr>
-                                                                      <th>Class Name</th>
-                                                                      <th>Enroll</th>
-                                                                </tr>
+								<h3 class="panel-title">Create New Class</h3>
+                                                        </div>
+<style>
+input[type=text], select, textarea {
+    width: 100%; /* Full width */
+    padding: 12px; /* Some padding */  
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 6px; /* Add a top margin */
+    margin-bottom: 16px; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+</style>
+                                                         
+  <form id="create_class">
+    <label>Course Name</label>
+    <input type="text" id="course_name" placeholder="Course Name..">
 
-								<!--classes.js should write here-->
-							</table>
+    <label>Department</label>
+    <input type="text" id="depart_prefix" placeholder="CS">
+
+    <label>Course Number</label>
+    <input type="text" id="course_num" placeholder="4400">
+
+    <label>Instructor username</label>
+    <input type="text" id="professor" placeholder="username">
+
+    <label>LDAP group</label>
+    <input type="text" id="ldap_group" placeholder="cs4400">
+
+    <label>Access Code</label>
+    <input type="text" id="acc_code" placeholder="">
+
+    <label>Description</label>
+    <textarea id="description" style="height:200px"></textarea>
+
+    <input type="submit" value="Create Course">
+  </form>
+
 						</div><!--panel-->
 					</div><!--id-->
 				</div><!--col-sm-12-->

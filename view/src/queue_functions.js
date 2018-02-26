@@ -78,6 +78,11 @@ function get_queue(course, refresh) {
     }
 
     $("#queue_state").text("State: "+dataParsed.state);
+    if(dataParsed.time_lim >0){
+       $("#time_limit").text("Time Limit: "+dataParsed.time_lim);
+    }else{
+       $("#time_limit").text("Time Limit: None");
+    }
 
     //Render the announcements box
     render_ann_box(dataParsed.announce);
@@ -104,7 +109,8 @@ function get_queue(course, refresh) {
 function render_ann_box(anns){
   $("#anns tr").remove();
   for(ann in anns){
-    var new_row = $('<tr>  <td><b>'+anns[ann]["tmstmp"]+':</b></td>  <td><b>'+anns[ann]["announcement"]+'</b></td> </tr>');
+    
+    var new_row = $('<tr>  <td><b>'+anns[ann]["tmstmp"].split(" ")[0]+':  </b></td>  <td><b>'+anns[ann]["announcement"]+'</b></td> </tr>');
     $('#anns').append(new_row);
   }
 }

@@ -47,6 +47,16 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new_class.php">Create Class</a>
+                            <a class="dropdown-item" href="edit_class.php">Edit Class</a>                          
+                          </div>
+                        </li>
+
                         <li>
                             <a href="classes.php">All Classes</a>
                         </li>
@@ -69,6 +79,7 @@
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
 				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
                                 <h2 id="queue_state" style="color: #404040; "></h2>
+                                <h2 id="time_limit"  style="color: #404040; "></h2>
 			</div>
 		</div>
 
@@ -117,26 +128,31 @@
 				</div><!--col-sm-8-->
 			</div><!--row-->
 			<div class="row">
-				<div class="col-sm-2">
-                                  <table>
-				    <tr> <button class="btn btn-success pull-right" id="duty_button"></button>
-				    <tr> <button class="btn btn-success pull-right" id="state_button"></button>
-                                    <tr> <button class="btn btn-success pull-right" id="freeze_button"></button>
-                                    <tr> <button class="btn btn-success pull-right" id="join_button"></button>
-                                  </table>
-                    <div id="dialog-form" title="Location and Question">
-                        <p class="validateTips">All form fields are required.</p>
-                        <form>
-                            <fieldset>
-                                <label for="location">Location</label>
-                                    <input type="text" name="location" id="location" class="text" maxlength="50">
-                                <label for="question">Question</label>
-                                    <input type="text" name="question" id="question" value="" class="text" maxlength="50">
-                            </fieldset>
-                        </form>
-                    </div> 
+                          <div class="col-sm-8 col-sm-offset-2">
+				<div class="col-sm-4">
+				  <button class="btn btn-success pull-right" id="duty_button"></button>
 				</div>
-			</div>
+                                <div class="col-sm-4">
+				  <button class="btn btn-success pull-right" id="state_button"></button>
+                                </div>
+                                <div class="col-sm-4">
+                                  <button class="btn btn-success pull-right" id="freeze_button"></button>
+                                </div>
+
+                                  <button class="btn btn-success pull-right" id="join_button"></button>
+                                <div id="dialog-form" title="Location and Question">
+                                  <p class="validateTips">All form fields are required.</p>
+                                  <form>
+                                    <fieldset>
+                                      <label for="location">Location</label>
+                                      <input type="text" name="location" id="location" class="text" maxlength="50">
+                                      <label for="question">Question</label>
+                                      <input type="text" name="question" id="question" value="" class="text" maxlength="50">
+                                    </fieldset>
+                                  </form>
+                                </div> 
+                          </div>
+                        </div>
 		</div><!--container-->
 	</body>
 </html>
