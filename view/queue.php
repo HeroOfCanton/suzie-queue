@@ -63,10 +63,6 @@
                         <li>
                             <a href="my_classes.php">My Classes</a>
                         </li>
-<!--                        THIS QUEUE TAB CURRENTLY SERVES NO PURPOSE-->
-<!--                        <li class="active">-->
-<!--                            <a href="#">Queue</a>-->
-<!--                        </li>-->
                         <li>
                             <a href="#" onclick="logout();">Logout</a>
                         </li>
@@ -128,15 +124,23 @@
 				</div><!--col-sm-8-->
 			</div><!--row-->
 			<div class="row">
-                          <div class="col-sm-8 col-sm-offset-2">
-				<div class="col-sm-4">
+                          <div class="col-sm-8 col-sm-offset-3">
+				<div class="col-sm-3">
 				  <button class="btn btn-success pull-right" id="duty_button"></button>
 				</div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
 				  <button class="btn btn-success pull-right" id="state_button"></button>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                   <button class="btn btn-success pull-right" id="freeze_button"></button>
+                                </div>
+
+                                <div class="col-sm-3">
+                                  <form id="time_form">
+                                    <label>Time Limit</label>
+                                    <input type="number" id="time_limit_input">
+                                    <input type="submit" value="Set">
+                                  </form>
                                 </div>
 
                                   <button class="btn btn-success pull-right" id="join_button"></button>

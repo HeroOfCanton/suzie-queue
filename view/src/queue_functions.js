@@ -13,7 +13,6 @@ $(document).ready(function(){
     }
   }
   if(typeof course === 'undefined'){
-    alert("No course specified");
     window.location ='./my_classes.php';
   }
 
@@ -37,7 +36,9 @@ $(document).ready(function(){
   $("#duty_button").hide();
   $("#state_button").hide();
   $("#freeze_button").hide();
+  $("#time_form").hide(); 
   $("#join_button").hide();
+ 
   start();
 });
 
@@ -128,6 +129,7 @@ function render_ta_view(dataParsed){
   $("#state_button").unbind("click");
   $("#duty_button").unbind("click");
   $("#freeze_button").unbind("click");
+  $("#time_form").unbind("submit");
 
   queue_state = dataParsed.state;
   if(queue_state == "closed"){
@@ -189,6 +191,12 @@ function render_ta_view(dataParsed){
     }
     $("#duty_button").show();
     $("#freeze_button").show();
+    $("#time_form").show();
+    $("#time_form").submit(function(event){
+      event.preventDefault();
+      var limit = $(this).find( "input[id='time_limit_input']" ).val();
+      set_limit(course, limit);
+    });
   }
   $("#state_button").show();
 }
@@ -311,6 +319,8 @@ function render_queue_table(dataParsed, role){
     $('#queue').append(new_row);
   }
 }
+
+
 
 //API Endpoint calls
 //This code should be fine for alpha
@@ -482,6 +492,21 @@ next_student = function(course){
 function help_student(course, username){
   url = "../api/queue/help_student.php";
   posting = $.post( url, { course: course, student: username } );
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed["error"]);
+    }else{
+      get_queue(course, 0); //refreshes the page
+    }
+  }
+  posting.done(done);
+}
+
+function set_limit(course, limit){
+  url = "../api/queue/set_limit.php";
+  posting = $.post( url, { course: course, time_lim: limit } );
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);

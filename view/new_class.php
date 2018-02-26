@@ -98,25 +98,25 @@ input[type=text], select, textarea {
                                                          
   <form id="create_class">
     <label>Course Name</label>
-    <input type="text" id="course_name" placeholder="Course Name..">
+    <input type="text" id="course_name" placeholder="Course Name.." required>
 
     <label>Department</label>
-    <input type="text" id="depart_prefix" placeholder="CS">
+    <input type="text" id="depart_prefix" placeholder="CS" required>
 
     <label>Course Number</label>
-    <input type="text" id="course_num" placeholder="4400">
+    <input type="text" id="course_num" placeholder="4400" required>
 
     <label>Instructor username</label>
-    <input type="text" id="professor" placeholder="username">
+    <input type="text" id="professor" placeholder="username" required>
 
     <label>LDAP group</label>
-    <input type="text" id="ldap_group" placeholder="cs4400">
+    <input type="text" id="ldap_group" placeholder="cs4400" required>
 
     <label>Access Code</label>
-    <input type="text" id="acc_code" placeholder="">
+    <input type="text" id="acc_code">
 
     <label>Description</label>
-    <textarea id="description" style="height:200px"></textarea>
+    <textarea id="description" style="height:200px" required></textarea>
 
     <input type="submit" value="Create Course">
   </form>
