@@ -74,8 +74,9 @@
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
 				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
-                                <h2 id="queue_state" style="color: #404040; "></h2>
-                                <h2 id="time_limit"  style="color: #404040; "></h2>
+                                <h3 id="queue_state" style="color: #404040; "></h2>
+                                <h3 id="time_limit"  style="color: #404040; "></h2>
+                                <h3 id="in_queue"    style="color: #404040; "></h2>
 			</div>
 		</div>
 

@@ -31,7 +31,8 @@ function get_queue($course){
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
-    $return["state"] = "closed";
+    $return["state"]        = "closed";
+    $return["queue_length"] = 0;
     return $return;
   }
   $entry    = mysqli_fetch_assoc($result);
@@ -39,6 +40,7 @@ function get_queue($course){
   $return["time_lim"] = $entry["time_lim"];
   $return["announce"] = [];
   $return["TAs"]      = [];
+  $return["queue"]    = [];
 
   #Get the announcements
   $query  = "SELECT announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
@@ -64,6 +66,7 @@ function get_queue($course){
   while($entry = mysqli_fetch_assoc($result)){
     $return["queue"][] = $entry;
   }
+  $return["queue_length"] = count($return["queue"]);
 
   mysqli_close($sql_conn);
   return $return;

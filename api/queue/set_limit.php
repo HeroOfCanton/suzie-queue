@@ -26,7 +26,7 @@ if (!$_POST['course'])
   die();
 }
 
-if (!$_POST['time_lim'])
+if (!isset($_POST['time_lim']))
 {
   $return = array(
     "authenticated" => True,

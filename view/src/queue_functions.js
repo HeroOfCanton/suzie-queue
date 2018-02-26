@@ -78,12 +78,14 @@ function get_queue(course, refresh) {
       return;
     }
 
-    $("#queue_state").text("State: "+dataParsed.state);
+    var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
+    $("#queue_state").text("State: "+state);
     if(dataParsed.time_lim >0){
-       $("#time_limit").text("Time Limit: "+dataParsed.time_lim);
+       $("#time_limit").text("Time Limit: " + dataParsed.time_lim + " Minutes");
     }else{
        $("#time_limit").text("Time Limit: None");
     }
+    $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
 
     //Render the announcements box
     render_ann_box(dataParsed.announce);
@@ -141,6 +143,7 @@ function render_ta_view(dataParsed){
     });
     $("#duty_button").hide();
     $("#freeze_button").hide();
+    $("#time_form").hide();
   }else{ //open or frozen
     document.getElementById("state_button").style.background='FireBrick';
     $("#state_button").text("CLOSE QUEUE");
@@ -506,7 +509,7 @@ function help_student(course, username){
 
 function set_limit(course, limit){
   url = "../api/queue/set_limit.php";
-  posting = $.post( url, { course: course, time_lim: limit } );
+  posting = $.post( url, { course: course, time_lim: limit.toString() } );
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
