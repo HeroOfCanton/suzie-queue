@@ -1,8 +1,11 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Remove 'Admin' tab on navbar for regular students
+-Less important: disable move up/down button when student is at top/bottom of queue, respectively?
+-TAs can move students up/down and dequeue without being on duty. Keep this way?
+-Are we treating queue_state.time_lim as minutes?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
--for get_queue.php, should time_lim be an integer instead of string?
 -destroy_session() on unsuccessful logins? Are these undestroyed sessions eating up memory?
 -Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
 'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course

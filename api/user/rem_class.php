@@ -31,7 +31,7 @@ if (!rem_stud_course($username, $course))
 {
   $return = array(
     "authenticated" => True,
-    "message" => "Student Course Removed Successfully"
+    "success" => "Student Course Removed Successfully"
   );
 }
 else

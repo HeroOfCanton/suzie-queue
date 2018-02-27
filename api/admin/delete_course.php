@@ -1,5 +1,5 @@
 <?php
-// File: open.php
+// File: delete_course.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';

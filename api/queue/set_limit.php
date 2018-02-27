@@ -1,5 +1,5 @@
 <?php
-// File: open.php
+// File: set_limit.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';

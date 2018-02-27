@@ -38,7 +38,7 @@ if ($ret == 0)
 {
   $return = array(
     "authenticated" => True,
-    "message" => "Student Course Added Successfully"
+    "success" => "Student Course Added Successfully"
   );
 }
 elseif ($ret == 1)
