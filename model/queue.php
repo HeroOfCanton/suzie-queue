@@ -12,19 +12,17 @@ require_once 'config.php';
  * @return -1 on error
  * @return -2 on nonexistant class
  */
-function get_queue($course){
+function get_queue($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1; //SQL error
   }
 
-  $course_id = course_name_to_id($course, $sql_conn);
+  $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
     return -1; //SQL error
-  }
-
-  if($course_id == -2){
+  }elseif($course_id == -2){
     mysqli_close($sql_conn);
     return -2; //Nonexistant course
   }
@@ -83,12 +81,22 @@ function get_queue($course){
  *
  * @param string $course_name
  * @return int length of queue
- *             -1 on error
+ * @return int -1 on error
+ * @return int -2 on nonexistant course
  */
 function get_queue_length($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "SELECT * FROM queue NATURAL JOIN courses WHERE course_name=?";
@@ -164,7 +172,7 @@ function enq_stu($username, $course_name, $question, $location){
  * @param string $course
  * @return 0  on success
  * @return -1 on fail
- * @return -2 on closed nonexistant course
+ * @return -2 on nonexistant course
  * @return -3 on closed course
  */
 function deq_stu($username, $course_name){
@@ -207,13 +215,23 @@ function deq_stu($username, $course_name){
  *
  * @param string $username
  * @param string $course_name
- * @return 0  on success
- * @return -1 on fail
+ * @return int 0  on success
+ * @return int -1 on fail
+ * @return int -2 on nonexistant course
  */
 function enq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "INSERT INTO ta_status (username, course_id) 
@@ -241,13 +259,23 @@ function enq_ta($username, $course_name){
  *
  * @param string $username
  * @param string $course_name
- * @return 0  on success
- * @return -1 on fail
+ * @return int 0  on success
+ * @return int -1 on fail
+ * @return int -2 on nonexistant course
  */
 function deq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "DELETE FROM ta_status 
@@ -276,14 +304,24 @@ function deq_ta($username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return int -1 on error
- *              1 if TA not on duty
- *              2 if on duty, but not helping anyone
- *              3 if on duty, and helping someone
+ * @return int -2 on nonexistant course
+ * @return int  1 if TA not on duty
+ * @return int  2 if on duty, but not helping anyone
+ * @return int  3 if on duty, and helping someone
  */
 function get_ta_status($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query  = "SELECT helping FROM ta_status 
@@ -335,7 +373,16 @@ function help_next_student($username, $course_name){
     return -1;
   }
 
-  if(get_queue_state($course_name) != "open"){
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
+  }
+
+  if(get_queue_state($course_name) == "closed"){
     mysqli_close($sql_conn);
     return -3;
   }
@@ -345,17 +392,6 @@ function help_next_student($username, $course_name){
     return -4;
   }
 
-  $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  
-  if($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistant course
-  }
-  
   $query = "SELECT position FROM queue
             WHERE course_id ='".$course_id."'
             AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
@@ -402,12 +438,10 @@ function help_student($TA_username, $stud_username, $course_name){
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
-    return -1;
-  }
-
-  if($course_id == -2){
+    return -1; //SQL error
+  }elseif($course_id == -2){
     mysqli_close($sql_conn);
-    return -2;
+    return -2; //Nonexistant course
   }
 
   if(get_queue_state($course_name) == "closed"){
@@ -448,12 +482,22 @@ function help_student($TA_username, $stud_username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return 0  on success
- * @return -1 on fail
+ * @return int -1 on fail
+ * @return int -2 on nonexistant course
  */
 function free_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "UPDATE ta_status SET helping = NULL 
@@ -481,12 +525,24 @@ function free_ta($username, $course_name){
  *
  * @param string $time_lim in minutes
  * @param string $course_name
- * @return 0 on success, 1 on sql fail
+ * @return int 0  on success,
+ * @return int -1 on fail
+ * @return int -2 on nonexistant course
+
  */
 function set_time_lim($time_lim, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "UPDATE queue_state SET time_lim = ? 
@@ -593,12 +649,10 @@ function change_queue_state($course_name, $state){
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
-    return -1;
-  }
-  
-  if($course_id == -2){
+    return -1; //SQL error
+  }elseif($course_id == -2){
     mysqli_close($sql_conn);
-    return -2;
+    return -2; //Nonexistant course
   }
 
   if($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
@@ -685,6 +739,15 @@ function change_stud_priority($stud_username, $course_name, $operation){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "SELECT position, username, course_id, question, location FROM queue WHERE username=? AND course_id=(SELECT course_id from courses where course_name=?)";
