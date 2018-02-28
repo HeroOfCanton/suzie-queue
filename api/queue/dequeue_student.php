@@ -46,20 +46,19 @@ if (in_array($course, $ta_courses)){
   $username = $_POST['username']; // Set to dequeue another student
 }
 
-if(deq_stu($username, $course)) // Dequeue yourself
+$res = deq_stu($username, $course);
+if($res)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to dequeue student"
   );
-  echo json_encode($return);
-  die();
+}else{
+  $return = array(
+    "authenticated" => True,  
+    "success" => "Student dequeued"
+  );
 }
-
-$return = array(
-  "authenticated" => True,  
-  "success" => "Student dequeued"
-);
 echo json_encode($return);
 ?>
 

@@ -37,12 +37,10 @@ $ta_courses = $_SESSION["ta_courses"];
 if (in_array($course, $ta_courses)) //TA
 {
   $return = get_queue($course);
-  $return["authenticated"] = True;
 }
 elseif (in_array($course, get_stud_courses($username))) //Student
 {
   $return = get_queue($course);
-  $return["authenticated"] = True;
 }else //Not in course
 {
   $return = array(
@@ -51,13 +49,20 @@ elseif (in_array($course, get_stud_courses($username))) //Student
   );
 }
 
-if(is_null($return))
+if($return == -1) //SQL error
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to fetch queue state"
   );
+}elseif($return == -2) //Nonexistant Course
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "Invalid Course"
+  );
 }
 
+$return["authenticated"] = True;
 echo json_encode($return, JSON_PRETTY_PRINT);
 ?>

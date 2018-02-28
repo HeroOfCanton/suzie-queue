@@ -51,19 +51,26 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if(help_student($username, $student, $course))
+$res = help_student($username, $student, $course);
+if($res == 1)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to change TA status"
   );
-  echo json_encode($return);
-  die();
+}elseif($res == 2)
+{
+  $return = array(
+    "authenticated" => True,
+    "error" => "Nonexistant Course"
+  );
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "success" => "TA status changed"
+  );
 }
 
-$return = array(
-  "authenticated" => True,
-  "success" => "TA status changed"
-);
 echo json_encode($return);
 ?>

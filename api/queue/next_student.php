@@ -40,19 +40,19 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if(help_next_student($username, $course))
+$res = help_next_student($username, $course);
+if($res)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to change TA status"
   );
-  echo json_encode($return);
-  die();
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "success" => "TA status changed"
+  );
 }
-
-$return = array(
-  "authenticated" => True,
-  "success" => "TA status changed"
-);
 echo json_encode($return);
 ?>

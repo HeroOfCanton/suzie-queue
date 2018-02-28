@@ -51,7 +51,8 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if (set_time_lim($time_lim, $course))
+$res = set_time_lim($time_lim, $course);
+if ($res)
 {
   $return = array(
     "authenticated" => True,

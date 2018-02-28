@@ -40,19 +40,18 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if(deq_ta($username, $course))
+$res = deq_ta($username, $course);
+if($res)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to dequeue TA"
   );
-  echo json_encode($return);
-  die();
+}else{
+  $return = array(
+    "authenticated" => True,
+    "success" => "TA dequeued"
+  );
 }
-
-$return = array(
-  "authenticated" => True,
-  "success" => "TA dequeued"
-);
 echo json_encode($return);
 ?>

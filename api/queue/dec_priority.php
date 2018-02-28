@@ -51,19 +51,19 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if(decrease_stud_priority($student, $course))
+$res = decrease_stud_priority($student, $course);
+if($res)
 {
   $return = array(
     "authenticated" => True,
     "error" => "Unable to change student priority"
   );
-  echo json_encode($return);
-  die();
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "success" => "Student priority decreased"
+  );
 }
-
-$return = array(
-  "authenticated" => True,
-  "success" => "Student priority decreased"
-);
 echo json_encode($return);
 ?>

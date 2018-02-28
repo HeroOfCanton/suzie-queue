@@ -31,20 +31,20 @@ $course   = $_POST['course'];
 $question = $_POST['question'];
 $location = $_POST['location'];
 
-if(enq_stu($username, $course, $question, $location))
+$res = enq_stu($username, $course, $question, $location);
+if($res)
 {
   $return = array(
-  "authenticated" => True,
-  "error" => "Unable to enqueue student"
-);
-  echo json_encode($return);
-  die();
+    "authenticated" => True,
+    "error" => "Unable to enqueue student"
+  );
+}else
+{
+  $return = array(
+    "authenticated" => True,
+    "success" => "Student enqueued"
+  );
 }
-
-$return = array(
-  "authenticated" => True,
-  "success" => "Student enqueued"
-);
 echo json_encode($return);
 ?>
 

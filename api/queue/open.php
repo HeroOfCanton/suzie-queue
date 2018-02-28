@@ -40,7 +40,8 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-if (open_queue($course) != "open")
+$res = open_queue($course);
+if ($res != "open")
 {
   $return = array(
     "authenticated" => True,
