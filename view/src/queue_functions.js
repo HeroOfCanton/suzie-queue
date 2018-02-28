@@ -296,25 +296,34 @@ function render_queue_table(dataParsed, role){
           help_student(course, username);
         });
       }
-      var increase_button = $('<button type="button" class="btn btn-primary btn-arrow-left">up</button>');
+      var increase_button = $('<button type="button" class="btn btn-primary">up</button>');
+      if(row == 0){
+        increase_button = $('<button type="button" class="btn btn-primary" disabled=true>up</button>');
+      }
       increase_button.click(function(event){
         inc_priority(course, username); 
       });
-      var decrease_button = $('<button type="button" class="btn btn-primary btn-arrow-left">down</button>');
+
+      var decrease_button = $('<button type="button" class="btn btn-primary">down</button>');
+      if(row == dataParsed.queue_length -1){
+        decrease_button = $('<button type="button" class="btn btn-primary" disabled=true>down</button>');
+      }
       decrease_button.click(function(event){
         dec_priority(course, username);
       });
 
-
       new_row.append("<td>");
       new_row.append(help_button);
       new_row.append("</td>");
+
       new_row.append("<td>");
       new_row.append(dequeue_button);
       new_row.append("</td>");
+
       new_row.append("<td>");
       new_row.append(increase_button);
       new_row.append("</td>");
+
       new_row.append("<td>");
       new_row.append(decrease_button);
       new_row.append("</td>");

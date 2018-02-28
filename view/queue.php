@@ -82,7 +82,7 @@
 
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-lg-2">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
                 			<h3 class="panel-title">TA(s) on Duty</h3>
@@ -91,7 +91,7 @@
                 		</div>
             		</div>
 				</div>
-				<div class="col-sm-8 col-sm-offset-1">
+				<div class="col-lg-8 col-lg-offset-1">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
                 			<h3 class="panel-title">Announcements</h3>
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-lg-2">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
                 			<h3 class="panel-title">TA Hours</h3>
@@ -112,7 +112,7 @@
                 		</div>
             		</div>
 				</div>
-				<div class="col-sm-8 col-sm-offset-1">
+				<div class="col-lg-8 col-lg-offset-1">
 					<div id ="queue_table">
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->

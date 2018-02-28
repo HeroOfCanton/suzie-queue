@@ -58,7 +58,9 @@ function renderCourseTable(allCourses, dataParsed) {
 
 function prompt_acc_code(course_name){
   var code = prompt("Please enter the course access code:");
-  enrollCourse(course_name, code);
+  if(code != null){
+    enrollCourse(course_name, code);
+  }
 }
 
 function enrollCourse(course, code) {

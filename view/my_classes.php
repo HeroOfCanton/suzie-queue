@@ -71,7 +71,7 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">List of My Classes</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">My Classes</h1>
 			</div>
 		</div>
 
