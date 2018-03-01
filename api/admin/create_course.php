@@ -4,6 +4,7 @@
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
 require_once '../../model/queue.php';
+require_once '../errors.php';
 
 // get the session variables
 session_start();
@@ -11,29 +12,20 @@ header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
 if (!$_SESSION['is_admin'])
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Not authorized to create courses"
-  );
-  echo json_encode($return);
+  echo json_encode( not_authorized() );
   die();
 }
 
 if (!$_POST['course_name'] || !$_POST['depart_prefix'] || !$_POST['course_num'] || 
     !$_POST['description'] || !$_POST['ldap_group']    || !$_POST['professor'])
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Missing required info"
-  );
-  echo json_encode($return);
+  echo json_encode( missing_info() );
   die();
 }
 
@@ -51,12 +43,9 @@ if ($_POST['acc_code'])
 }
 
 $res = new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code);
-if ($res)
+if ($res < 0)
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to create course"
-  );
+  $return = return_JSON_error($res);
 }else
 {
   $return = array(

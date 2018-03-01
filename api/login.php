@@ -3,6 +3,7 @@
 
 require_once '../model/auth.php';
 require_once '../model/courses.php';
+require_once './errors.php';
 
 session_start();
 $_SESSION = array();
@@ -10,11 +11,7 @@ header('Content-Type: application/json');
 
 if(!$_POST['username'] || !$_POST['password'])
 {
-  $return = array(
-    "authenticated" => False,
-    "error" => "No username and/or password"
-  );
-  echo json_encode($return);
+  echo json_encode( invalid_auth() );
   die();
 }
 
@@ -32,37 +29,23 @@ if(!auth($username, $password))
 }
 
 $info = get_info($username);
-
 if(is_null($info))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to Retrieve Info"
-  );
-  echo json_encode($return);
+  echo json_encode( ldap_issue() );
   die();
 }
 
 $is_admin = is_admin($username);
 if(is_null($is_admin))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to Retrieve group status"
-  );
-  echo json_encode($return);
+  echo json_encode( ldap_issue() );
   die();
 }
 
 $ta_courses = get_ta_courses($username);
-
 if(is_null($ta_courses))
 {
-  $return = array(
-      "authenticated" => True,
-      "error" => "Unable to Retrieve group status"
-  );
-  echo json_encode($return);
+  echo json_encode( ldap_issue() );
   die();
 }
 
