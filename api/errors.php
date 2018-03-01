@@ -49,4 +49,11 @@ function ldap_issue(){
   );
 }
 
+function course_list_error(){
+  return array(
+    "authenticated" => True,
+    "error" => "Unable to Fetch All Courses"
+  );
+}
+
 ?>

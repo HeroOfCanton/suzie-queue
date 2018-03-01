@@ -44,11 +44,7 @@ $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "TA not assigned to course"
-  );
-  echo json_encode($return);
+  echo json_encode( not_authorized() );
   die();
 }
 
