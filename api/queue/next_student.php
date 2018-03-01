@@ -19,11 +19,7 @@ if (!$_SESSION['username'])
 
 if (!$_POST['course'])
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "No course specified"
-  );
-  echo json_encode($return);
+  echo json_encode( missing_course() );
   die();
 }
 
