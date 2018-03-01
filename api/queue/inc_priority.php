@@ -4,6 +4,7 @@
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
 require_once '../../model/queue.php';
+require_once '../errors.php';
 
 // get the session variables
 session_start();
@@ -52,7 +53,7 @@ if (!in_array($course, $ta_courses))
 }
 
 $res = increase_stud_priority($student, $course);
-if($res)
+if($res < 0)
 {
   $return = array(
     "authenticated" => True,
