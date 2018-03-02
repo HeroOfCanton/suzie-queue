@@ -59,55 +59,59 @@ function start(){
       if($.inArray(course, dataParsed["ta_courses"]) != -1){
         is_TA = true;
       }
-      get_queue(course, 5000); //This function calls itself every 5 seconds
+      get_queue(course);
+      setInterval(get_queue, 5000, course);
     }
     posting.done(done);
   }
   posting.done(done);
 }
 
-function get_queue(course, refresh) {
+function get_queue(course) {
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
-
-  var done = function(data) {
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed.error);
-      return;
-    }
-
-    var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
-    $("#queue_state").text("State: "+state);
-    if(dataParsed.time_lim >0){
-       $("#time_limit").text("Time Limit: " + dataParsed.time_lim + " Minutes");
-    }else{
-       $("#time_limit").text("Time Limit: None");
-    }
-    $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
-
-    //Render the announcements box
-    render_ann_box(dataParsed.announce);
-
-    //This block of code does the majority of the rendering
-    render_ta_table(dataParsed.TAs)
-    if(is_TA){
-      render_queue_table(dataParsed, "ta");
-      render_ta_view(dataParsed)
-    }else{
-      render_queue_table(dataParsed, "student");
-      render_student_view(dataParsed)
-    }
-
-    //Schedule the queue to refresh again. This way the calls can't overlap
-    if(refresh != 0){
-      setTimeout(function(){get_queue(course, refresh);}, refresh);
-    }
-  }
-  posting.done(done);
+  posting.done(render_view);
 }
 
+
+
+//This function renders the view
+var render_view = function(data) {
+  var dataString = JSON.stringify(data);
+  var dataParsed = JSON.parse(dataString);
+  if(dataParsed.error){
+    alert(dataParsed.error);
+    return;
+  }
+
+  //Render the top stats: state, time, length
+  render_stats(dataParsed);
+
+  //Render the announcements box
+  render_ann_box(dataParsed.announce);
+
+  //This block of code does the majority of the rendering
+  render_ta_table(dataParsed.TAs)
+  if(is_TA){
+    render_queue_table(dataParsed, "ta");
+    render_ta_view(dataParsed)
+  }else{
+    render_queue_table(dataParsed, "student");
+    render_student_view(dataParsed)
+  }
+
+}
+
+function render_stats(dataParsed){
+ var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
+  $("#queue_state").text("State: "+state);
+  if(dataParsed.time_lim >0){
+     $("#time_limit").text("Time Limit: " + dataParsed.time_lim + " Minutes");
+  }else{
+     $("#time_limit").text("Time Limit: None");
+  }
+  $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
+}
 
 function render_ann_box(anns){
   $("#anns tr").remove();
@@ -345,7 +349,7 @@ function open_queue(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -360,7 +364,7 @@ function close_queue(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -375,7 +379,7 @@ function freeze_queue(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -391,7 +395,7 @@ function enqueue_student(course, question, Location){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -415,7 +419,7 @@ function dequeue_student(course, username){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -430,7 +434,7 @@ function release_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -445,7 +449,7 @@ function enqueue_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -460,7 +464,7 @@ function dequeue_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -475,7 +479,7 @@ function inc_priority(course, student){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -490,7 +494,7 @@ function dec_priority(course, student){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -510,7 +514,7 @@ function help_student(course, username){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -525,7 +529,7 @@ function set_limit(course, limit){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
