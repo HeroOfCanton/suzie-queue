@@ -12,8 +12,7 @@ header('Content-type: application/json');
 
 if (!$_SESSION['username'])
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
@@ -36,10 +35,7 @@ if (!in_array($course, $ta_courses))
 $res = enq_ta($username, $course);
 if($res)
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to enqueue TA"
-  );
+  $return = return_JSON_error($res);
 }else
 {
   $return = array(

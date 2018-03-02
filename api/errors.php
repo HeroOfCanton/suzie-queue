@@ -2,15 +2,14 @@
 // File: errors.php
 
 //Error codes returned by the model
-$err_codes = [
-  "-1" => "Generic SQL error",
-  "-2" => "Course does not exist",
-  "-3" => "Queue is closed for this course",
-  "-4" => "TA not on duty",
-];
-
 function return_JSON_error($err_code){
-  $return = array(
+  $err_codes = array(
+    -1 => "Generic SQL error",
+    -2 => "Course does not exist",
+    -3 => "Queue is closed for this course",
+    -4 => "TA not on duty",
+  );
+  return array(
     "authenticated" => True,
     "error" => $err_codes[$err_code]
   );
@@ -39,6 +38,27 @@ function missing_info(){
   return array(
     "authenticated" => True,
     "error" => "Missing required info"
+  );
+}
+
+function missing_course(){
+  return array(
+    "authenticated" => True,
+    "error" => "No course specified"
+  );
+}
+
+function missing_student(){
+  return array(
+    "authenticated" => True,
+    "error" => "No student specified"
+  );
+}
+
+function missing_time(){
+  $return = array(
+    "authenticated" => True,
+    "error" => "No time_lim specified"
   );
 }
 

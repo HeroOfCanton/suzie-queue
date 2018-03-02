@@ -12,8 +12,7 @@ header('Content-type: application/json');
 
 if (!$_SESSION['username'])
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
@@ -25,11 +24,7 @@ if (!$_POST['course'])
 
 if (!$_POST['student'])
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "No student specified"
-  );
-  echo json_encode($return);
+  echo json_encode( missing_student() );
   die();
 }
 
@@ -47,10 +42,7 @@ if (!in_array($course, $ta_courses))
 $res = increase_stud_priority($student, $course);
 if($res < 0)
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to change student priority"
-  );
+  $return = return_JSON_error($res);
 }else
 {
   $return = array(

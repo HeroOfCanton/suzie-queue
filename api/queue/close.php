@@ -12,8 +12,7 @@ header('Content-type: application/json');
 
 if (!$_SESSION['username'])
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 

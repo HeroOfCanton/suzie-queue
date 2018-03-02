@@ -12,8 +12,7 @@ header('Content-Type: application/json');
 
 if (!$_SESSION['username'])
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
@@ -25,11 +24,7 @@ if (!$_POST['course'])
 
 if (!isset($_POST['time_lim']))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "No time_lim specified"
-  );
-  echo json_encode($return);
+  echo json_encode( missing_time() );
   die();
 }
 
@@ -47,10 +42,7 @@ if (!in_array($course, $ta_courses))
 $res = set_time_lim($time_lim, $course);
 if ($res)
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to set time limit"
-  );
+  $return = return_JSON_error($res);
 }else
 {
   $return = array(

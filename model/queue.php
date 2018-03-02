@@ -812,7 +812,7 @@ function change_stud_priority($stud_username, $course_name, $operation){
   $result = mysqli_query($sql_conn, $query);
   $entry = mysqli_fetch_assoc($result);
   if(!$entry){
-    return -1;
+    return 0;//Nobody to switch with
   }
 
   $position2 = $entry['position'];
