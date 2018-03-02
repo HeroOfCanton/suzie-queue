@@ -30,7 +30,7 @@ if (!$_POST['course'])
 $course_name = $_POST['course'];
 
 $res = del_course($course_name);
-if ($res < 0)
+if ($res)
 {
   $return = return_JSON_error($res);
 }else

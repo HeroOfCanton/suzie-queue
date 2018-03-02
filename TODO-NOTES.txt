@@ -1,13 +1,18 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Is the same course ever taught by different professors during the same semester? DB currently doesn't allow that.
+If we did allow it, del_course.php would also need to be updated to 'delete from courses where course_name=? and professor =?'
+-I think we discussed this before but I forgot, why are we writing the full course name w/ department and number in the db
+instead of just the name (e.g. 'CS 4400: Computer Systems' vs 'Computer Systems')
+-I forget how I even got my CADE credentials in the first place... should we have a link on the login page to some CADE page if
+users don't have a CADE account?
+-nitpicky thing but might be easier to do in an IDE: change 'class' to 'course' in endpoint names as that matches the code
+and API documentation
 -Remove 'Admin' tab on navbar for regular students
 -Less important: disable move up/down button when student is at top/bottom of queue, respectively?
--TAs can move students up/down and dequeue without being on duty. Keep this way?
--Are we treating queue_state.time_lim as minutes?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
--destroy_session() on unsuccessful logins? Are these undestroyed sessions eating up memory?
--Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
+***Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
 'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course
 doesn't exist still in one SQL call. Again, this isn't real high priority and is sorta convention. But I think
 ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
@@ -30,13 +35,16 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
 What convention should we use? 
 -Lock navbar in place when scrolling
--Consider using web sockets and events so server can push changes instead clients pulling from server every 5 seconds
 -TA/faculty ability to delete announcements
--Some of our endpoints might be better suited for other operations, e.g. GET get_queue.php. GET is faster than POST.
 -Probably isn't a problem, but the 'Try it out' functionality on the swagger UI only works when the UI is running
 on our server (which is mainly how it will be used anyway). It doesn't work when running the UI from swagger editor
 on my (Blake) laptop.
 -Consider changing HTTP response status codes for errors to, for example, 400 instead of 200 (200 indicates success)
+-NOT IMPORTANT UNTIL END OF SEMESTER: Swagger lets people test the API, similar to Postman. Ideally I think we should
+allow people to test all endpoints, including those restricted to admins or TAs. But for obvious reasons, we don't want
+Swagger to be messing with the actual DB in use. How do we accomplish this? Set up a sandbox server/directory with its own DB
+and point Swagger to that? For each new/updated edition of the API, the sandbox directory would have to be/should be
+updated.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
 
