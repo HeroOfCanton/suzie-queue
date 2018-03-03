@@ -655,6 +655,82 @@ function freeze_queue($course_name){
   return change_queue_state($course_name, "frozen");
 }
 
+/**
+ * Post announcement to the course
+ *
+ * @param string $course_name
+ * @return 0  on success
+ * @return -1 on error
+ * @return -2 on Nonexistant Course
+ */
+function add_announcement($course_name, $announcement){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
+  }
+
+  $query = "INSERT INTO announcements (course_id, announcement) 
+            VALUES (?, ?)";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "is", $course_id, $announcement);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
+
+function del_announcement($course_name, $announcement_id){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  $course_id = course_name_to_id($course_name, $sql_conn);
+  if($course_id == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($course_id == -2){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
+  }
+
+  $query = "DELETE FROM announcements 
+            WHERE id=? AND course_id=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "ii", $announcement_id, $course_id);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
+
 
 //HELPER FUNCTIONS
 /**

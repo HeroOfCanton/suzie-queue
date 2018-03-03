@@ -56,9 +56,16 @@ function missing_student(){
 }
 
 function missing_time(){
-  $return = array(
+  return array(
     "authenticated" => True,
     "error" => "No time_lim specified"
+  );
+}
+
+function missing_announcement(){
+  return array(
+    "authenticated" => True,
+    "error" => "No annoucement given"
   );
 }
 
