@@ -47,7 +47,7 @@ function get_queue($course_name){
   $return["queue"]    = [];
 
   #Get the announcements
-  $query  = "SELECT announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
+  $query  = "SELECT id, announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
   $result = mysqli_query($sql_conn, $query);
   while($entry = mysqli_fetch_assoc($result)){
     $return["announce"][] = $entry;
