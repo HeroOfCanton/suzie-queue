@@ -337,67 +337,48 @@ function render_queue_table(dataParsed, role){
 }
 
 
+done = function(data){
+  var dataString = JSON.stringify(data);
+  var dataParsed = JSON.parse(dataString);
+  if(dataParsed.error){
+    alert(dataParsed["error"]);
+  }else{
+    get_queue(course); //refreshes the page
+  }
+}
 
 //API Endpoint calls
-//This code should be fine for alpha
-function open_queue(course){
-  url = "../api/queue/open.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
+done = function(data){
+  var dataString = JSON.stringify(data);
+  var dataParsed = JSON.parse(dataString);
+  if(dataParsed.error){
+    alert(dataParsed["error"]);
+  }else{
+    get_queue(course); //refreshes the page
   }
+}
+function open_queue(course){
+  var url = "../api/queue/open.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 function close_queue(course){
-  url = "../api/queue/close.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/close.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 function freeze_queue(course){
-  url = "../api/queue/freeze.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/freeze.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 
 function enqueue_student(course, question, Location){
-  url = "../api/queue/enqueue_student.php";
-  posting = $.post( url, { course: course, question: question, location: Location } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/enqueue_student.php";
+  var posting = $.post( url, { course: course, question: question, location: Location } );
   posting.done(done);
 }
 
@@ -406,131 +387,71 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, username){
-  url = "../api/queue/dequeue_student.php";
+  var url = "../api/queue/dequeue_student.php";
   if(username == null){
     posting = $.post( url, { course: course } );
   }
   else{
     posting = $.post( url, { course: course, username: username } );
   }
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
   posting.done(done);
 }
 
 function release_ta(course){
-  url = "../api/queue/release_ta.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/release_ta.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 function enqueue_ta(course){
-  url = "../api/queue/enqueue_ta.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/enqueue_ta.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 function dequeue_ta(course){
-  url = "../api/queue/dequeue_ta.php";
-  posting = $.post( url, { course: course } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/dequeue_ta.php";
+  var posting = $.post( url, { course: course } );
   posting.done(done);
 }
 
 function inc_priority(course, student){
-  url = "../api/queue/inc_priority.php";
-  posting = $.post( url, { course: course, student: student } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/inc_priority.php";
+  var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
 }
 
 function dec_priority(course, student){
-  url = "../api/queue/dec_priority.php";
-  posting = $.post( url, { course: course, student: student } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/dec_priority.php";
+  var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
 }
 
 next_student = function(course){
-  url = "../api/queue/next_student.php";
-  posting = $.post( url, { course: course } );
+  var url = "../api/queue/next_student.php";
+  var posting = $.post( url, { course: course } );
 }
 
 function help_student(course, username){
-  url = "../api/queue/help_student.php";
-  posting = $.post( url, { course: course, student: username } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/help_student.php";
+  var posting = $.post( url, { course: course, student: username } );
   posting.done(done);
 }
 
 function set_limit(course, limit){
-  url = "../api/queue/set_limit.php";
-  posting = $.post( url, { course: course, time_lim: limit.toString() } );
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      get_queue(course); //refreshes the page
-    }
-  }
+  var url = "../api/queue/set_limit.php";
+  var posting = $.post( url, { course: course, time_lim: limit.toString() } );
+  posting.done(done);
+}
+
+function add_announcement(course, announcement){
+  var url = "../api/queue/add_announcement.php";
+  var posting = $.post( url, { course: course, announcement: announcement } );
+  posting.done(done);
+}
+
+function del_announcement(course, announcement_id){
+  var url = "../api/queue/del_announcement.php";
+  var posting = $.post( url, { course: course, announcement_id: announcement_id } );
   posting.done(done);
 }
