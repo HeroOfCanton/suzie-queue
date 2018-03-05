@@ -4,16 +4,16 @@ $(function () {
   $get.done(function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    stud_courses = dataParsed.student_courses;
-    ta_courses   = dataParsed.ta_courses;
+    var stud_courses = dataParsed.student_courses;
+    var ta_courses   = dataParsed.ta_courses;
   
-    intersection = stud_courses.filter(function(n) {
+    var intersection = stud_courses.filter(function(n) {
                      return ta_courses.indexOf(n) !== -1;
                    });    
     if(intersection.length){
       alert("You're registered on the queue as both a student and TA for one or more courses. Unregisting as student...");
       for(course in intersection){ 
-        url = "../api/user/rem_class.php";
+        var url = "../api/user/rem_class.php";
         var $posting = $.post( url, { course: intersection[course]} );
       }
       location.reload;
@@ -30,7 +30,7 @@ function renderCourseTable(courses, role) {
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
     tableRow.append($('<td>').text(role));
-    URI = encodeURI("queue.php?course="+course);
+    var URI = encodeURI("queue.php?course="+course);
     tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary"><span>GoTo</span> </button></a> </td> '  );
     table.append(tableRow);
   });

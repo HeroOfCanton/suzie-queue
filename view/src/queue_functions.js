@@ -114,8 +114,10 @@ function render_stats(dataParsed){
 
 function render_ann_box(anns){
   $("#anns tr").remove();
-  for(ann in anns){ 
-    var new_row = $('<tr>  <td><b>'+anns[ann]["tmstmp"].split(" ")[0]+':  </b></td>  <td><b>'+anns[ann]["announcement"]+'</b></td> </tr>');
+  for(ann in anns){
+    var timestamp    = anns[ann]["tmstmp"].split(" ")[0];
+    var announcement = anns[ann]["announcement"]; 
+    var new_row = $('<tr>  <td><b>'+timestamp+':</b>   </td>  <td><b>'+announcement+'</b></td> </tr>');
     $('#anns').append(new_row);
   }
 }
@@ -334,17 +336,6 @@ function render_queue_table(dataParsed, role){
   }
 }
 
-
-done = function(data){
-  var dataString = JSON.stringify(data);
-  var dataParsed = JSON.parse(dataString);
-  if(dataParsed.error){
-    alert(dataParsed["error"]);
-  }else{
-    get_queue(course); //refreshes the page
-  }
-}
-
 //API Endpoint calls
 done = function(data){
   var dataString = JSON.stringify(data);
@@ -352,7 +343,7 @@ done = function(data){
   if(dataParsed.error){
     alert(dataParsed["error"]);
   }else{
-    get_queue(course); //refreshes the page
+    get_queue(course); //reloads the content on the page
   }
 }
 function open_queue(course){
@@ -428,6 +419,7 @@ function dec_priority(course, student){
 next_student = function(course){
   var url = "../api/queue/next_student.php";
   var posting = $.post( url, { course: course } );
+  posting.done(done);
 }
 
 function help_student(course, username){

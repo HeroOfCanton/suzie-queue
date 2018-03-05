@@ -1,13 +1,12 @@
 login = function( event ) {
   event.preventDefault();
   
-  var $form = $( this ),
-  $username = $form.find( "input[name='username']" ).val(),
-  $password = $form.find( "input[name='password']" ).val(),
-  url = "./api/login.php";
+  var $form = $( this );
+  var username = $form.find( "input[name='username']" ).val();
+  var password = $form.find( "input[name='password']" ).val();
+  var url = "./api/login.php";
 
-  var $posting = $.post( url, { username: $username, password: $password } );
-
+  var $posting = $.post( url, { username: username, password: password } );
   $posting.done(function( data ) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);

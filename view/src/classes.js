@@ -1,15 +1,12 @@
 get_classes();
 
-
-
-
 function get_classes(){
   var $url = "../api/classes/all_classes.php";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    allCourses = dataParsed.all_courses;
+    var allCourses = dataParsed.all_courses;
 
     var $url = "../api/user/my_classes.php";
     var $get = $.get( $url );
@@ -24,8 +21,8 @@ function get_classes(){
 function renderCourseTable(allCourses, dataParsed) {
   $('#all_classes tr').remove();
   var table = $('#all_classes');
-  myCourses = dataParsed.student_courses;
-  ta_courses= dataParsed.ta_courses;
+  var myCourses = dataParsed.student_courses;
+  var ta_courses= dataParsed.ta_courses;
   for(course in allCourses){
     var course_name = course;
     var tableRow = $('<tr>');
@@ -34,8 +31,8 @@ function renderCourseTable(allCourses, dataParsed) {
       tableRow.append('<td> <button class="btn btn-primary" disabled> TA </button> </td>');
     }
     else if( $.inArray(course_name, myCourses) >= 0 ){
-      text = "Leave";
-      action = "dropCourse('"+course_name+"')";
+      var text = "Leave";
+      var action = "dropCourse('"+course_name+"')";
       if(allCourses[course_name]["acc_req"]){
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
       }else{
@@ -43,12 +40,12 @@ function renderCourseTable(allCourses, dataParsed) {
       }
     }
     else{
-      text = "Enroll";
+      var text = "Enroll";
       if(allCourses[course_name]["acc_req"]){
-        action = "prompt_acc_code('"+course_name+"')";
+        var action = "prompt_acc_code('"+course_name+"')";
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
       }else{
-        action = "enrollCourse('"+course_name+"', null)";
+        var action = "enrollCourse('"+course_name+"', null)";
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
       }
     }
@@ -64,7 +61,7 @@ function prompt_acc_code(course_name){
 }
 
 function enrollCourse(course, code) {
-  url = "../api/user/add_class.php";
+  var url = "../api/user/add_class.php";
   if(code == null){
     var $posting = $.post( url, { course: course } );
   }else{
@@ -82,7 +79,7 @@ function enrollCourse(course, code) {
 }
 
 function dropCourse(course) {
-  url = "../api/user/rem_class.php";
+  var url = "../api/user/rem_class.php";
   var $posting = $.post( url, { course: course} );
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);
