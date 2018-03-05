@@ -75,7 +75,7 @@ function get_queue(course) {
 
 
 
-//This function renders the view
+//This function renders the view from the data
 var render_view = function(data) {
   var dataString = JSON.stringify(data);
   var dataParsed = JSON.parse(dataString);
@@ -114,8 +114,7 @@ function render_stats(dataParsed){
 
 function render_ann_box(anns){
   $("#anns tr").remove();
-  for(ann in anns){
-    
+  for(ann in anns){ 
     var new_row = $('<tr>  <td><b>'+anns[ann]["tmstmp"].split(" ")[0]+':  </b></td>  <td><b>'+anns[ann]["announcement"]+'</b></td> </tr>');
     $('#anns').append(new_row);
   }

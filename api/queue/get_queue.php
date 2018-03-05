@@ -61,5 +61,5 @@ if($return == -1) //SQL error
 }
 
 $return["authenticated"] = True;
-echo json_encode($return, JSON_PRETTY_PRINT);
+echo json_encode($return);
 ?>

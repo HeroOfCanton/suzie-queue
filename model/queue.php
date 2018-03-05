@@ -34,14 +34,13 @@ function get_queue($course_name){
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   if(!mysqli_num_rows($result)){
-    mysqli_close($sql_conn);
     $return["state"]        = "closed";
     $return["queue_length"] = 0;
-    return $return;
+  }else{
+    $entry    = mysqli_fetch_assoc($result);
+    $return["state"]    = $entry["state"];
+    $return["time_lim"] = $entry["time_lim"];
   }
-  $entry    = mysqli_fetch_assoc($result);
-  $return["state"]    = $entry["state"];
-  $return["time_lim"] = $entry["time_lim"];
   $return["announce"] = [];
   $return["TAs"]      = [];
   $return["queue"]    = [];
