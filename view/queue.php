@@ -99,11 +99,6 @@
                 			<h3 class="panel-title">TA Hours</h3>
                 		</div>
                 		<div class="panel-body">
-                    		<p>
-                    		   Mon 1-3p <br/>
-                    		   Wed 1-3p <br/>
-                    		   Fri 2-5p <br/>
-                    		</p>
                 		</div>
             		</div>
 				</div>

@@ -62,14 +62,15 @@ function start(){
       else{
         alert("Not enrolled in course");
       }
-      get_queue(course, 5000); //This function calls itself every 5 seconds
+      get_queue(course); //This function calls itself every 5 seconds
+      setInterval(get_queue, 5000, course);
     }
     posting.done(done);
   }
   posting.done(done);
 }
 
-function get_queue(course, refresh) {
+function get_queue(course) {
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
 
@@ -94,11 +95,6 @@ function get_queue(course, refresh) {
     }else{
       render_queue_table(dataParsed, "student");
       render_student_view(dataParsed)
-    }
-
-    //Schedule the queue to refresh again. This way the calls can't overlap
-    if(refresh != 0){
-      setTimeout(function(){get_queue(course, refresh);}, refresh);
     }
   }
   posting.done(done);
@@ -270,7 +266,7 @@ function open_queue(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -285,7 +281,7 @@ function close_queue(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -300,7 +296,7 @@ function enqueue_student(course, question, Location){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -324,7 +320,7 @@ function dequeue_student(course, username){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -339,7 +335,7 @@ function release_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -354,7 +350,7 @@ function enqueue_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -369,7 +365,7 @@ function dequeue_ta(course){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
@@ -390,7 +386,7 @@ function help_student(course, username){
     if(dataParsed.error){
       alert(dataParsed["error"]);
     }else{
-      get_queue(course, 0); //refreshes the page
+      get_queue(course); //refreshes the page
     }
   }
   posting.done(done);
