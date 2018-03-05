@@ -44,14 +44,14 @@ $(document).ready(function(){
 
 function start(){
   $("#title").text(course+' Queue');
-  url = "../api/user/get_info.php";
-  posting = $.post( url);
+  var url = "../api/user/get_info.php";
+  var posting = $.post( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     my_username = dataParsed.student_info["username"];
-    url = "../api/user/my_classes.php";
-    posting = $.get( url);
+    var url = "../api/user/my_classes.php";
+    var posting = $.get( url);
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
@@ -90,7 +90,6 @@ var render_view = function(data) {
   //Render the announcements box
   render_ann_box(dataParsed.announce);
 
-  //This block of code does the majority of the rendering
   render_ta_table(dataParsed.TAs)
   if(is_TA){
     render_queue_table(dataParsed, "ta");
@@ -126,7 +125,7 @@ function render_ann_box(anns){
 function render_ta_table(TAs){
   $("#ta_on_duty h4").remove();
   for(TA in TAs){
-    full_name = TAs[TA]["full_name"];
+    var full_name = TAs[TA]["full_name"];
     $('#ta_on_duty').append("<h4>"+full_name+"</h4>");
   }
 }
@@ -172,8 +171,8 @@ function render_ta_view(dataParsed){
       });
     }
 
-    TAs_on_duty = dataParsed.TAs;
-    on_duty= false;
+    var TAs_on_duty = dataParsed.TAs;
+    var on_duty     = false;
     for(var entry = 0; entry < TAs_on_duty.length; entry++){
       if(TAs_on_duty[entry].username == my_username){
         on_duty = true;
@@ -209,9 +208,9 @@ function render_ta_view(dataParsed){
 }
 
 function render_student_view(dataParsed){
-  queue = dataParsed.queue;
+  var queue = dataParsed.queue;
   
-  in_queue = false;
+  var in_queue = false;
   for(session in queue){
     if(my_username == queue[session]["username"]){
       in_queue = true;
@@ -251,15 +250,15 @@ function render_queue_table(dataParsed, role){
   $("#queue tr").remove();
   $('#queue').append("<tr> <th>Pos.</th> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
  
-  helping = {};
+  var helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
       helping[TAs[TA].helping] = TAs[TA].duration;  
     }
   }
   
-  time_lim = dataParsed.time_lim;
- 
+  var time_lim = dataParsed.time_lim;
+
   var i = 1;
   for(row in queue){
     let username  = queue[row].username;
@@ -271,13 +270,13 @@ function render_queue_table(dataParsed, role){
  
     if( username in helping ){
       new_row.css("background-color", "#b3ffb3");
-      if(time_lim>0){
-        duration = helping[username];
-        fields = duration.split(':');
+      if(time_lim > 0){
+        var duration = helping[username];
+        var fields = duration.split(':');
         duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
-        time_rem = time_lim*60-duration;
+        var time_rem = time_lim*60-duration;
 
-        if(time_rem <=0){
+        if(time_rem <= 0){
           new_row.css("background-color", "#fe2b40"); //User is over time limit
         }
       }
@@ -295,7 +294,7 @@ function render_queue_table(dataParsed, role){
         });
       }else{
         var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
-        help_button.click(function(event){
+        help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
           enqueue_ta(course); //Maybe make this cleaner. 
           help_student(course, username);
         });
