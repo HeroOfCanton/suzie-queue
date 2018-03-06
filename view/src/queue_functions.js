@@ -115,6 +115,7 @@ function render_stats(dataParsed){
 
 function render_ann_box(anns){
   $("#anns tr").remove();
+  $('#anns').append("<tr> <th>Date</th> <th>Announcement</th> </tr>");
   for(ann in anns){
     var timestamp    = anns[ann]["tmstmp"].split(" ")[0];
     var announcement = anns[ann]["announcement"]; 
