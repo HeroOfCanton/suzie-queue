@@ -69,7 +69,7 @@
         </nav>  
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
+			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">	
 				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
                                 <h4 id="queue_state" style="color: #404040; "></h4>
                                 <h4 id="time_limit"  style="color: #404040; "></h4>
@@ -97,7 +97,7 @@
                        
                                  <form>
                                    <input type="text" id="new_ann" style="width: 300px;" >
-                                   <input class="btn btn-success" id="ann_button" type="submit" value="Submit">
+                                   <input class="btn btn-success" id="ann_button" type="submit" value="Post">
                                  </form> 
 
             		</div>
