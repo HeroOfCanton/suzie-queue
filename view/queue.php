@@ -71,9 +71,9 @@
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
 				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
-                                <h3 id="queue_state" style="color: #404040; "></h2>
-                                <h3 id="time_limit"  style="color: #404040; "></h2>
-                                <h3 id="in_queue"    style="color: #404040; "></h2>
+                                <h4 id="queue_state" style="color: #404040; "></h4>
+                                <h4 id="time_limit"  style="color: #404040; "></h4>
+                                <h4 id="in_queue"    style="color: #404040; "></h4>
 			</div>
 		</div>
 
@@ -93,7 +93,13 @@
                 		<div class="panel-heading">
                 			<h3 class="panel-title">Announcements</h3>
                 		</div>
-                                <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 150px; overflow-y: scroll;"> </table>
+                                <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 120px; overflow-y: scroll;"> </table>
+                       
+                                 <form>
+                                   <input type="text" id="new_ann" >
+                                   <input class="btn btn-success" id="ann_button" type="submit" value="Submit">
+                                 </form> 
+
             		</div>
 				</div>
 			</div>
@@ -113,13 +119,13 @@
 			<div class="row">
                           <div class="col-sm-8 col-sm-offset-3">
 				<div class="col-sm-3">
-				  <button class="btn btn-success pull-right" id="duty_button"></button>
+				  <button class="btn btn-success" id="duty_button"></button>
 				</div>
                                 <div class="col-sm-3">
-				  <button class="btn btn-success pull-right" id="state_button"></button>
+				  <button class="btn btn-success" id="state_button"></button>
                                 </div>
                                 <div class="col-sm-3">
-                                  <button class="btn btn-success pull-right" id="freeze_button"></button>
+                                  <button class="btn btn-success" id="freeze_button"></button>
                                 </div>
 
                                 <div class="col-sm-3">

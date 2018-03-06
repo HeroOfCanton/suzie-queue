@@ -38,7 +38,8 @@ $(document).ready(function(){
   $("#freeze_button").hide();
   $("#time_form").hide(); 
   $("#join_button").hide();
- 
+  $("#new_ann").hide();
+  $("#ann_button").hide(); 
   start();
 });
 
@@ -119,6 +120,16 @@ function render_ann_box(anns){
     var announcement = anns[ann]["announcement"]; 
     var new_row = $('<tr>  <td><b>'+timestamp+':</b>   </td>  <td><b>'+announcement+'</b></td> </tr>');
     $('#anns').append(new_row);
+  }
+  if(is_TA){
+    $("#ann_button").unbind("click");
+    $("#new_ann").show();
+    $("#ann_button").show();
+    $("#ann_button").click(function( event ) {
+      event.preventDefault();
+      var announcement = document.getElementById("new_ann").value;
+      add_announcement(course, announcement)
+    });
   }
 }
 

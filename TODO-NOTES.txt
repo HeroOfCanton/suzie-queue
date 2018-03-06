@@ -4,7 +4,6 @@
 users don't have a CADE account?
 -nitpicky thing but might be easier to do in an IDE: change 'class' to 'course' in endpoint names as that matches the code
 and API documentation
--Remove 'Admin' tab on navbar for regular students
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
 ***Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
