@@ -28,25 +28,25 @@ function renderCourseTable(allCourses, dataParsed) {
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text( course_name ));
     if( $.inArray(course_name, ta_courses) >= 0 ){
-      tableRow.append('<td> <button class="btn btn-primary" disabled> TA </button> </td>');
+      tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button> </td>');
     }
     else if( $.inArray(course_name, myCourses) >= 0 ){
       var text = "Leave";
       var action = "dropCourse('"+course_name+"')";
       if(allCourses[course_name]["acc_req"]){
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" > <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
       }else{
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
       }
     }
     else{
       var text = "Enroll";
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'"> <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" > <span class="glyphicon glyphicon-lock"></span> '+text+'</button> </td>');
       }else{
         var action = "enrollCourse('"+course_name+"', null)";
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'">'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
       }
     }
     table.append(tableRow);

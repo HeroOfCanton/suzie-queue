@@ -96,7 +96,7 @@
                                 <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 120px; overflow-y: scroll;"> </table>
                        
                                  <form>
-                                   <input type="text" id="new_ann" >
+                                   <input type="text" id="new_ann" style="width: 300px;" >
                                    <input class="btn btn-success" id="ann_button" type="submit" value="Submit">
                                  </form> 
 
@@ -117,7 +117,7 @@
 				</div><!--col-sm-8-->
 			</div><!--row-->
 			<div class="row">
-                          <div class="col-sm-8 col-sm-offset-3">
+                          <div class="col-sm-9 col-sm-offset-3">
 				<div class="col-sm-3">
 				  <button class="btn btn-success" id="duty_button"></button>
 				</div>
@@ -130,9 +130,9 @@
 
                                 <div class="col-sm-3">
                                   <form id="time_form">
-                                    <label>Time Limit</label>
-                                    <input type="number" id="time_limit_input">
-                                    <input type="submit" value="Set">
+                                    <label>Time Lim</label>
+                                    <input type="number" id="time_limit_input" style='width:3em'>
+                                    <input class="btn btn-success" type="submit" value="Set">
                                   </form>
                                 </div>
 
