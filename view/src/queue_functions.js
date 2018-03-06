@@ -118,7 +118,7 @@ function render_ann_box(anns){
   for(ann in anns){
     var timestamp    = anns[ann]["tmstmp"].split(" ")[0];
     var announcement = anns[ann]["announcement"]; 
-    var new_row = $('<tr>  <td><b>'+timestamp+':</b>   </td>  <td><b>'+announcement+'</b></td> </tr>');
+    var new_row = $('<tr>  <td><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td> </tr>');
     $('#anns').append(new_row);
   }
   if(is_TA){
@@ -295,33 +295,33 @@ function render_queue_table(dataParsed, role){
     }
 
     if(is_TA) {
-      var dequeue_button = $('<button class="btn btn-primary" ><span>Dequeue</span> </button>');
+      var dequeue_button = $('<button class="btn btn-primary"> <i class="fa fa-close"></i>  </button>');
       dequeue_button.click(function(event) {
         dequeue_student(course, username);
       });
       if( username in helping ){
-        var help_button = $('<button class="btn btn-primary" ><span>Release</span> </button>');
+        var help_button = $('<button class="btn btn-primary"> <i class="fa fa-undo"></i>  </button>');
         help_button.click(function(event){
           release_ta(course);
         });
       }else{
-        var help_button = $('<button class="btn btn-primary" ><span>Help</span> </button>');
+        var help_button = $('<button class="btn btn-primary"><span> <i class="fa fa-clipboard"></i>  </span> </button>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
           enqueue_ta(course); //Maybe make this cleaner. 
           help_student(course, username);
         });
       }
-      var increase_button = $('<button type="button" class="btn btn-primary">up</button>');
+      var increase_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-up"></i>  </button>');
       if(row == 0){
-        increase_button = $('<button type="button" class="btn btn-primary" disabled=true>up</button>');
+        increase_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-up"></i>  </button>');
       }
       increase_button.click(function(event){
         inc_priority(course, username); 
       });
 
-      var decrease_button = $('<button type="button" class="btn btn-primary">down</button>');
+      var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
       if(row == dataParsed.queue_length -1){
-        decrease_button = $('<button type="button" class="btn btn-primary" disabled=true>down</button>');
+        decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
       }
       decrease_button.click(function(event){
         dec_priority(course, username);

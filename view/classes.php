@@ -82,9 +82,9 @@
 								<h3 class="panel-title">All Available Classes</h3>
 							</div>
 							<div class="panel-body">
-								<p>The following table contains the list of classes for this semester.</p>
+								<p>The following table contains the list of available classes.</p>
 							</div>
-								<table class="table table-hover" id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
+								<table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
                                                                 <tr>
                                                                       <th>Class Name</th>
                                                                       <th>Enroll</th>

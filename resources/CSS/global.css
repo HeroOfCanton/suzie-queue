@@ -32,11 +32,7 @@ a:hover
   bottom:0;
 }
 
-.table
-{
-  border-collapse: separate; 
-  border-spacing: 3px;
-}
+
 
 .btn {
   background: #d93434;
