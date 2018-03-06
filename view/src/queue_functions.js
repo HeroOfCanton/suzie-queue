@@ -115,11 +115,11 @@ function render_stats(dataParsed){
 
 function render_ann_box(anns){
   $("#anns tr").remove();
-  $('#anns').append("<tr> <th>Date</th> <th>Announcement</th> </tr>");
+  $('#anns').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Date</th> <th class='col-sm-6' align='left' style='padding-left:0px; text-decoration:underline;'>Announcement</th> </tr>");
   for(ann in anns){
     var timestamp    = anns[ann]["tmstmp"].split(" ")[0];
     var announcement = anns[ann]["announcement"]; 
-    var new_row = $('<tr>  <td><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td> </tr>');
+    var new_row = $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td> </tr>');
     $('#anns').append(new_row);
   }
   if(is_TA){
@@ -194,6 +194,7 @@ function render_ta_view(dataParsed){
     
     if(!on_duty) {
       document.getElementById("duty_button").style.background='ForestGreen';
+      $("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
       $("#duty_button").text("GO ON DUTY");
       $("#duty_button").click(function(event){
          event.preventDefault();
@@ -202,6 +203,7 @@ function render_ta_view(dataParsed){
     }
     else{
       document.getElementById("duty_button").style.background='FireBrick';
+      $("body").css("background-image", "-webkit-linear-gradient(top, #4286f4 0%, #0FFFBB 50%");
       $("#duty_button").text("GO OFF DUTY");
       $("#duty_button").click(function(event){
 	 event.preventDefault();
@@ -261,7 +263,10 @@ function render_queue_table(dataParsed, role){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
   $("#queue tr").remove();
-  $('#queue').append("<tr> <th>Pos.</th> <th>Student</th> <th>Location</th> <th>Question</th> </tr>");
+  $('#queue').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Pos.</th>"+ 
+                           "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+ 
+                           "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+ 
+                           "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
  
   var helping = {};
   for(TA in TAs ){
@@ -278,7 +283,7 @@ function render_queue_table(dataParsed, role){
     let full_name = queue[row].full_name;
     var question  = queue[row].question;
     var Location  = queue[row].location;
-    var new_row = $('<tr> <td>'+i+'</td> <td>'+full_name+'</td> <td>'+Location+'</td> <td>'+question+'</td> </tr>');
+    var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
     i++;   
  
     if( username in helping ){
@@ -291,6 +296,7 @@ function render_queue_table(dataParsed, role){
 
         if(time_rem <= 0){
           new_row.css("background-color", "#fe2b40"); //User is over time limit
+	  //$("body").css("background-image", "-webkit-linear-gradient(top, #ff9C00 0%, #fFFFBB 50%");
         }
       }
     }

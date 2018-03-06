@@ -72,19 +72,19 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">	
-				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
+				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; font-family: garamond;"></h1>
                                 <h4 id="queue_state" style="color: #404040; "></h4>
                                 <h4 id="time_limit"  style="color: #404040; "></h4>
                                 <h4 id="in_queue"    style="color: #404040; "></h4>
 			</div>
 		</div>
 
-		<div class="container" style="width: 80%;">
+		<div class="container" style="width: 90%;">
 			<div class="row">
 				<div class="col-sm-2">
 					<div class="panel panel-primary">
-                		<div class="panel-heading">
-                			<h3 class="panel-title">TA(s) on Duty</h3>
+                			<div class="panel-heading">
+                			<h3 class="panel-title" style="font-family: garamond; font-size: 20px;">TA(s) on Duty</h3>
                 		</div>
                 		<div class="panel-body" id="ta_on_duty">
                 		</div>
@@ -93,7 +93,7 @@
 				<div class="col-sm-8 col-sm-offset-1">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
-                			<h3 class="panel-title">Announcements</h3>
+                			<h3 class="panel-title" style="font-family: garamond; font-size:30px;" align="center">Announcements</h3>
                 		</div>
                                 <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 120px; overflow-y: scroll;"> </table>
                        
@@ -106,12 +106,19 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-8 col-lg-offset-3">
+			<div class="col-sm-2">
+                                  <form id="time_form">
+                                    <label>Time Limit Per Student</label> </br>
+                                    <input type="number" id="time_limit_input" style='width:5em'>
+                                    <input class="btn btn-success" type="submit" value="Set">
+                                  </form>
+                                </div>
+				<div class="col-sm-8 col-sm-offset-1">
 					<div id ="queue_table">
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title">Queue</h3>
+								<h3 class="panel-title" style="font-family: garamond; font-size: 30px;" align="center"">Queue</h3>
 							</div>
 								<table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto;"> </table>
 						</div><!--panel-->
@@ -119,23 +126,15 @@
 				</div><!--col-sm-8-->
 			</div><!--row-->
 			<div class="row">
-                          <div class="col-sm-9 col-sm-offset-3">
-				<div class="col-sm-3">
+                          <div class="col-sm-8 col-sm-offset-3">
+				<div class="col-sm-4">
 				  <button class="btn btn-success" id="duty_button"></button>
 				</div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
 				  <button class="btn btn-success" id="state_button"></button>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                   <button class="btn btn-success" id="freeze_button"></button>
-                                </div>
-
-                                <div class="col-sm-3">
-                                  <form id="time_form">
-                                    <label>Time Lim</label>
-                                    <input type="number" id="time_limit_input" style='width:3em'>
-                                    <input class="btn btn-success" type="submit" value="Set">
-                                  </form>
                                 </div>
 
                                   <button class="btn btn-success" id="join_button"></button>
