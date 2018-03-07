@@ -1,5 +1,5 @@
 <?php
-// File: help_student.php
+// File: del_announcement.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';

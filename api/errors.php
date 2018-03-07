@@ -6,7 +6,7 @@ function return_JSON_error($err_code){
   $err_codes = array(
     -1 => "Generic SQL error",
     -2 => "Course does not exist",
-    -3 => "Queue is closed for this course",
+    -3 => "Queue closed for this course",
     -4 => "TA not on duty",
   );
   return array(
@@ -19,7 +19,7 @@ function return_JSON_error($err_code){
 function invalid_auth(){
   return  array(
     "authenticated" => False,
-    "error" => "No username and/or password supplied"
+    "error" => "No username and/or password specified"
   );
 }
 
@@ -65,7 +65,7 @@ function missing_time(){
 function missing_announcement(){
   return array(
     "authenticated" => True,
-    "error" => "No annoucement given"
+    "error" => "No announcement specified"
   );
 }
 

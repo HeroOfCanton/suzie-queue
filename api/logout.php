@@ -1,4 +1,6 @@
 <?php
+// File: logout.php
+
 // get the session variables
 session_start();
 header('Content-Type: application/json');

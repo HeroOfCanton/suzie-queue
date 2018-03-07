@@ -1,5 +1,5 @@
 <?php
-// File: enqueue_ta.php
+// File: get_queue.php
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
