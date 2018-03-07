@@ -203,7 +203,7 @@ function render_ta_view(dataParsed){
     }
     else{
       document.getElementById("duty_button").style.background='FireBrick';
-      $("body").css("background-image", "-webkit-linear-gradient(top, #4286f4 0%, #0FFFBB 50%");
+      $("body").css("background-image", "-webkit-linear-gradient(top, #314755 0%, #26a0da 50%");
       $("#duty_button").text("GO OFF DUTY");
       $("#duty_button").click(function(event){
 	 event.preventDefault();
