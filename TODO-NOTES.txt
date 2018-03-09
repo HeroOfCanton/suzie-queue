@@ -1,5 +1,12 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-SIMPLE WORK AROUND TO 'HOLD POSITION' DILEMA: allow students to move themselves down in the queue
+-Make questions optionally visible to rest of class?
+-Make 'description' optional for courses? What did we want to use this for?
+-Make the 's' dynamic in the 'TA(s) on Duty' box?
+-The 'U' logo in the top left of the screen simply takes you to the page you're on. Disable?
+-Add tool tips for unnamed buttons in the queue (e.g. the help/free button on the queue page)
+-It took up more room, but I think the timestamp could be useful for announcments. Also, should we include names?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
 -Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make
 these integers?
