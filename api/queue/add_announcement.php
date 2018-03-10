@@ -10,19 +10,19 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   echo json_encode( not_authenticated() );
   die();
 }
 
-if (!$_POST['course'])
+if (!isset($_POST['course']))
 {
   echo json_encode( missing_course() );
   die();
 }
 
-if (!$_POST['announcement'])
+if (!isset($_POST['announcement']))
 {
   echo json_encode( missing_announcement() );
   die();

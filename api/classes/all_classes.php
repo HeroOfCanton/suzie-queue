@@ -9,7 +9,7 @@ session_start();
 header('Content-type: application/json');
 
 // return authenticated False if user isn't authenticated
-if (!$_SESSION["username"])
+if (!isset($_SESSION["username"]))
 {
   echo json_encode( not_authenticated() );
   die();

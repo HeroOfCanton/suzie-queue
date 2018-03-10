@@ -10,13 +10,13 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   echo json_encode( not_authenticated() );
   die();
 }
 
-if (!$_POST['course'])
+if (!isset($_POST['course']))
 {
   echo json_encode( missing_course() );
   die();
@@ -30,7 +30,7 @@ $ta_courses = $_SESSION["ta_courses"];
 //remove themselves, and TAs to remove students,
 //we check if the request came from a TA
 if (in_array($course, $ta_courses)){
-  if (!$_POST['username'])
+  if (!isset($_POST['username']))
   {
     echo json_encode( missing_student() );
     die();

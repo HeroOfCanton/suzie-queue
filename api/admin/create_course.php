@@ -10,20 +10,20 @@ require_once '../errors.php';
 session_start();
 header('Content-Type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   echo json_encode( not_authenticated() );
   die();
 }
 
-if (!$_SESSION['is_admin'])
+if (!isset($_SESSION['is_admin']))
 {
   echo json_encode( not_authorized() );
   die();
 }
 
-if (!$_POST['course_name'] || !$_POST['depart_prefix'] || !$_POST['course_num'] || 
-    !$_POST['description'] || !$_POST['ldap_group']    || !$_POST['professor'])
+if (!isset($_POST['course_name']) || !isset($_POST['depart_prefix']) || !isset($_POST['course_num']) || 
+    !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
 {
   echo json_encode( missing_info() );
   die();

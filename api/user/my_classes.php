@@ -7,7 +7,7 @@ require_once '../../model/courses.php';
 session_start(); 
 header('Content-Type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   $return = array("authenticated" => False);
   echo json_encode($return);

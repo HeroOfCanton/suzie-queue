@@ -7,14 +7,14 @@ require_once '../../model/courses.php';
 session_start(); 
 header('Content-Type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   $return = array("authenticated" => False);
   echo json_encode($return);
   die();
 }
 
-if (!$_POST['course'])
+if (!isset($_POST['course']))
 {
   $return = array(
     "authenticated" => True,
@@ -25,13 +25,13 @@ if (!$_POST['course'])
 }
 
 $acc_code = NULL;
-if ($_POST['acc_code'])
+if (isset($_POST['acc_code']))
 {
   $acc_code = $_POST['acc_code'];
 }
 
 $username = $_SESSION['username'];
-$course = $_POST['course'];
+$course   = $_POST['course'];
 
 $ret = add_stud_course($username, $course, $acc_code);
 if ($ret == 0)

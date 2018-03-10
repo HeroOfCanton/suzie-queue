@@ -10,15 +10,14 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-// return authenticated False if user isn't authenticated
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   $return = array("authenticated" => False);
   echo json_encode($return);
   die();
 }
 
-if (!$_POST['course'])
+if (!isset($_POST['course']))
 {
   echo json_encode( missing_course() );
   die();

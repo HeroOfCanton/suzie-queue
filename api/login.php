@@ -9,7 +9,7 @@ session_start();
 $_SESSION = array();
 header('Content-Type: application/json');
 
-if(!$_POST['username'] || !$_POST['password'])
+if(!isset($_POST['username']) || !isset($_POST['password']))
 {
   echo json_encode( invalid_auth() );
   die();

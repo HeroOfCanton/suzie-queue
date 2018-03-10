@@ -10,13 +10,13 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-if (!$_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
   echo json_encode( not_authenticated() );
   die();
 }
 
-if (!$_POST["course"] || !$_POST["question"] || !$_POST["location"])
+if (!isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["location"]))
 {
   $return = array(
     "authenticated" => True,
