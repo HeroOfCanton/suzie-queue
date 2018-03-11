@@ -8,6 +8,12 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
+if ($_SERVER['REQUEST_METHOD'] !== "GET"){
+  http_response_code(405);
+  echo json_encode( invalid_method() );
+  die();
+}
+
 // return authenticated False if user isn't authenticated
 if (!isset($_SESSION["username"]))
 {

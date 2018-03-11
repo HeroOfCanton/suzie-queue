@@ -46,13 +46,13 @@ $(document).ready(function(){
 function start(){
   $("#title").text(course+' Queue');
   var url = "../api/user/get_info.php";
-  var posting = $.post( url);
+  var get_req = $.get( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     my_username = dataParsed.student_info["username"];
     var url = "../api/user/my_classes.php";
-    var posting = $.get( url);
+    var get_req = $.get( url);
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
@@ -63,9 +63,9 @@ function start(){
       get_queue(course);
       setInterval(get_queue, 5000, course);
     }
-    posting.done(done);
+    get_req.done(done);
   }
-  posting.done(done);
+  get_req.done(done);
 }
 
 function get_queue(course) {
@@ -149,7 +149,7 @@ function render_ta_view(dataParsed){
   $("#freeze_button").unbind("click");
   $("#time_form").unbind("submit");
 
-  queue_state = dataParsed.state;
+  var queue_state = dataParsed.state;
   if(queue_state == "closed"){
     document.getElementById("state_button").style.background='ForestGreen';
     $("#state_button").text("OPEN QUEUE");
@@ -169,6 +169,7 @@ function render_ta_view(dataParsed){
     });
    
     if(queue_state == "open"){ 
+      //$("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
       document.getElementById("freeze_button").style.background='#1B4F72';
       $("#freeze_button").text("FREEZE QUEUE");
       $("#freeze_button").click(function( event ) {
@@ -176,6 +177,7 @@ function render_ta_view(dataParsed){
         freeze_queue(course);
       });
     }else{ //frozen
+      //$("body").css("background-image", "-webkit-linear-gradient(top, #075685 0%, #FFF 50%");
       document.getElementById("freeze_button").style.background='Orange';
       $("#freeze_button").text("RESUME QUEUE");
       $("#freeze_button").click(function( event ) {
@@ -189,12 +191,12 @@ function render_ta_view(dataParsed){
     for(var entry = 0; entry < TAs_on_duty.length; entry++){
       if(TAs_on_duty[entry].username == my_username){
         on_duty = true;
+        break;
       }
     } 
     
     if(!on_duty) {
       document.getElementById("duty_button").style.background='ForestGreen';
-      $("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
       $("#duty_button").text("GO ON DUTY");
       $("#duty_button").click(function(event){
          event.preventDefault();
@@ -203,7 +205,6 @@ function render_ta_view(dataParsed){
     }
     else{
       document.getElementById("duty_button").style.background='FireBrick';
-      $("body").css("background-image", "-webkit-linear-gradient(top, #314755 0%, #26a0da 50%");
       $("#duty_button").text("GO OFF DUTY");
       $("#duty_button").click(function(event){
 	 event.preventDefault();

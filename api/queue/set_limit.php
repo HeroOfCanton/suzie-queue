@@ -10,6 +10,12 @@ require_once '../errors.php';
 session_start();
 header('Content-Type: application/json');
 
+if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+  http_response_code(405);
+  echo json_encode( invalid_method() );
+  die();
+}
+
 if (!isset($_SESSION['username']))
 {
   echo json_encode( not_authenticated() );
@@ -22,7 +28,7 @@ if (!isset($_POST['course']))
   die();
 }
 
-if (!isset($_POST['time_lim']))
+if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']))
 {
   echo json_encode( missing_time() );
   die();

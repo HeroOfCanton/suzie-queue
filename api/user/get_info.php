@@ -7,6 +7,12 @@ require_once '../../model/auth.php';
 session_start();
 header('Content-Type: application/json');
 
+if ($_SERVER['REQUEST_METHOD'] !== "GET"){
+  http_response_code(405);
+  echo json_encode( invalid_method() );
+  die();
+}
+
 if (!isset($_SESSION['username']))
 {
   $return = array("authenticated" => False);

@@ -15,6 +15,11 @@ function return_JSON_error($err_code){
   );
 }
 
+function invalid_method(){
+  return  array(
+    "error" => "Only POST is allowed"
+  );
+}
 
 function invalid_auth(){
   return  array(
