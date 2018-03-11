@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if (!isset($_SESSION['username']))
 {
+  http_response_code(401);
   $return = array("authenticated" => False);
   echo json_encode($return);
   die();
@@ -25,6 +26,7 @@ if (!isset($_SESSION['username']))
 
 if (!isset($_POST['course']))
 {
+  http_response_code(422);
   echo json_encode( missing_course() );
   die();
 }
@@ -45,6 +47,7 @@ elseif (in_array($course, get_stud_courses($username))) //Student
   $return = get_queue($course);
 }else //Not in course
 {
+  http_response_code(403);
   $return = array(
     "authenticated" => True,
     "error" => "Not enrolled in course"

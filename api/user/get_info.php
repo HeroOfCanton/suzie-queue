@@ -2,6 +2,7 @@
 // File: get_info.php
 
 require_once '../../model/auth.php';
+require_once '../errors.php';
 
 // get the session variables
 session_start();
@@ -15,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET"){
 
 if (!isset($_SESSION['username']))
 {
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  http_response_code(401);
+  echo json_encode( not_authenticated() );
   die();
 }
 

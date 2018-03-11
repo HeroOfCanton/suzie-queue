@@ -18,12 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if (!isset($_SESSION['username']))
 {
+  http_response_code(401);
   echo json_encode( not_authenticated() );
   die();
 }
 
 if (!isset($_SESSION['is_admin']))
 {
+  http_response_code(403);
   echo json_encode( not_authorized() );
   die();
 }
@@ -31,6 +33,7 @@ if (!isset($_SESSION['is_admin']))
 if (!isset($_POST['course_name']) || !isset($_POST['depart_prefix']) || !isset($_POST['course_num']) || 
     !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
 {
+  http_response_code(422);
   echo json_encode( missing_info() );
   die();
 }

@@ -18,12 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if (!isset($_SESSION['username']))
 {
+  http_response_code(401);
   echo json_encode( not_authenticated() );
   die();
 }
 
 if (!isset($_POST['course']))
 {
+  http_response_code(422);
   echo json_encode( missing_course() );
   die();
 }
@@ -38,6 +40,7 @@ $ta_courses = $_SESSION["ta_courses"];
 if (in_array($course, $ta_courses)){
   if (!isset($_POST['username']))
   {
+    http_response_code(422);
     echo json_encode( missing_student() );
     die();
   }

@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if(!isset($_POST['username']) || !isset($_POST['password']))
 {
+  http_response_code(422);
   echo json_encode( invalid_auth() );
   die();
 }

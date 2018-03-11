@@ -18,12 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if (!isset($_SESSION['username']))
 {
+  http_response_code(401);
   echo json_encode( not_authenticated() );
   die();
 }
 
 if (!isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["location"]))
 {
+  http_response_code(422);
   $return = array(
     "authenticated" => True,
     "error" => "Missing course, question, or location"

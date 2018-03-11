@@ -18,18 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST"){
 
 if (!isset($_SESSION['username']))
 {
+  http_response_code(401);
   echo json_encode( not_authenticated() );
   die();
 }
 
 if (!isset($_POST['course']))
 {
+  http_response_code(422);
   echo json_encode( missing_course() );
   die();
 }
 
 if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']))
 {
+  http_response_code(422);
   echo json_encode( missing_time() );
   die();
 }
@@ -41,6 +44,7 @@ $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {
+  http_response_code(403);
   echo json_encode( not_authorized() );
   die();
 }

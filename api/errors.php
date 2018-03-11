@@ -15,7 +15,7 @@ function return_JSON_error($err_code){
   );
 }
 
-function invalid_method(){
+function invalid_method($supported){
   return  array(
     "error" => "Only POST is allowed"
   );

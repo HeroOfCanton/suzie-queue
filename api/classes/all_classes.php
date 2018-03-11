@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET"){
 // return authenticated False if user isn't authenticated
 if (!isset($_SESSION["username"]))
 {
+  http_response_code(401);
   echo json_encode( not_authenticated() );
   die();
 }
