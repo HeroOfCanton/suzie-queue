@@ -49,6 +49,8 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
+$announcement = filter_var($announcement, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+
 $res = add_announcement($course, $announcement);
 if($res < 0)
 {

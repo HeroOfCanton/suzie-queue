@@ -39,6 +39,9 @@ $course   = $_POST['course'];
 $question = $_POST['question'];
 $location = $_POST['location'];
 
+$question = filter_var($question, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+$location = filter_var($location, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+
 $res = enq_stu($username, $course, $question, $location);
 if($res)
 {
