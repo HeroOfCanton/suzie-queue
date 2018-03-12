@@ -27,10 +27,7 @@ $ta_courses   = $_SESSION['ta_courses'];
 
 if (is_null(stud_courses) || is_null(ta_courses))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to Fetch Classes"
-  );
+  $return = my_course_list_error();
   http_response_code(500);
 }else
 {

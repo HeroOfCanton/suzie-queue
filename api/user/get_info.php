@@ -26,10 +26,7 @@ $stud_info = get_info($username);
 
 if (is_null($stud_info))
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to Fetch Student Info"
-  );
+  $return = ldap_issue();
   http_response_code(500);
 }else
 {

@@ -24,11 +24,7 @@ if (!isset($_SESSION['username']))
 if (!isset($_POST['course']))
 {
   http_response_code(422);
-  $return = array(
-    "authenticated" => True,
-    "error" => "No course specified"
-  );
-  echo json_encode($return);
+  echo json_encode( missing_course() );
   die();
 }
 

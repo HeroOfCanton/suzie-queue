@@ -35,22 +35,11 @@ if(!auth($username, $password))
   die();
 }
 
-$info = get_info($username);
-if(is_null($info))
-{
-  echo json_encode( ldap_issue() );
-  die();
-}
-
-$is_admin = is_admin($username);
-if(is_null($is_admin))
-{
-  echo json_encode( ldap_issue() );
-  die();
-}
-
+$info       = get_info($username);
+$is_admin   = is_admin($username);
 $ta_courses = get_ta_courses($username);
-if(is_null($ta_courses))
+
+if(is_null($info) || is_null($is_admin) || is_null($ta_courses))
 {
   echo json_encode( ldap_issue() );
   die();

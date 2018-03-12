@@ -90,4 +90,11 @@ function course_list_error(){
   );
 }
 
+function my_course_list_error(){
+  return array(
+    "authenticated" => True,
+    "error" => "Unable to Fetch Your Courses"
+  );
+}
+
 ?>
