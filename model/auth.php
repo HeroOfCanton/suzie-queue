@@ -1,6 +1,7 @@
 <?php
 require_once 'config.php';
 /**
+ * SPDX-License-Identifier: GPL-3.0-or-later
  * Functions for Authentication and Authorization.
  *
  * NOTE: All user and group 'names' are references to 
