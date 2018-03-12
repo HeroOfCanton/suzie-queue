@@ -41,38 +41,19 @@ if (isset($_POST['acc_code']))
 $username = $_SESSION['username'];
 $course   = $_POST['course'];
 
-$ret = add_stud_course($username, $course, $acc_code);
-if ($ret == 0)
+$res = add_stud_course($username, $course, $acc_code);
+if ($res < 0)
+{
+  $return = return_JSON_error($res);
+  http_response_code(500);
+}else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Student Course Added Successfully"
   );
+  $return = return_JSON_error($res);
   http_response_code(200);
-}
-elseif ($ret == 1)
-{
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to Add Student Course"
-  );
-  http_response_code(500);
-}
-elseif ($ret == 2)
-{
-  $return = array(
-    "authenticated" => True,
-    "error" => "Already registered as TA for course"
-  );
-  http_response_code(500);
-}
-elseif ($ret == 3)
-{
-  $return = array(
-    "authenticated" => True,
-    "error" => "Invalid Access Code"
-  );
-  http_response_code(500);
 }
 
 echo json_encode($return);

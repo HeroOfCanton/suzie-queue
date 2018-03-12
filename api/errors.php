@@ -8,6 +8,8 @@ function return_JSON_error($err_code){
     -2 => "Course does not exist",
     -3 => "Queue closed for this course",
     -4 => "TA not on duty",
+    -5 => "User already registered as TA for course",
+    -6 => "Invalid access code provided"
   );
   return array(
     "authenticated" => True,

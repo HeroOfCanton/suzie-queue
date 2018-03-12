@@ -220,41 +220,44 @@ function get_stud_courses($username){
   *
   * @param string $username
   * @param string $course_name
-  * @return int 0 on success, 1 on fail, 2 if user already has TA role, 3 on invalid access code
+  * @return int 0 on success, 
+  *             -1 on fail, 
+  *             -5 if user already has TA role, 
+  *             -6 on invalid access code
   */
 function add_stud_course($username, $course_name, $acc_code){ 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
+    return -1;
   }
 
   //Don't allow user to enroll in course if they're a TA
   if (in_array($username, get_tas($course_name))){
     mysqli_close($sql_conn);
-    return 2;
+    return -5;
   }
 
   $real_acc_code = get_course_acc_code($course_name); 
   if($real_acc_code == -1 ){
     mysqli_close($sql_conn);
-    return 1;//error
-  } elseif((!is_null($real_acc_code)) &&  $acc_code != $real_acc_code){
+    return -1;//error
+  } elseif(!is_null($real_acc_code) &&  $acc_code != $real_acc_code){
     mysqli_close($sql_conn);
-    return 3;//invalid access code
+    return -6;//invalid access code
   }
-  //Proper access code, or one isn't required
+  //Proper access code provided, or one isn't required
 
   $query = "REPLACE enrolled (username, course_id) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?) )";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
 
   mysqli_stmt_close($stmt);
@@ -267,7 +270,8 @@ function add_stud_course($username, $course_name, $acc_code){
   *
   * @param string $username
   * @param string $course_name
-  * @return int 0 on success, 1 on fail
+  * @return int 0 on success, 
+  *             -1 on fail
   */
 function rem_stud_course($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);

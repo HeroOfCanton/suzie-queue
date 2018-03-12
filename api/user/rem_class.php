@@ -35,19 +35,17 @@ if (!isset($_POST['course']))
 $username = $_SESSION['username'];
 $course   = $_POST['course'];
 
-if (!rem_stud_course($username, $course))
+$res = rem_stud_course($username, $course);
+if ($res < 0)
 {
-  $return = array(
-    "authenticated" => True,
-    "success" => "Student Course Removed Successfully"
-  );
+  $return = return_JSON_error($res);
   http_response_code(500);
 }
 else
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to Remove Student Course"
+    "success" => "Student Course Removed Successfully"
   );
   http_response_code(200);
 }
