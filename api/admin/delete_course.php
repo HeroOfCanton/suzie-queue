@@ -1,5 +1,6 @@
 <?php
 // File: delete_course.php
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';

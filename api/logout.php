@@ -1,7 +1,7 @@
 <?php
 // File: logout.php
+// SPDX-License-Identifier: GPL-3.0-or-later
 
-// get the session variables
 session_start();
 header('Content-Type: application/json');
 

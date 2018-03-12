@@ -1,5 +1,6 @@
 <?php
 // File: rem_class.php
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/courses.php';
 require_once '../errors.php';

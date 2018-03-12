@@ -1,5 +1,6 @@
 <?php
 // File: errors.php
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 //Error codes returned by the model
 function return_JSON_error($err_code){

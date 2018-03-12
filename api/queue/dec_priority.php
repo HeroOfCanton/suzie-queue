@@ -1,12 +1,12 @@
 <?php
 // File: dec_priority.php
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/auth.php';
 require_once '../../model/courses.php';
 require_once '../../model/queue.php';
 require_once '../errors.php';
 
-// get the session variables
 session_start();
 header('Content-type: application/json');
 
