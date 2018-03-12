@@ -49,12 +49,14 @@ if ($res != "frozen")
     "authenticated" => True,
     "error" => "Unable to freeze queue"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Queue frozen"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

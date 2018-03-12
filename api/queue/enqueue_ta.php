@@ -45,12 +45,14 @@ $res = enq_ta($username, $course);
 if($res)
 {
   $return = return_JSON_error($res);
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "TA enqueued"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

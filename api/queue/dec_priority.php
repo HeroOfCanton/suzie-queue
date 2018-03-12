@@ -10,7 +10,8 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+if ($_SERVER['REQUEST_METHOD'] !== "POST")
+{
   http_response_code(405);
   echo json_encode( invalid_method() );
   die();
@@ -53,12 +54,14 @@ $res = decrease_stud_priority($student, $course);
 if($res)
 {
   $return = return_JSON_error($res);
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Student priority decreased"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

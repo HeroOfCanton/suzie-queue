@@ -48,6 +48,7 @@ if ($ret == 0)
     "authenticated" => True,
     "success" => "Student Course Added Successfully"
   );
+  http_response_code(200);
 }
 elseif ($ret == 1)
 {
@@ -55,6 +56,7 @@ elseif ($ret == 1)
     "authenticated" => True,
     "error" => "Unable to Add Student Course"
   );
+  http_response_code(500);
 }
 elseif ($ret == 2)
 {
@@ -62,6 +64,7 @@ elseif ($ret == 2)
     "authenticated" => True,
     "error" => "Already registered as TA for course"
   );
+  http_response_code(500);
 }
 elseif ($ret == 3)
 {
@@ -69,8 +72,8 @@ elseif ($ret == 3)
     "authenticated" => True,
     "error" => "Invalid Access Code"
   );
+  http_response_code(500);
 }
-
 
 echo json_encode($return);
 ?>

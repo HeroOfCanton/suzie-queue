@@ -53,13 +53,14 @@ $res = help_student($username, $student, $course);
 if($res < 0)
 {
   $return = return_JSON_error($res);
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "TA status changed"
   );
+  http_response_code(200);
 }
-
 echo json_encode($return);
 ?>

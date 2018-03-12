@@ -10,7 +10,8 @@ require_once '../errors.php';
 session_start();
 header('Content-type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+if ($_SERVER['REQUEST_METHOD'] !== "POST")
+{
   http_response_code(405);
   echo json_encode( invalid_method() );
   die();
@@ -49,11 +50,13 @@ if($res)
     "authenticated" => True,
     "error" => "Unable to dequeue TA"
   );
+  http_response_code(500);
 }else{
   $return = array(
     "authenticated" => True,
     "success" => "TA dequeued"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

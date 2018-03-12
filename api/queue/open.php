@@ -49,12 +49,14 @@ if ($res != "open")
     "authenticated" => True,
     "error" => "Unable to open queue"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Queue opened"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

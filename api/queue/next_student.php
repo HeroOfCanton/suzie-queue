@@ -49,12 +49,14 @@ if($res)
     "authenticated" => True,
     "error" => "Unable to change TA status"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "TA status changed"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

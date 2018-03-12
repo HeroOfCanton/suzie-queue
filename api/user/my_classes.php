@@ -31,6 +31,7 @@ if (is_null(stud_courses) || is_null(ta_courses))
     "authenticated" => True,
     "error" => "Unable to Fetch Classes"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
@@ -38,6 +39,7 @@ if (is_null(stud_courses) || is_null(ta_courses))
     "student_courses" => $stud_courses,
     "ta_courses"      => $ta_courses
   );
+  http_response_code(200);
 }
 
 echo json_encode($return);

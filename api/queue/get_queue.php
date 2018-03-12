@@ -54,20 +54,14 @@ elseif (in_array($course, get_stud_courses($username))) //Student
   );
 }
 
-if($return == -1) //SQL error
+if($return < 0)
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to fetch queue state"
-  );
-}elseif($return == -2) //Nonexistant Course
+  $return = return_JSON_error($res);
+  http_response_code(500);
+}else
 {
-  $return = array(
-    "authenticated" => True,
-    "error" => "Invalid Course"
-  );
+  $return["authenticated"] = True;
+  http_response_code(200);  
 }
-
-$return["authenticated"] = True;
 echo json_encode($return);
 ?>

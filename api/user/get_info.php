@@ -30,12 +30,14 @@ if (is_null($stud_info))
     "authenticated" => True,
     "error" => "Unable to Fetch Student Info"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "student_info" => $stud_info
   );
+  http_response_code(200);
 }
 
 echo json_encode($return);

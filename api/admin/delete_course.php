@@ -42,12 +42,14 @@ $res = del_course($course_name);
 if ($res)
 {
   $return = return_JSON_error($res);
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Course deleted"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>

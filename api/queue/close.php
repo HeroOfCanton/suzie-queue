@@ -48,12 +48,14 @@ if($res != "closed")
     "authenticated" => True,
     "error" => "Unable to close queue"
   );
+  http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
     "success" => "Queue closed"
   );
+  http_response_code(200);
 }
 echo json_encode($return);
 ?>
